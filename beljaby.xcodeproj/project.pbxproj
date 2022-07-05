@@ -13,9 +13,12 @@
 		744624042872E2E100492565 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744624022872E2E100492565 /* Main.storyboard */; };
 		744624062872E2E200492565 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 744624052872E2E200492565 /* Assets.xcassets */; };
 		744624092872E2E200492565 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744624072872E2E200492565 /* LaunchScreen.storyboard */; };
+		744624132874003C00492565 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 744624122874003C00492565 /* GoogleService-Info.plist */; };
+		7EEC046B3DB1C1EFC8AEE87F /* Pods_beljaby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_beljaby.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		744623F92872E2E100492565 /* beljaby.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beljaby.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		744623FC2872E2E100492565 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		744623FE2872E2E100492565 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -24,6 +27,9 @@
 		744624052872E2E200492565 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		744624082872E2E200492565 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7446240A2872E2E200492565 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		744624122874003C00492565 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.release.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.release.xcconfig"; sourceTree = "<group>"; };
+		87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.debug.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,17 +37,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7EEC046B3DB1C1EFC8AEE87F /* Pods_beljaby.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		06A6862862A437BC3DD56DFA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		744623F02872E2E100492565 = {
 			isa = PBXGroup;
 			children = (
 				744623FB2872E2E100492565 /* beljaby */,
 				744623FA2872E2E100492565 /* Products */,
+				C44D88650C19F6C8D17E6893 /* Pods */,
+				06A6862862A437BC3DD56DFA /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -58,13 +75,40 @@
 			children = (
 				744623FC2872E2E100492565 /* AppDelegate.swift */,
 				744623FE2872E2E100492565 /* SceneDelegate.swift */,
-				744624002872E2E100492565 /* ViewController.swift */,
-				744624022872E2E100492565 /* Main.storyboard */,
+				744624102872E2EB00492565 /* Controller */,
+				744624112872E2FD00492565 /* View */,
 				744624052872E2E200492565 /* Assets.xcassets */,
 				744624072872E2E200492565 /* LaunchScreen.storyboard */,
 				7446240A2872E2E200492565 /* Info.plist */,
+				744624122874003C00492565 /* GoogleService-Info.plist */,
 			);
 			path = beljaby;
+			sourceTree = "<group>";
+		};
+		744624102872E2EB00492565 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				744624002872E2E100492565 /* ViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		744624112872E2FD00492565 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				744624022872E2E100492565 /* Main.storyboard */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		C44D88650C19F6C8D17E6893 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */,
+				83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */,
+			);
+			name = Pods;
+			path = Pods;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -74,9 +118,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 7446240D2872E2E200492565 /* Build configuration list for PBXNativeTarget "beljaby" */;
 			buildPhases = (
+				51CCA156E1583DE960FFB605 /* [CP] Check Pods Manifest.lock */,
 				744623F52872E2E100492565 /* Sources */,
 				744623F62872E2E100492565 /* Frameworks */,
 				744623F72872E2E100492565 /* Resources */,
+				5D8350EF4F55FF9C3B71B47A /* [CP] Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -126,12 +172,55 @@
 			buildActionMask = 2147483647;
 			files = (
 				744624092872E2E200492565 /* LaunchScreen.storyboard in Resources */,
+				744624132874003C00492565 /* GoogleService-Info.plist in Resources */,
 				744624062872E2E200492565 /* Assets.xcassets in Resources */,
 				744624042872E2E100492565 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		51CCA156E1583DE960FFB605 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-beljaby-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5D8350EF4F55FF9C3B71B47A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-beljaby/Pods-beljaby-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-beljaby/Pods-beljaby-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-beljaby/Pods-beljaby-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		744623F52872E2E100492565 /* Sources */ = {
@@ -282,6 +371,7 @@
 		};
 		7446240E2872E2E200492565 /* Debug */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
@@ -310,6 +400,7 @@
 		};
 		7446240F2872E2E200492565 /* Release */ = {
 			isa = XCBuildConfiguration;
+			baseConfigurationReference = 83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
