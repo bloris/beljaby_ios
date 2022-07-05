@@ -17,7 +17,6 @@
 		744624192874278A00492565 /* UserRankCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 744624172874278A00492565 /* UserRankCell.xib */; };
 		7446241B287430EB00492565 /* RankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446241A287430EB00492565 /* RankViewController.swift */; };
 		7446241E2874314600492565 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446241D2874314600492565 /* Users.swift */; };
-		74462420287431D900492565 /* Riot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7446241F287431D900492565 /* Riot-Info.plist */; };
 		7EEC046B3DB1C1EFC8AEE87F /* Pods_beljaby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */; };
 /* End PBXBuildFile section */
 
@@ -35,7 +34,6 @@
 		744624172874278A00492565 /* UserRankCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRankCell.xib; sourceTree = "<group>"; };
 		7446241A287430EB00492565 /* RankViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankViewController.swift; sourceTree = "<group>"; };
 		7446241D2874314600492565 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
-		7446241F287431D900492565 /* Riot-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Riot-Info.plist"; sourceTree = "<group>"; };
 		83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.release.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.release.xcconfig"; sourceTree = "<group>"; };
 		87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.debug.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -90,7 +88,6 @@
 				744624072872E2E200492565 /* LaunchScreen.storyboard */,
 				7446240A2872E2E200492565 /* Info.plist */,
 				744624122874003C00492565 /* GoogleService-Info.plist */,
-				7446241F287431D900492565 /* Riot-Info.plist */,
 			);
 			path = beljaby;
 			sourceTree = "<group>";
@@ -194,7 +191,6 @@
 				744624092872E2E200492565 /* LaunchScreen.storyboard in Resources */,
 				744624132874003C00492565 /* GoogleService-Info.plist in Resources */,
 				744624062872E2E200492565 /* Assets.xcassets in Resources */,
-				74462420287431D900492565 /* Riot-Info.plist in Resources */,
 				744624042872E2E100492565 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
