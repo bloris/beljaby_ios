@@ -9,11 +9,15 @@
 /* Begin PBXBuildFile section */
 		744623FD2872E2E100492565 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744623FC2872E2E100492565 /* AppDelegate.swift */; };
 		744623FF2872E2E100492565 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744623FE2872E2E100492565 /* SceneDelegate.swift */; };
-		744624012872E2E100492565 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744624002872E2E100492565 /* ViewController.swift */; };
 		744624042872E2E100492565 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744624022872E2E100492565 /* Main.storyboard */; };
 		744624062872E2E200492565 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 744624052872E2E200492565 /* Assets.xcassets */; };
 		744624092872E2E200492565 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744624072872E2E200492565 /* LaunchScreen.storyboard */; };
 		744624132874003C00492565 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 744624122874003C00492565 /* GoogleService-Info.plist */; };
+		744624182874278A00492565 /* UserRankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744624162874278A00492565 /* UserRankCell.swift */; };
+		744624192874278A00492565 /* UserRankCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 744624172874278A00492565 /* UserRankCell.xib */; };
+		7446241B287430EB00492565 /* RankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446241A287430EB00492565 /* RankViewController.swift */; };
+		7446241E2874314600492565 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446241D2874314600492565 /* Users.swift */; };
+		74462420287431D900492565 /* Riot-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 7446241F287431D900492565 /* Riot-Info.plist */; };
 		7EEC046B3DB1C1EFC8AEE87F /* Pods_beljaby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */; };
 /* End PBXBuildFile section */
 
@@ -22,12 +26,16 @@
 		744623F92872E2E100492565 /* beljaby.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beljaby.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		744623FC2872E2E100492565 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		744623FE2872E2E100492565 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
-		744624002872E2E100492565 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
 		744624032872E2E100492565 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		744624052872E2E200492565 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		744624082872E2E200492565 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7446240A2872E2E200492565 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		744624122874003C00492565 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		744624162874278A00492565 /* UserRankCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRankCell.swift; sourceTree = "<group>"; };
+		744624172874278A00492565 /* UserRankCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRankCell.xib; sourceTree = "<group>"; };
+		7446241A287430EB00492565 /* RankViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankViewController.swift; sourceTree = "<group>"; };
+		7446241D2874314600492565 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		7446241F287431D900492565 /* Riot-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Riot-Info.plist"; sourceTree = "<group>"; };
 		83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.release.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.release.xcconfig"; sourceTree = "<group>"; };
 		87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.debug.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -73,6 +81,7 @@
 		744623FB2872E2E100492565 /* beljaby */ = {
 			isa = PBXGroup;
 			children = (
+				7446241C2874313A00492565 /* Model */,
 				744623FC2872E2E100492565 /* AppDelegate.swift */,
 				744623FE2872E2E100492565 /* SceneDelegate.swift */,
 				744624102872E2EB00492565 /* Controller */,
@@ -81,6 +90,7 @@
 				744624072872E2E200492565 /* LaunchScreen.storyboard */,
 				7446240A2872E2E200492565 /* Info.plist */,
 				744624122874003C00492565 /* GoogleService-Info.plist */,
+				7446241F287431D900492565 /* Riot-Info.plist */,
 			);
 			path = beljaby;
 			sourceTree = "<group>";
@@ -88,7 +98,7 @@
 		744624102872E2EB00492565 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				744624002872E2E100492565 /* ViewController.swift */,
+				7446241A287430EB00492565 /* RankViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -97,8 +107,18 @@
 			isa = PBXGroup;
 			children = (
 				744624022872E2E100492565 /* Main.storyboard */,
+				744624162874278A00492565 /* UserRankCell.swift */,
+				744624172874278A00492565 /* UserRankCell.xib */,
 			);
 			path = View;
+			sourceTree = "<group>";
+		};
+		7446241C2874313A00492565 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7446241D2874314600492565 /* Users.swift */,
+			);
+			path = Model;
 			sourceTree = "<group>";
 		};
 		C44D88650C19F6C8D17E6893 /* Pods */ = {
@@ -107,7 +127,6 @@
 				87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */,
 				83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */,
 			);
-			name = Pods;
 			path = Pods;
 			sourceTree = "<group>";
 		};
@@ -171,9 +190,11 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				744624192874278A00492565 /* UserRankCell.xib in Resources */,
 				744624092872E2E200492565 /* LaunchScreen.storyboard in Resources */,
 				744624132874003C00492565 /* GoogleService-Info.plist in Resources */,
 				744624062872E2E200492565 /* Assets.xcassets in Resources */,
+				74462420287431D900492565 /* Riot-Info.plist in Resources */,
 				744624042872E2E100492565 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -227,8 +248,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				744624012872E2E100492565 /* ViewController.swift in Sources */,
+				744624182874278A00492565 /* UserRankCell.swift in Sources */,
 				744623FD2872E2E100492565 /* AppDelegate.swift in Sources */,
+				7446241E2874314600492565 /* Users.swift in Sources */,
+				7446241B287430EB00492565 /* RankViewController.swift in Sources */,
 				744623FF2872E2E100492565 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
