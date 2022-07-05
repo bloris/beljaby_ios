@@ -1,0 +1,477 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 55;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		744623FD2872E2E100492565 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744623FC2872E2E100492565 /* AppDelegate.swift */; };
+		744623FF2872E2E100492565 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744623FE2872E2E100492565 /* SceneDelegate.swift */; };
+		744624042872E2E100492565 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744624022872E2E100492565 /* Main.storyboard */; };
+		744624062872E2E200492565 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 744624052872E2E200492565 /* Assets.xcassets */; };
+		744624092872E2E200492565 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 744624072872E2E200492565 /* LaunchScreen.storyboard */; };
+		744624132874003C00492565 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 744624122874003C00492565 /* GoogleService-Info.plist */; };
+		744624182874278A00492565 /* UserRankCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 744624162874278A00492565 /* UserRankCell.swift */; };
+		744624192874278A00492565 /* UserRankCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 744624172874278A00492565 /* UserRankCell.xib */; };
+		7446241B287430EB00492565 /* RankViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446241A287430EB00492565 /* RankViewController.swift */; };
+		7446241E2874314600492565 /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7446241D2874314600492565 /* Users.swift */; };
+		74462422287432AB00492565 /* Riot-API-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 74462421287432AB00492565 /* Riot-API-Info.plist */; };
+		7EEC046B3DB1C1EFC8AEE87F /* Pods_beljaby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_beljaby.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		744623F92872E2E100492565 /* beljaby.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = beljaby.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		744623FC2872E2E100492565 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		744623FE2872E2E100492565 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		744624032872E2E100492565 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
+		744624052872E2E200492565 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		744624082872E2E200492565 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		7446240A2872E2E200492565 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		744624122874003C00492565 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		744624162874278A00492565 /* UserRankCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRankCell.swift; sourceTree = "<group>"; };
+		744624172874278A00492565 /* UserRankCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserRankCell.xib; sourceTree = "<group>"; };
+		7446241A287430EB00492565 /* RankViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankViewController.swift; sourceTree = "<group>"; };
+		7446241D2874314600492565 /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		74462421287432AB00492565 /* Riot-API-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = "Riot-API-Info.plist"; sourceTree = "<group>"; };
+		83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.release.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.release.xcconfig"; sourceTree = "<group>"; };
+		87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.debug.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.debug.xcconfig"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		744623F62872E2E100492565 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				7EEC046B3DB1C1EFC8AEE87F /* Pods_beljaby.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		06A6862862A437BC3DD56DFA /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		744623F02872E2E100492565 = {
+			isa = PBXGroup;
+			children = (
+				744623FB2872E2E100492565 /* beljaby */,
+				744623FA2872E2E100492565 /* Products */,
+				C44D88650C19F6C8D17E6893 /* Pods */,
+				06A6862862A437BC3DD56DFA /* Frameworks */,
+			);
+			sourceTree = "<group>";
+		};
+		744623FA2872E2E100492565 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				744623F92872E2E100492565 /* beljaby.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		744623FB2872E2E100492565 /* beljaby */ = {
+			isa = PBXGroup;
+			children = (
+				7446241C2874313A00492565 /* Model */,
+				744623FC2872E2E100492565 /* AppDelegate.swift */,
+				744623FE2872E2E100492565 /* SceneDelegate.swift */,
+				744624102872E2EB00492565 /* Controller */,
+				744624112872E2FD00492565 /* View */,
+				744624052872E2E200492565 /* Assets.xcassets */,
+				744624072872E2E200492565 /* LaunchScreen.storyboard */,
+				7446240A2872E2E200492565 /* Info.plist */,
+				744624122874003C00492565 /* GoogleService-Info.plist */,
+				74462421287432AB00492565 /* Riot-API-Info.plist */,
+			);
+			path = beljaby;
+			sourceTree = "<group>";
+		};
+		744624102872E2EB00492565 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				7446241A287430EB00492565 /* RankViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		744624112872E2FD00492565 /* View */ = {
+			isa = PBXGroup;
+			children = (
+				744624022872E2E100492565 /* Main.storyboard */,
+				744624162874278A00492565 /* UserRankCell.swift */,
+				744624172874278A00492565 /* UserRankCell.xib */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
+		7446241C2874313A00492565 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				7446241D2874314600492565 /* Users.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		C44D88650C19F6C8D17E6893 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */,
+				83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */,
+			);
+			path = Pods;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		744623F82872E2E100492565 /* beljaby */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 7446240D2872E2E200492565 /* Build configuration list for PBXNativeTarget "beljaby" */;
+			buildPhases = (
+				51CCA156E1583DE960FFB605 /* [CP] Check Pods Manifest.lock */,
+				744623F52872E2E100492565 /* Sources */,
+				744623F62872E2E100492565 /* Frameworks */,
+				744623F72872E2E100492565 /* Resources */,
+				5D8350EF4F55FF9C3B71B47A /* [CP] Embed Pods Frameworks */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = beljaby;
+			productName = beljaby;
+			productReference = 744623F92872E2E100492565 /* beljaby.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		744623F12872E2E100492565 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1340;
+				LastUpgradeCheck = 1340;
+				TargetAttributes = {
+					744623F82872E2E100492565 = {
+						CreatedOnToolsVersion = 13.4.1;
+					};
+				};
+			};
+			buildConfigurationList = 744623F42872E2E100492565 /* Build configuration list for PBXProject "beljaby" */;
+			compatibilityVersion = "Xcode 13.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 744623F02872E2E100492565;
+			productRefGroup = 744623FA2872E2E100492565 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				744623F82872E2E100492565 /* beljaby */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		744623F72872E2E100492565 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				744624192874278A00492565 /* UserRankCell.xib in Resources */,
+				744624092872E2E200492565 /* LaunchScreen.storyboard in Resources */,
+				744624132874003C00492565 /* GoogleService-Info.plist in Resources */,
+				744624062872E2E200492565 /* Assets.xcassets in Resources */,
+				744624042872E2E100492565 /* Main.storyboard in Resources */,
+				74462422287432AB00492565 /* Riot-API-Info.plist in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		51CCA156E1583DE960FFB605 /* [CP] Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
+			);
+			name = "[CP] Check Pods Manifest.lock";
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-beljaby-checkManifestLockResult.txt",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
+			showEnvVarsInLog = 0;
+		};
+		5D8350EF4F55FF9C3B71B47A /* [CP] Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-beljaby/Pods-beljaby-frameworks-${CONFIGURATION}-input-files.xcfilelist",
+			);
+			name = "[CP] Embed Pods Frameworks";
+			outputFileListPaths = (
+				"${PODS_ROOT}/Target Support Files/Pods-beljaby/Pods-beljaby-frameworks-${CONFIGURATION}-output-files.xcfilelist",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-beljaby/Pods-beljaby-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+/* End PBXShellScriptBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		744623F52872E2E100492565 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				744624182874278A00492565 /* UserRankCell.swift in Sources */,
+				744623FD2872E2E100492565 /* AppDelegate.swift in Sources */,
+				7446241E2874314600492565 /* Users.swift in Sources */,
+				7446241B287430EB00492565 /* RankViewController.swift in Sources */,
+				744623FF2872E2E100492565 /* SceneDelegate.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		744624022872E2E100492565 /* Main.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				744624032872E2E100492565 /* Base */,
+			);
+			name = Main.storyboard;
+			sourceTree = "<group>";
+		};
+		744624072872E2E200492565 /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				744624082872E2E200492565 /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		7446240B2872E2E200492565 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		7446240C2872E2E200492565 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++17";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.5;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		7446240E2872E2E200492565 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GXZKT8P9YZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = beljaby/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.exmaple.beljaby;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		7446240F2872E2E200492565 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GXZKT8P9YZ;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = beljaby/Info.plist;
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.exmaple.beljaby;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		744623F42872E2E100492565 /* Build configuration list for PBXProject "beljaby" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7446240B2872E2E200492565 /* Debug */,
+				7446240C2872E2E200492565 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		7446240D2872E2E200492565 /* Build configuration list for PBXNativeTarget "beljaby" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				7446240E2872E2E200492565 /* Debug */,
+				7446240F2872E2E200492565 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 744623F12872E2E100492565 /* Project object */;
+}
