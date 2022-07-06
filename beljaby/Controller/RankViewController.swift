@@ -49,6 +49,14 @@ extension RankViewController{
         cell.mostSecondImage.kf.setImage(with: m1)
         cell.mostThirdImage.kf.setImage(with: m1)
         
+        let win = 500
+        let lose = 500
+        let ratio = 100*Double(win)/Double(win+lose)
+        cell.ratioConstraint = cell.ratioConstraint.setMultiplier(multiplier: ratio/50)
+        
+        cell.winLabel.text = "\(win)W"
+        cell.loseLabel.text = "\(lose)L"
+        cell.ratioLabel.text = "\(Int(ratio))%"
 
         return cell
     }

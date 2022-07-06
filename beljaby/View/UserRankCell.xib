@@ -96,7 +96,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="TAg-dX-uT2">
                                         <rect key="frame" x="0.0" y="0.0" width="30" height="20"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100W" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="flg-iJ-2xd">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100W" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="1" translatesAutoresizingMaskIntoConstraints="NO" id="flg-iJ-2xd">
                                                 <rect key="frame" x="1" y="4.6666666666666679" width="24" height="11"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -113,7 +113,7 @@
                                     <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="2iO-rG-4uZ">
                                         <rect key="frame" x="30" y="0.0" width="30" height="20"/>
                                         <subviews>
-                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100L" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" minimumFontSize="5" translatesAutoresizingMaskIntoConstraints="NO" id="ZZV-CW-cSC">
+                                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="100L" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" translatesAutoresizingMaskIntoConstraints="NO" id="ZZV-CW-cSC">
                                                 <rect key="frame" x="5" y="4.6666666666666679" width="24" height="11"/>
                                                 <fontDescription key="fontDescription" type="boldSystem" pointSize="9"/>
                                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -165,6 +165,7 @@
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>
             <connections>
                 <outlet property="elo" destination="rSa-B2-ykn" id="3ai-gf-KXQ"/>
+                <outlet property="entireView" destination="ztB-jb-Gtw" id="VTP-XK-6Y0"/>
                 <outlet property="loseLabel" destination="ZZV-CW-cSC" id="QHC-P2-4Sb"/>
                 <outlet property="loseView" destination="2iO-rG-4uZ" id="4QW-wx-tZy"/>
                 <outlet property="mostOneImage" destination="pey-jg-nhd" id="yUw-zu-9LF"/>
