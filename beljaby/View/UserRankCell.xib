@@ -176,6 +176,7 @@
                 <outlet property="ratioConstraint" destination="MmQ-hG-qfP" id="kt4-r3-k6N"/>
                 <outlet property="ratioLabel" destination="VlH-6C-W00" id="CnL-aw-jSy"/>
                 <outlet property="tierImage" destination="224-Nk-ILq" id="TXO-Bd-Het"/>
+                <outlet property="tierLabel" destination="K7m-g2-rDo" id="wJn-RE-ZqW"/>
                 <outlet property="winLabel" destination="flg-iJ-2xd" id="1lY-Xc-HuN"/>
                 <outlet property="winView" destination="TAg-dX-uT2" id="YZr-gm-t2O"/>
             </connections>

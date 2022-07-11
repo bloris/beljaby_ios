@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Alamofire
 
 class RankViewController: UITableViewController {
 
@@ -29,25 +30,55 @@ extension RankViewController{
         return 1
     }
     
-    
+    func getVersion(completionHandler: @escaping (Result<Version, Error>) -> Void){
+        let url = "https://ddragon.leagueoflegends.com/realms/kr.json"
+        
+        AF.request(url, method: .get)
+            .responseDecodable(of: Version.self) { response in
+                switch response.result {
+                case .success(let response):
+                    completionHandler(.success(response))
+                case .failure(let error):
+                    completionHandler(.failure(error))
+                }
+            }
+    }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
             return UITableViewCell()
         }
+        var version = "12.12.1"
+        let profileImageId = "4902"
         
-        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/profileicon/4902.png")
-        let tierImageURL = URL(string: "https://opgg-static.akamaized.net/images/medals_new/gold.png?image=q_auto,f_webp,w_144&v=1657013167257")
-        let m1 = URL(string: "https://ddragon.leagueoflegends.com/cdn/12.12.1/img/champion/Qiyana.png")
+        getVersion { [weak self] result in
+            guard let self = self else{return}
+            switch result{
+            case let .success(result):
+                version = result.v
+            case let .failure(error):
+                print(error.localizedDescription)
+                return
+            }
+        }
+        
+        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(profileImageId).png")
+        let m1 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/champion/Qiyana.png")
         
         cell.profileImage.kf.setImage(with: profileImageURL)
-        cell.tierImage.kf.setImage(with: tierImageURL)
-        cell.name.text = "Bloris"
-        cell.elo.text = "\(1480)LP"
-        
         cell.mostOneImage.kf.setImage(with: m1)
         cell.mostSecondImage.kf.setImage(with: m1)
         cell.mostThirdImage.kf.setImage(with: m1)
+        
+        let tier = "Master"
+        
+        
+        
+        cell.tierImage.image = UIImage(named: "Emblem_\(tier)")
+        cell.name.text = "Bloris"
+        cell.elo.text = "\(1480)LP"
+        cell.tierLabel.text = tier
+        
         
         let win = 500
         let lose = 500

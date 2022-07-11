@@ -9,6 +9,7 @@ target 'beljaby' do
   pod 'Firebase/Database'
   pod 'Firebase/Firestore'
   pod 'FirebaseFirestoreSwift'
+  pod 'Alamofire', '~> 5.6'
   # Pods for beljaby
 
 end

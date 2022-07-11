@@ -27,6 +27,7 @@ class UserRankCell: UITableViewCell {
     @IBOutlet weak var ratioLabel: UILabel!
     @IBOutlet weak var winLabel: UILabel!
     @IBOutlet weak var loseLabel: UILabel!
+    @IBOutlet weak var tierLabel: UILabel!
     
     
     @IBOutlet weak var ratioConstraint: NSLayoutConstraint!
