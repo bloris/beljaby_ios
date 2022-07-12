@@ -7,16 +7,26 @@
 
 import Foundation
 
-struct Users{
+struct Users: Codable{
     let puuid: String
-    let summonerLevel: Int
+    let profileIconId: Int
     let elo: Int
     let tier: String
     let win: Int
     let lose: Int
-    let matches: [Match]
+    let matches: [userMatch]
 }
 
-struct Match{
-    
+struct userMatch: Codable{
+    let champ: String
+    let eloChange: Int
+    let mainPerk: String
+    let subPerk: String
+    let kill: Int
+    let death: Int
+    let assist: Int
+    let cs: Int
+    let killP : Int
+    let item: [Int]
+    let ward: Int
 }
