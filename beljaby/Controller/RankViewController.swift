@@ -9,6 +9,7 @@ import UIKit
 import Alamofire
 import FirebaseDatabase
 import FirebaseFirestore
+import RealmSwift
 
 class RankViewController: UITableViewController {
     var userList = [(Users,String)]()
@@ -18,45 +19,15 @@ class RankViewController: UITableViewController {
     var champData = [Int: Champion]()
     var version = "12.12.1"
     var db = Firestore.firestore()
+    let realm = try! Realm()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
         tableView.register(nibName, forCellReuseIdentifier: "UserRankCell")
         
-        
+        self.initData()
         self.getAllUser()
-        
-        self.getVersion {[weak self] result in
-            guard let self = self else{
-                return
-            }
-            switch result{
-            case let .success(result):
-                self.version = result.v
-            case let .failure(error):
-                print(error.localizedDescription)
-                return
-            }
-        }
-        
-        self.getChampion(self.version) {[weak self] result in
-            guard let self = self else{
-                return
-            }
-            switch result{
-            case let .success(result):
-                result.data.forEach{
-                    self.champData[Int($0.value.key) ?? 0] = $0.value
-                }
-                DispatchQueue.main.async {
-                    self.tableView.reloadData()
-                }
-            case let .failure(error):
-                print(error.localizedDescription)
-                return
-            }
-        }
     }
     
     func getAllUserMatch(puuid: String){
@@ -86,7 +57,7 @@ class RankViewController: UITableViewController {
             }
             
             while self.userChampCnt[puuid]!.count < 3{
-                self.userChampCnt[puuid]!.append(self.userChampCnt[puuid]!.last!)
+                self.userChampCnt[puuid]!.append(-1)
             }
             
             DispatchQueue.main.async {
@@ -126,6 +97,7 @@ class RankViewController: UITableViewController {
 
 //MARK: - Table View Datasource
 extension RankViewController{
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.userList[indexPath.row].0
         print(user.name)
@@ -138,6 +110,124 @@ extension RankViewController{
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return self.userList.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
+            return UITableViewCell()
+        }
+        
+        let user = self.userList[indexPath.row].0
+        let puuid = self.userList[indexPath.row].1
+        
+        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/profileicon/\(user.profileIconId).png")
+        
+        let champURL: [String] = (0...2).map{
+            guard let champCnt = userChampCnt[puuid] else{
+                return "blank"
+            }
+            return champData[champCnt[$0]]?.id ?? "blank"
+        }
+        
+        let m1 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[0]).png")
+        let m2 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[1]).png")
+        let m3 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[2]).png")
+
+        cell.profileImage.kf.setImage(with: profileImageURL)
+        
+        if champURL[0] != "blank"{cell.mostOneImage.kf.setImage(with: m1)}
+        if champURL[1] != "blank"{cell.mostSecondImage.kf.setImage(with: m2)}
+        if champURL[2] != "blank"{cell.mostThirdImage.kf.setImage(with: m3)}
+        
+        cell.tierImage.image = UIImage(named: "Emblem_\(user.tier)")
+        cell.name.text = user.name
+        cell.elo.text = "\(user.elo)LP"
+        cell.tierLabel.text = user.tier
+        
+        let win = user.win
+        let lose = user.lose
+        let ratio = 100*Double(win)/Double(win+lose)
+        cell.ratioConstraint = cell.ratioConstraint.setMultiplier(multiplier: ratio/50)
+        
+        cell.winLabel.text = "\(win)W"
+        cell.loseLabel.text = "\(lose)L"
+        cell.ratioLabel.text = "\(Int(ratio))%"
+        
+        cell.layer.cornerRadius = 10
+
+        return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 60
+    }
+}
+
+extension RankViewController{
+    func initData(){
+        let data = realm.objects(DataCache.self)
+        let semaphore = DispatchSemaphore(value: 0)
+        var version = ""
+        self.getVersion {[weak self] result in
+            guard let self = self else{
+                return
+            }
+            switch result{
+            case let .success(result):
+                version = result.v
+                semaphore.signal()
+            case let .failure(error):
+                print(error.localizedDescription)
+                return
+            }
+        }
+        
+        if data.count == 0 || data.first!.version != version{
+            DispatchQueue.global().async {
+                semaphore.wait()
+                let data = DataCache()
+                data.version = version
+                self.getChampion(version) {[weak self] result in
+                    guard let self = self else{
+                        return
+                    }
+                    switch result{
+                    case let .success(result):
+                        result.data.forEach{
+                            let champData = ChampionCache()
+                            champData.id = $0.value.id
+                            champData.key = $0.value.key
+                            champData.name = $0.value.name
+                            
+                            data.champions.append(champData)
+                            self.champData[Int($0.value.key) ?? 0] = $0.value
+                        }
+                        DispatchQueue.main.async {
+                            self.tableView.reloadData()
+                        }
+                        self.save(data: data)
+                    case let .failure(error):
+                        print(error.localizedDescription)
+                        return
+                    }
+                }
+            }
+        }else{
+            data.first!.champions.forEach {
+                self.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
+            }
+            self.tableView.reloadData()
+        }
+    }
+    
+    func save(data: DataCache){
+        do{
+            try realm.write({
+                realm.add(data)
+            })
+        }catch{
+            print("Error saving cache, \(error)")
+        }
     }
     
     func getVersion(completionHandler: @escaping (Result<Version, Error>) -> Void){
@@ -165,52 +255,5 @@ extension RankViewController{
                     completionHandler(.failure(error))
                 }
             }
-    }
-    
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
-            return UITableViewCell()
-        }
-        
-        let user = self.userList[indexPath.row].0
-        let puuid = self.userList[indexPath.row].1
-        
-        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/profileicon/\(user.profileIconId).png")
-        
-        let champ: [String] = (0...2).map{
-            guard let champCnt = userChampCnt[puuid] else{
-                return "Qiyana"
-            }
-            return champData[champCnt[$0]]?.id ?? "Qiyana"
-        }
-        
-        let m1 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champ[0]).png")
-        let m2 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champ[1]).png")
-        let m3 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champ[2]).png")
-
-        cell.profileImage.kf.setImage(with: profileImageURL)
-        cell.mostOneImage.kf.setImage(with: m1)
-        cell.mostSecondImage.kf.setImage(with: m2)
-        cell.mostThirdImage.kf.setImage(with: m3)
-        
-        cell.tierImage.image = UIImage(named: "Emblem_\(user.tier)")
-        cell.name.text = user.name
-        cell.elo.text = "\(user.elo)LP"
-        cell.tierLabel.text = user.tier
-        
-        let win = user.win
-        let lose = user.lose
-        let ratio = 100*Double(win)/Double(win+lose)
-        cell.ratioConstraint = cell.ratioConstraint.setMultiplier(multiplier: ratio/50)
-        
-        cell.winLabel.text = "\(win)W"
-        cell.loseLabel.text = "\(lose)L"
-        cell.ratioLabel.text = "\(Int(ratio))%"
-
-        return cell
-    }
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
     }
 }

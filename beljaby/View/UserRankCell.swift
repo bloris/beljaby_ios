@@ -52,8 +52,8 @@ class UserRankCell: UITableViewCell {
         
         entireView.layer.borderWidth = 0
         
+        
     }
-
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
 
@@ -75,7 +75,7 @@ extension NSLayoutConstraint {
         NSLayoutConstraint.deactivate([self])
 
         let newConstraint = NSLayoutConstraint(
-            item: firstItem,
+            item: firstItem!,
             attribute: firstAttribute,
             relatedBy: relation,
             toItem: secondItem,
