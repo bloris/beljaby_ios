@@ -22,6 +22,13 @@ struct Users: Codable{
     
 }
 
+struct Match: Codable{
+    let gameDuration: Int
+    let matchDate: Date
+    let users: [String]
+    let win: Bool
+}
+
 struct UserMatch: Codable{
     let champ: Int
     let eloChange: Int

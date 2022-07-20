@@ -15,6 +15,7 @@ class RankViewController: UITableViewController {
     var userList = [(Users,String)]()
     var userChampCnt = [String: [Int]]()
     var userMatchDict = [String: Array<(UserMatch,String)>]()
+    var MatchDict = [String: Match]()
     //var userMatchDict = [Users: Array<userMatch>]()
     var champData = [Int: Champion]()
     var version = "12.12.1"
@@ -25,9 +26,10 @@ class RankViewController: UITableViewController {
         super.viewDidLoad()
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
         tableView.register(nibName, forCellReuseIdentifier: "UserRankCell")
-        
+        tableView.allowsSelection = false
         self.initData()
         self.getAllUser()
+        self.getAllMatch()
     }
     
     func getAllUserMatch(puuid: String){
@@ -47,7 +49,7 @@ class RankViewController: UITableViewController {
                     return nil
                 }
             }).sorted(by: {
-                $0.0.matchDate < $1.0.matchDate
+                $0.0.matchDate > $1.0.matchDate
             })
             
             self.userChampCnt[puuid] = champCnt.sorted(by: {
@@ -62,6 +64,27 @@ class RankViewController: UITableViewController {
             
             DispatchQueue.main.async {
                 self.tableView.reloadData()
+                if self.userMatchDict.count == self.userList.count{
+                    self.tableView.allowsSelection = true
+                }
+            }
+        }
+    }
+    
+    func getAllMatch(){
+        db.collection("matches").addSnapshotListener { snapshot, error in
+            guard let documents = snapshot?.documents else{
+                print("Error Firestore fetching document \(String(describing: error))")
+                return
+            }
+            
+            documents.forEach { doc in
+                do{
+                    let match = try doc.data(as: Match.self)
+                    self.MatchDict[doc.documentID] = match
+                }catch let error{
+                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
+                }
             }
         }
     }
@@ -90,7 +113,6 @@ class RankViewController: UITableViewController {
             DispatchQueue.main.async {
                 self.tableView.reloadData()
             }
-            
         }
     }
 }
@@ -101,7 +123,21 @@ extension RankViewController{
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.userList[indexPath.row].0
         print(user.name)
+        performSegue(withIdentifier: "goToUserMatch", sender: self)
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let destinationVC = segue.destination as! UserMatchHistoryViewController
+        
+        if let indexPath = self.tableView.indexPathForSelectedRow{
+            destinationVC.userMatchDict = self.userMatchDict
+            destinationVC.puuid = self.userList[indexPath.row].1
+            destinationVC.champData = self.champData
+            destinationVC.version = self.version
+            destinationVC.MatchDict = self.MatchDict
+        }
+    }
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
