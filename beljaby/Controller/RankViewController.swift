@@ -188,11 +188,11 @@ extension RankViewController{
         cell.winLabel.text = "\(win)W"
         cell.loseLabel.text = "\(lose)L"
         cell.ratioLabel.text = "\(Int(ratio))%"
-        
-        cell.layer.cornerRadius = 10
 
         return cell
     }
+    
+    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
@@ -204,10 +204,7 @@ extension RankViewController{
         let data = realm.objects(DataCache.self)
         let semaphore = DispatchSemaphore(value: 0)
         var version = ""
-        self.getVersion {[weak self] result in
-            guard let self = self else{
-                return
-            }
+        self.getVersion {result in
             switch result{
             case let .success(result):
                 version = result.v

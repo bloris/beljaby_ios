@@ -67,8 +67,12 @@ class UserMatchHistoryViewController: UICollectionViewController {
             let gameDuration = self.MatchDict![matchTuple.1]!.gameDuration
             
             let champ = self.champData![match.champ]!
-            
-            let itemImageURL: [URL?] = match.item.map{
+            var itemList = match.item.filter{$0 != 0}
+            while itemList.count < 7{
+                itemList.insert(0, at: itemList.count - 1)
+            }
+
+            let itemImageURL: [URL?] = itemList.map{
                 if $0 == 0{
                     return nil
                 }
@@ -109,6 +113,8 @@ class UserMatchHistoryViewController: UICollectionViewController {
             if let url = itemImageURL[5] {cell.item5.kf.setImage(with: url)}
             if let url = itemImageURL[6] {cell.item6.kf.setImage(with: url)}
             
+            cell.mainPerkImage.image = UIImage(named: "\(match.mainPerk)")
+            cell.subPerkImage.image = UIImage(named: "\(match.subPerk)")
             
             cell.champSplashImage.kf.setImage(with: splashURL)
             
@@ -117,7 +123,6 @@ class UserMatchHistoryViewController: UICollectionViewController {
             gradientMaskLayer.colors =  [UIColor.white.cgColor, UIColor.clear.cgColor]
             gradientMaskLayer.locations = [0.8, 1]
             
-            cell.layoutIfNeeded()
             cell.champSplashImage.layer.mask = gradientMaskLayer
         }
         
