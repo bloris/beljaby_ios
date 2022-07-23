@@ -40,11 +40,13 @@ class UserRankCell: UITableViewCell {
         view.clipsToBounds = true
         view.layer.cornerRadius = radius
         view.layer.borderWidth = 1
+        
     }
     func configureView(){
         [entireView,profileImage].forEach{
             setCornerRadius($0, 5)
         }
+         
         
         [mostOneImage, mostSecondImage, mostThirdImage].forEach {
             setCornerRadius($0, $0.frame.height/2)

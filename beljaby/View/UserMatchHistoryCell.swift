@@ -35,6 +35,9 @@ class UserMatchHistoryCell: UICollectionViewCell {
     @IBOutlet weak var killPLabel: UILabel!
     @IBOutlet weak var wardLabel: UILabel!
     
+    @IBOutlet weak var mainPerkImage: UIImageView!
+    @IBOutlet weak var subPerkImage: UIImageView!
+    
     override func awakeFromNib() {
         super.awakeFromNib()
         self.configureView()
@@ -50,8 +53,10 @@ class UserMatchHistoryCell: UICollectionViewCell {
             setCornerRadius($0, 5)
         }
         
-        setCornerRadius(champLevelView, champLevelView.frame.height/2)
-        setCornerRadius(winView, winView.frame.height/2)
+        [champLevelView,winView,mainPerkImage].forEach {
+            setCornerRadius($0, $0.frame.height/2)
+        }
+        
         
         
         self.clipsToBounds = true
@@ -59,6 +64,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
         
         
     }
+    
     
     
 }
