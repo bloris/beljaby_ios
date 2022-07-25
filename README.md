@@ -1,4 +1,9 @@
 # Beljaby
+<br />
+<p align="row">
+<img src= "rankview.png" width="400" >
+<img src= "matchview.png" width="400" >
+</p>
 
 ## Features
 
