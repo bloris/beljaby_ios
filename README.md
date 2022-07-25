@@ -2,9 +2,9 @@
 
 ## Features
 
-- [o] Get User custom game current Rank
-- [o] Get User custom game Match History
-- [x] Get User custom game Match History Detail
+- [x] Get User custom game current Rank
+- [x] Get User custom game Match History
+- [] Get User custom game Match History Detail
 
 ## Requirements
 
