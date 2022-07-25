@@ -170,7 +170,7 @@ extension UserMatchHistoryViewController: UICollectionViewDelegateFlowLayout{
         
         let cnt = self.view.frame.width / 370
         
-        return CGSize(width: self.view.frame.width/cnt , height: 180)
+        return CGSize(width: self.view.frame.width/cnt , height: 190)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
