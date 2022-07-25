@@ -4,7 +4,7 @@
 
 - [x] Get User custom game current Rank
 - [x] Get User custom game Match History
-- [] Get User custom game Match History Detail
+- [ ] Get User custom game Match History Detail
 
 ## Requirements
 
