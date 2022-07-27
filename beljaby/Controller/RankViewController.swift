@@ -16,7 +16,7 @@ class RankViewController: UITableViewController {
     var userChampCnt = [String: [Int]]()
     var userMatchDict = [String: Array<(UserMatch,String)>]()
     var MatchDict = [String: Match]()
-    //var userMatchDict = [Users: Array<userMatch>]()
+
     var champData = [Int: Champion]()
     var version = "12.12.1"
     var db = Firestore.firestore()
@@ -139,12 +139,10 @@ extension RankViewController{
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        // #warning Incomplete implementation, return the number of sections
         return 1
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        // #warning Incomplete implementation, return the number of rows
         return self.userList.count
     }
     
