@@ -4,6 +4,7 @@
     <dependencies>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="20020"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <capability name="collection view cell content view" minToolsVersion="11.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -25,7 +26,7 @@
                                     <autoresizingMask key="autoresizingMask"/>
                                 </tableViewCellContentView>
                                 <connections>
-                                    <segue destination="vOO-Ym-34M" kind="show" identifier="goToUserMatch" id="l94-7G-CJm"/>
+                                    <segue destination="yrf-Mw-RTG" kind="show" identifier="goToUserMatch" id="fMy-Ir-bQS"/>
                                 </connections>
                             </tableViewCell>
                         </prototypes>
@@ -48,58 +49,51 @@
             <point key="canvasLocation" x="752" y="175"/>
         </scene>
         <!--대전 기록-->
-        <scene sceneID="K0N-Bm-547">
+        <scene sceneID="HPs-GU-nMx">
             <objects>
-                <collectionViewController id="vOO-Ym-34M" customClass="UserMatchHistoryViewController" customModule="beljaby" customModuleProvider="target" sceneMemberID="viewController">
-                    <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="LBh-1x-6md">
+                <viewController id="yrf-Mw-RTG" customClass="UserMatchHistoryViewController" customModule="beljaby" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Pld-VL-l4R">
                         <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" red="0.078431372549019607" green="0.070588235294117646" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
-                        <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="DQd-GX-HRc">
-                            <size key="itemSize" width="128" height="128"/>
-                            <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                            <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                            <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                        </collectionViewFlowLayout>
-                        <cells>
-                            <collectionViewCell autoresizesSubviews="NO" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="ANb-3d-EzO">
-                                <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                    <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                    <autoresizingMask key="autoresizingMask"/>
-                                </view>
-                                <connections>
-                                    <segue destination="3q5-04-Emb" kind="show" id="M1X-aR-I95"/>
-                                </connections>
-                            </collectionViewCell>
-                        </cells>
-                        <connections>
-                            <outlet property="dataSource" destination="vOO-Ym-34M" id="qZQ-Yk-oad"/>
-                            <outlet property="delegate" destination="vOO-Ym-34M" id="t3x-9r-iRc"/>
-                        </connections>
-                    </collectionView>
-                    <navigationItem key="navigationItem" title="대전 기록" largeTitleDisplayMode="always" id="jtg-rF-n6I"/>
-                </collectionViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Tqx-bL-RgZ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                        <subviews>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="O9N-Ul-r2a">
+                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
+                                <color key="backgroundColor" red="0.078431372549019607" green="0.070588235294117646" blue="0.074509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IVJ-IU-LLS">
+                                    <size key="itemSize" width="128" height="128"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Coc-PC-1Na">
+                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="b4T-7y-Ntl">
+                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                        </collectionViewCellContentView>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="0k9-yi-4q4"/>
+                        <color key="backgroundColor" red="0.078431372549019607" green="0.070588235294117646" blue="0.074509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="O9N-Ul-r2a" secondAttribute="bottom" id="Eve-zE-I5B"/>
+                            <constraint firstItem="O9N-Ul-r2a" firstAttribute="leading" secondItem="0k9-yi-4q4" secondAttribute="leading" id="S3t-ij-22c"/>
+                            <constraint firstItem="0k9-yi-4q4" firstAttribute="trailing" secondItem="O9N-Ul-r2a" secondAttribute="trailing" id="SMZ-Fw-Pzu"/>
+                            <constraint firstItem="O9N-Ul-r2a" firstAttribute="top" secondItem="Pld-VL-l4R" secondAttribute="top" id="W2x-DA-IAR"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" title="대전 기록" id="3ht-pU-VEA"/>
+                    <connections>
+                        <outlet property="collectionView" destination="O9N-Ul-r2a" id="UA2-dk-HqH"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="pIg-N6-iUu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1643" y="175"/>
-        </scene>
-        <!--대전 정보-->
-        <scene sceneID="R0v-vb-jtS">
-            <objects>
-                <viewController id="3q5-04-Emb" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="CuY-jk-O9k">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <viewLayoutGuide key="safeArea" id="b27-XS-0ED"/>
-                        <color key="backgroundColor" red="0.078431372549019607" green="0.070588235294117646" blue="0.074509803921568626" alpha="1" colorSpace="calibratedRGB"/>
-                    </view>
-                    <navigationItem key="navigationItem" title="대전 정보" id="D85-pk-lTe"/>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="nNF-WW-ZT9" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2663" y="175"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="y0U-aF-bxX">

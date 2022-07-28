@@ -10,7 +10,9 @@ import Kingfisher
 
 private let reuseIdentifier = "Cell"
 
-class UserMatchHistoryViewController: UICollectionViewController {
+class UserMatchHistoryViewController: UIViewController {
+    @IBOutlet weak var collectionView: UICollectionView!
+    
     var userMatchDict: [String: Array<(UserMatch,String)>]?
     var MatchDict: [String: Match]?
     var puuid: String?
@@ -25,6 +27,12 @@ class UserMatchHistoryViewController: UICollectionViewController {
         let nibName = UINib(nibName: "UserMatchHistoryCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserMatchHistoryCell")
         
+        self.collectionView.delegate = self
+        self.collectionView.dataSource = self
+        
+        if let flowlayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            flowlayout.estimatedItemSize = .zero
+        }
     }
     
     override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
@@ -34,18 +42,18 @@ class UserMatchHistoryViewController: UICollectionViewController {
         }
         flowLayout.invalidateLayout()
     }
-    
-    
-    override func numberOfSections(in collectionView: UICollectionView) -> Int {
+}
+
+extension UserMatchHistoryViewController: UICollectionViewDataSource{
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
         return 1
     }
     
-    
-    override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.userMatchDict?[self.puuid ?? ""]?.count ?? 1
     }
     
-    override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else{
             return UICollectionViewCell()
         }
@@ -59,26 +67,21 @@ class UserMatchHistoryViewController: UICollectionViewController {
             cell.configure(userMatch, match, version, champ)
         }
         
-        
         return cell
     }
 }
 
 extension UserMatchHistoryViewController: UICollectionViewDelegateFlowLayout{
-    
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        
-        let cnt = self.view.frame.width / 370
-        
-        return CGSize(width: self.view.frame.width/cnt , height: 190)
+        let cnt = self.collectionView.bounds.width / 370
+        return CGSize(width: self.collectionView.bounds.width/cnt , height: 190)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        
-        let cnt = self.view.frame.width / 370
-        let totalCellWidth = cnt.rounded(.down) * (self.view.frame.width/cnt)
+        let cnt = self.collectionView.bounds.width / 370
+        let totalCellWidth = cnt.rounded(.down) * (self.collectionView.bounds.width/cnt)
         let totalSapcing = (cnt.rounded(.down)-1) * 10
-        let inset = self.view.frame.width - (totalSapcing+totalCellWidth)
+        let inset = self.collectionView.bounds.width - (totalSapcing+totalCellWidth)
         
         return UIEdgeInsets(top: 10, left: inset/2, bottom: 10, right: inset/2)
     }
