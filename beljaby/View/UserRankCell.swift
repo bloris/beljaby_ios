@@ -16,11 +16,9 @@ class UserRankCell: UITableViewCell {
     @IBOutlet weak var mostSecondImage: UIImageView!
     @IBOutlet weak var mostThirdImage: UIImageView!
     
-    
     @IBOutlet weak var winView: UIView!
     @IBOutlet weak var loseView: UIView!
     @IBOutlet weak var entireView: UIStackView!
-    
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var elo: UILabel!
@@ -28,7 +26,6 @@ class UserRankCell: UITableViewCell {
     @IBOutlet weak var winLabel: UILabel!
     @IBOutlet weak var loseLabel: UILabel!
     @IBOutlet weak var tierLabel: UILabel!
-    
     
     @IBOutlet weak var ratioConstraint: NSLayoutConstraint!
     
@@ -84,14 +81,11 @@ class UserRankCell: UITableViewCell {
         }
         
         entireView.layer.borderWidth = 0
-        
-        
     }
+    
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
     }
-    
-    
 }
 
 extension NSLayoutConstraint {

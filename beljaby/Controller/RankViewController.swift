@@ -37,89 +37,6 @@ class RankViewController: UITableViewController {
         makeMode.toggle()
     }
     
-    func getAllUserMatch(puuid: String){
-        self.db.collection("users").document(puuid).collection("userMatch").getDocuments { (snapshot, error) in
-            guard let documents = snapshot?.documents else{
-                print("Error Firestore fetching document \(String(describing: error))")
-                return
-            }
-            var champCnt = [Int: Int]()
-            self.userMatchDict[puuid] = documents.compactMap({ doc -> (UserMatch,String)?  in
-                do{
-                    let userMatch = try doc.data(as: UserMatch.self)
-                    champCnt[userMatch.champ, default: 0] += 1
-                    return (userMatch,doc.documentID)
-                }catch let error{
-                    print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
-                    return nil
-                }
-            }).sorted(by: {
-                $0.0.matchDate > $1.0.matchDate
-            })
-            
-            self.userChampCnt[puuid] = champCnt.sorted(by: {
-                $0.value > $1.value
-            }).map{
-                $0.key
-            }
-            
-            while self.userChampCnt[puuid]!.count < 3{
-                self.userChampCnt[puuid]!.append(-1)
-            }
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                if self.userMatchDict.count == self.userList.count{
-                    self.tableView.allowsSelection = true
-                }
-            }
-        }
-    }
-    
-    func getAllMatch(){
-        db.collection("matches").addSnapshotListener { snapshot, error in
-            guard let documents = snapshot?.documents else{
-                print("Error Firestore fetching document \(String(describing: error))")
-                return
-            }
-            
-            documents.forEach { doc in
-                do{
-                    let match = try doc.data(as: Match.self)
-                    self.MatchDict[doc.documentID] = match
-                }catch let error{
-                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
-                }
-            }
-        }
-    }
-
-    func getAllUser(){
-        db.collection("users").addSnapshotListener {snapshot, error in
-            guard let documents = snapshot?.documents else{
-                print("Error Firestore fetching document \(String(describing: error))")
-                return
-            }
-            
-            self.userList = documents.compactMap({ doc -> (User,String)? in
-                do{
-                    let user = try doc.data(as: User.self)
-                    self.getAllUserMatch(puuid: doc.documentID)
-                    
-                    return (user,doc.documentID)
-                } catch let error{
-                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
-                    return nil
-                }
-            }).sorted(by: {
-                $0.0.elo > $1.0.elo
-            })
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-    }
 }
 
 //MARK: - Table View Datasource
@@ -171,8 +88,6 @@ extension RankViewController{
 
         return cell
     }
-    
-    
     
     override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
@@ -268,5 +183,89 @@ extension RankViewController{
                     completionHandler(.failure(error))
                 }
             }
+    }
+    
+    func getAllUserMatch(puuid: String){
+        self.db.collection("users").document(puuid).collection("userMatch").getDocuments { (snapshot, error) in
+            guard let documents = snapshot?.documents else{
+                print("Error Firestore fetching document \(String(describing: error))")
+                return
+            }
+            var champCnt = [Int: Int]()
+            self.userMatchDict[puuid] = documents.compactMap({ doc -> (UserMatch,String)?  in
+                do{
+                    let userMatch = try doc.data(as: UserMatch.self)
+                    champCnt[userMatch.champ, default: 0] += 1
+                    return (userMatch,doc.documentID)
+                }catch let error{
+                    print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
+                    return nil
+                }
+            }).sorted(by: {
+                $0.0.matchDate > $1.0.matchDate
+            })
+            
+            self.userChampCnt[puuid] = champCnt.sorted(by: {
+                $0.value > $1.value
+            }).map{
+                $0.key
+            }
+            
+            while self.userChampCnt[puuid]!.count < 3{
+                self.userChampCnt[puuid]!.append(-1)
+            }
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+                if self.userMatchDict.count == self.userList.count{
+                    self.tableView.allowsSelection = true
+                }
+            }
+        }
+    }
+    
+    func getAllMatch(){
+        db.collection("matches").addSnapshotListener { snapshot, error in
+            guard let documents = snapshot?.documents else{
+                print("Error Firestore fetching document \(String(describing: error))")
+                return
+            }
+            
+            documents.forEach { doc in
+                do{
+                    let match = try doc.data(as: Match.self)
+                    self.MatchDict[doc.documentID] = match
+                }catch let error{
+                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    func getAllUser(){
+        db.collection("users").addSnapshotListener {snapshot, error in
+            guard let documents = snapshot?.documents else{
+                print("Error Firestore fetching document \(String(describing: error))")
+                return
+            }
+            
+            self.userList = documents.compactMap({ doc -> (User,String)? in
+                do{
+                    let user = try doc.data(as: User.self)
+                    self.getAllUserMatch(puuid: doc.documentID)
+                    
+                    return (user,doc.documentID)
+                } catch let error{
+                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
+                    return nil
+                }
+            }).sorted(by: {
+                $0.0.elo > $1.0.elo
+            })
+            
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
     }
 }

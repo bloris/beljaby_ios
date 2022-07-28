@@ -119,14 +119,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
             setCornerRadius($0, $0.frame.height/2)
         }
         
-        
-        
         self.clipsToBounds = true
         self.layer.cornerRadius = 10
-        
-        
     }
-    
-    
-    
 }
