@@ -34,15 +34,46 @@ class UserRankCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.configureView()
+        self.initView()
     }
+    
+    func configure(_ user: User, _ champMost: [String], _ version: String){
+        let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
+        
+        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
+        
+        let champURL: [URL?] = champMost.map{
+            URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/champion/\($0).png")
+        }
+        
+        let win = user.win
+        let lose = user.lose
+        let ratio = 100*Double(win)/Double(win+lose)
+        
+        self.profileImage.kf.setImage(with: profileImageURL)
+        
+        for (idx, url) in champURL.enumerated(){
+            if champMost[idx] != "blank"{
+                champImageList[idx]?.kf.setImage(with: url)
+            }
+        }
+        
+        tierImage.image = UIImage(named: "Emblem_\(user.tier)")
+        name.text = user.name
+        elo.text = "\(user.elo)LP"
+        winLabel.text = "\(win)W"
+        loseLabel.text = "\(lose)L"
+        ratioLabel.text = "\(Int(ratio))%"
+        ratioConstraint = ratioConstraint.setMultiplier(multiplier: ratio/50)
+    }
+    
     func setCornerRadius<V:UIView>(_ view: V,_ radius: CGFloat){
         view.clipsToBounds = true
         view.layer.cornerRadius = radius
         view.layer.borderWidth = 1
-        
     }
-    func configureView(){
+    
+    func initView(){
         [entireView,profileImage].forEach{
             setCornerRadius($0, 5)
         }
@@ -58,7 +89,6 @@ class UserRankCell: UITableViewCell {
     }
     override func setSelected(_ selected: Bool, animated: Bool) {
         super.setSelected(selected, animated: animated)
-
     }
     
     

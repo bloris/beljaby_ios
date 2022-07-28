@@ -37,6 +37,9 @@
                     <navigationItem key="navigationItem" title="소환사 랭킹" id="ka6-FY-7Lp">
                         <barButtonItem key="rightBarButtonItem" title="Make Match" id="3V0-hL-tYC">
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            <connections>
+                                <action selector="makeMatchTapped:" destination="hdm-AO-nDK" id="fAx-8e-orh"/>
+                            </connections>
                         </barButtonItem>
                     </navigationItem>
                 </tableViewController>

@@ -50,70 +50,13 @@ class UserMatchHistoryViewController: UICollectionViewController {
             return UICollectionViewCell()
         }
         
-        if let matchTuple = self.userMatchDict?[self.puuid ?? ""]?[indexPath.row]{
-            let dateFormatter = DateFormatter()
-            dateFormatter.dateFormat = "yyyy/MM/dd"
-            let match = matchTuple.0
-            let gameDuration = self.MatchDict![matchTuple.1]!.gameDuration
+        if let matchTuple = self.userMatchDict?[self.puuid ?? ""]?[indexPath.row], let version = self.version{
+            let userMatch = matchTuple.0
+            let matchId = matchTuple.1
+            let match = self.MatchDict![matchId]!
+            let champ = self.champData![userMatch.champ]!
             
-            let champ = self.champData![match.champ]!
-            var itemList = match.item.filter{$0 != 0}
-            while itemList.count < 7{
-                itemList.insert(0, at: itemList.count - 1)
-            }
-
-            let itemImageURL: [URL?] = itemList.map{
-                if $0 == 0{
-                    return nil
-                }
-                return URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version!)/img/item/\($0).png")
-            }
-            let splashURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/\(champ.id)_0.jpg")
-            
-            
-            cell.dateLabel.text = dateFormatter.string(from: match.matchDate) + String(format: "  %02d:%02d분", gameDuration/60,gameDuration%60)
-            
-            if match.win{
-                cell.winLabel.text = "승리"
-                cell.winLabel.textColor = .black
-                cell.winView.backgroundColor = UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00)
-            }else{
-                cell.winLabel.text = "패배"
-                cell.winLabel.textColor = .white
-                cell.winView.backgroundColor = UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)
-            }
-            
-            cell.eloChange.text = (match.eloChange > 0 ? "+" : "") + "\(match.eloChange)"
-            
-            cell.champName.text = champ.name
-            cell.champLevel.text = "\(match.champLevel)"
-            
-            cell.killScoreLabel.text = "\(match.kill)/\(match.death)/\(match.assist)"
-            cell.csLabel.text = "\(match.cs) "+String(format: "(%.1f)", (Double(match.cs)/(Double(gameDuration)/600.0)+5.0)/10.0)
-            cell.goldEarnedLabel.text = String(format: "%.1f천", Double(match.goldEarned+50)/1000.0)
-            
-            cell.killPLabel.text = "킬관여 \(match.killP)%"
-            cell.wardLabel.text = "제어 와드 \(match.ward)"
-            
-            if let url = itemImageURL[0] {cell.item0.kf.setImage(with: url)}
-            if let url = itemImageURL[1] {cell.item1.kf.setImage(with: url)}
-            if let url = itemImageURL[2] {cell.item2.kf.setImage(with: url)}
-            if let url = itemImageURL[3] {cell.item3.kf.setImage(with: url)}
-            if let url = itemImageURL[4] {cell.item4.kf.setImage(with: url)}
-            if let url = itemImageURL[5] {cell.item5.kf.setImage(with: url)}
-            if let url = itemImageURL[6] {cell.item6.kf.setImage(with: url)}
-            
-            cell.mainPerkImage.image = UIImage(named: "\(match.mainPerk)")
-            cell.subPerkImage.image = UIImage(named: "\(match.subPerk)")
-            
-            cell.champSplashImage.kf.setImage(with: splashURL)
-            
-            let gradientMaskLayer = CAGradientLayer()
-            gradientMaskLayer.frame = cell.champSplashImage.bounds
-            gradientMaskLayer.colors =  [UIColor.white.cgColor, UIColor.clear.cgColor]
-            gradientMaskLayer.locations = [0.8, 1]
-            
-            cell.champSplashImage.layer.mask = gradientMaskLayer
+            cell.configure(userMatch, match, version, champ)
         }
         
         

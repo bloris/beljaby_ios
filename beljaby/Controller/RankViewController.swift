@@ -12,7 +12,7 @@ import FirebaseFirestore
 import RealmSwift
 
 class RankViewController: UITableViewController {
-    var userList = [(Users,String)]()
+    var userList = [(User,String)]()
     var userChampCnt = [String: [Int]]()
     var userMatchDict = [String: Array<(UserMatch,String)>]()
     var MatchDict = [String: Match]()
@@ -20,6 +20,7 @@ class RankViewController: UITableViewController {
     var champData = [Int: Champion]()
     var version = "12.12.1"
     var db = Firestore.firestore()
+    var makeMode = false
     let realm = try! Realm()
     
     override func viewDidLoad() {
@@ -30,6 +31,10 @@ class RankViewController: UITableViewController {
         self.initData()
         self.getAllUser()
         self.getAllMatch()
+    }
+    
+    @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
+        makeMode.toggle()
     }
     
     func getAllUserMatch(puuid: String){
@@ -96,9 +101,9 @@ class RankViewController: UITableViewController {
                 return
             }
             
-            self.userList = documents.compactMap({ doc -> (Users,String)? in
+            self.userList = documents.compactMap({ doc -> (User,String)? in
                 do{
-                    let user = try doc.data(as: Users.self)
+                    let user = try doc.data(as: User.self)
                     self.getAllUserMatch(puuid: doc.documentID)
                     
                     return (user,doc.documentID)
@@ -123,7 +128,9 @@ extension RankViewController{
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let user = self.userList[indexPath.row].0
         print(user.name)
-        performSegue(withIdentifier: "goToUserMatch", sender: self)
+        if !self.makeMode{
+            performSegue(withIdentifier: "goToUserMatch", sender: self)
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -154,38 +161,13 @@ extension RankViewController{
         let user = self.userList[indexPath.row].0
         let puuid = self.userList[indexPath.row].1
         
-        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/profileicon/\(user.profileIconId).png")
-        
-        let champURL: [String] = (0...2).map{
+        let champMost: [String] = (0...2).map{
             guard let champCnt = userChampCnt[puuid] else{
                 return "blank"
             }
             return champData[champCnt[$0]]?.id ?? "blank"
         }
-        
-        let m1 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[0]).png")
-        let m2 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[1]).png")
-        let m3 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[2]).png")
-
-        cell.profileImage.kf.setImage(with: profileImageURL)
-        
-        if champURL[0] != "blank"{cell.mostOneImage.kf.setImage(with: m1)}
-        if champURL[1] != "blank"{cell.mostSecondImage.kf.setImage(with: m2)}
-        if champURL[2] != "blank"{cell.mostThirdImage.kf.setImage(with: m3)}
-        
-        cell.tierImage.image = UIImage(named: "Emblem_\(user.tier)")
-        cell.name.text = user.name
-        cell.elo.text = "\(user.elo)LP"
-        cell.tierLabel.text = user.tier
-        
-        let win = user.win
-        let lose = user.lose
-        let ratio = 100*Double(win)/Double(win+lose)
-        cell.ratioConstraint = cell.ratioConstraint.setMultiplier(multiplier: ratio/50)
-        
-        cell.winLabel.text = "\(win)W"
-        cell.loseLabel.text = "\(lose)L"
-        cell.ratioLabel.text = "\(Int(ratio))%"
+        cell.configure(user, champMost, self.version)
 
         return cell
     }
