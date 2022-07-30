@@ -34,14 +34,23 @@ class UserRankCell: UICollectionViewCell {
         self.initView()
     }
     
-    func configure(_ user: User, _ champMost: [String], _ version: String){
+    func configure(_ user: User, _ version: String, _ userChampCnt: [String: [Int]]){
         let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
         
         let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
         
+        let champMost: [String] = (0...2).map{
+            guard let champCnt = userChampCnt[user.puuid] else{
+                return "blank"
+            }
+            return Champion.champData[champCnt[$0]]?.id ?? "blank"
+        }
+        
         let champURL: [URL?] = champMost.map{
             URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/champion/\($0).png")
         }
+        
+        
         
         let win = user.win
         let lose = user.lose
@@ -58,6 +67,7 @@ class UserRankCell: UICollectionViewCell {
         tierImage.image = UIImage(named: "Emblem_\(user.tier)")
         name.text = user.name
         elo.text = "\(user.elo)LP"
+        tierLabel.text = user.tier
         winLabel.text = "\(win)W"
         loseLabel.text = "\(lose)L"
         ratioLabel.text = "\(Int(ratio))%"

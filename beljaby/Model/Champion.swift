@@ -9,11 +9,18 @@ import Foundation
 import RealmSwift
 
 class ChampionCache: Object{
-    @objc dynamic var id: String = ""
-    @objc dynamic var key: String = ""
-    @objc dynamic var name: String = ""
+    @Persisted var id: String = ""
+    @Persisted var key: String = ""
+    @Persisted var name: String = ""
     
     var parentCategory = LinkingObjects(fromType: DataCache.self, property: "champions")
+    
+    convenience init(champ: Champion){
+        self.init()
+        self.id = champ.id
+        self.key = champ.key
+        self.name = champ.name
+    }
 }
 
 struct ChampionList:Codable{
@@ -24,4 +31,6 @@ struct Champion: Codable{
     let id: String
     let key: String
     let name: String
+    
+    static var champData = [Int: Champion]()
 }

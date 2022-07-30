@@ -16,7 +16,6 @@ class UserMatchHistoryViewController: UIViewController {
     var userMatchDict: [String: Array<(UserMatch,String)>]?
     var MatchDict: [String: Match]?
     var puuid: String?
-    var champData: [Int: Champion]?
     var version: String?
     
     var MatchList = [Match]()
@@ -62,7 +61,7 @@ extension UserMatchHistoryViewController: UICollectionViewDataSource{
             let userMatch = matchTuple.0
             let matchId = matchTuple.1
             let match = self.MatchDict![matchId]!
-            let champ = self.champData![userMatch.champ]!
+            let champ = Champion.champData[userMatch.champ]!
             
             cell.configure(userMatch, match, version, champ)
         }

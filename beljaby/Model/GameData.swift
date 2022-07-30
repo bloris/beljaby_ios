@@ -12,7 +12,8 @@ struct userData{
     let matchs: [UserMatch]
 }
 
-struct User: Codable{
+struct User: Codable, Hashable{
+    let puuid: String
     let name: String
     let profileIconId: Int
     let elo: Int
