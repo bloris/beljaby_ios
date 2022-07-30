@@ -11,7 +11,8 @@ import FirebaseDatabase
 import FirebaseFirestore
 import RealmSwift
 
-class RankViewController: UITableViewController {
+class RankViewController: UIViewController {
+    @IBOutlet weak var collectionView: UICollectionView!
     var userList = [(User,String)]()
     var userChampCnt = [String: [Int]]()
     var userMatchDict = [String: Array<(UserMatch,String)>]()
@@ -23,60 +24,71 @@ class RankViewController: UITableViewController {
     var makeMode = false
     let realm = try! Realm()
     
+    enum Section{
+        case main
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
-        tableView.register(nibName, forCellReuseIdentifier: "UserRankCell")
-        tableView.allowsSelection = false
+        self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
+        self.collectionView.allowsSelection = false
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
         self.initData()
         self.getAllUser()
         self.getAllMatch()
+        
+        if let flowlayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            flowlayout.estimatedItemSize = .zero
+        }
     }
     
     @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
-        makeMode.toggle()
+        //makeMode.toggle()
     }
     
 }
 
 //MARK: - Table View Datasource
-extension RankViewController{
+extension RankViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.userList[indexPath.row].0
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let user = self.userList[indexPath.item].0
         print(user.name)
         if !self.makeMode{
             performSegue(withIdentifier: "goToUserMatch", sender: self)
         }
     }
     
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! UserMatchHistoryViewController
         
-        if let indexPath = self.tableView.indexPathForSelectedRow{
+        if let indexPath = self.collectionView.indexPathsForSelectedItems?.first{
             destinationVC.userMatchDict = self.userMatchDict
-            destinationVC.puuid = self.userList[indexPath.row].1
+            destinationVC.puuid = self.userList[indexPath.item].1
             destinationVC.champData = self.champData
             destinationVC.version = self.version
             destinationVC.MatchDict = self.MatchDict
         }
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UICollectionView) -> Int {
         return 1
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.userList.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
-            return UITableViewCell()
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
+            return UICollectionViewCell()
         }
         
-        let user = self.userList[indexPath.row].0
-        let puuid = self.userList[indexPath.row].1
+        let user = self.userList[indexPath.item].0
+        let puuid = self.userList[indexPath.item].1
         
         let champMost: [String] = (0...2).map{
             guard let champCnt = userChampCnt[puuid] else{
@@ -89,9 +101,18 @@ extension RankViewController{
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.collectionView.bounds.width , height: 60)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+    
 }
 
 extension RankViewController{
@@ -131,7 +152,7 @@ extension RankViewController{
                             self.champData[Int($0.value.key) ?? 0] = $0.value
                         }
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
+                            self.collectionView.reloadData()
                         }
                         self.save(data: data)
                     case let .failure(error):
@@ -144,7 +165,7 @@ extension RankViewController{
             data.first!.champions.forEach {
                 self.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
             }
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
         }
     }
     
@@ -206,7 +227,10 @@ extension RankViewController{
             })
             
             self.userChampCnt[puuid] = champCnt.sorted(by: {
-                $0.value > $1.value
+                if $0.value == $1.value{
+                    return $0.key < $1.key
+                }
+                return $0.value > $1.value
             }).map{
                 $0.key
             }
@@ -216,9 +240,9 @@ extension RankViewController{
             }
             
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.collectionView.reloadData()
                 if self.userMatchDict.count == self.userList.count{
-                    self.tableView.allowsSelection = true
+                    self.collectionView.allowsSelection = true
                 }
             }
         }
@@ -264,7 +288,7 @@ extension RankViewController{
             })
             
             DispatchQueue.main.async {
-                self.tableView.reloadData()
+                self.collectionView.reloadData()
             }
         }
     }

@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class UserRankCell: UITableViewCell {
+class UserRankCell: UICollectionViewCell {
 
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var tierImage: UIImageView!
@@ -45,7 +45,7 @@ class UserRankCell: UITableViewCell {
         
         let win = user.win
         let lose = user.lose
-        let ratio = 100*Double(win)/Double(win+lose)
+        let ratio = win+lose != 0 ? 100*Double(win)/Double(win+lose) : 0.0
         
         self.profileImage.kf.setImage(with: profileImageURL)
         
@@ -81,10 +81,9 @@ class UserRankCell: UITableViewCell {
         }
         
         entireView.layer.borderWidth = 0
-    }
-    
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
+        
+        self.clipsToBounds = true
+        self.layer.cornerRadius = 5
     }
 }
 
