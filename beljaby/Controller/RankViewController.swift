@@ -11,8 +11,9 @@ import FirebaseDatabase
 import FirebaseFirestore
 import RealmSwift
 
-class RankViewController: UITableViewController {
-    var userList = [(Users,String)]()
+class RankViewController: UIViewController {
+    @IBOutlet weak var collectionView: UICollectionView!
+    var userList = [(User,String)]()
     var userChampCnt = [String: [Int]]()
     var userMatchDict = [String: Array<(UserMatch,String)>]()
     var MatchDict = [String: Match]()
@@ -20,181 +21,98 @@ class RankViewController: UITableViewController {
     var champData = [Int: Champion]()
     var version = "12.12.1"
     var db = Firestore.firestore()
+    var makeMode = false
     let realm = try! Realm()
+    
+    enum Section{
+        case main
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
-        tableView.register(nibName, forCellReuseIdentifier: "UserRankCell")
-        tableView.allowsSelection = false
+        self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
+        self.collectionView.allowsSelection = false
+        self.collectionView.dataSource = self
+        self.collectionView.delegate = self
         self.initData()
         self.getAllUser()
         self.getAllMatch()
-    }
-    
-    func getAllUserMatch(puuid: String){
-        self.db.collection("users").document(puuid).collection("userMatch").getDocuments { (snapshot, error) in
-            guard let documents = snapshot?.documents else{
-                print("Error Firestore fetching document \(String(describing: error))")
-                return
-            }
-            var champCnt = [Int: Int]()
-            self.userMatchDict[puuid] = documents.compactMap({ doc -> (UserMatch,String)?  in
-                do{
-                    let userMatch = try doc.data(as: UserMatch.self)
-                    champCnt[userMatch.champ, default: 0] += 1
-                    return (userMatch,doc.documentID)
-                }catch let error{
-                    print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
-                    return nil
-                }
-            }).sorted(by: {
-                $0.0.matchDate > $1.0.matchDate
-            })
-            
-            self.userChampCnt[puuid] = champCnt.sorted(by: {
-                $0.value > $1.value
-            }).map{
-                $0.key
-            }
-            
-            while self.userChampCnt[puuid]!.count < 3{
-                self.userChampCnt[puuid]!.append(-1)
-            }
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-                if self.userMatchDict.count == self.userList.count{
-                    self.tableView.allowsSelection = true
-                }
-            }
+        
+        if let flowlayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
+            flowlayout.estimatedItemSize = .zero
         }
     }
     
-    func getAllMatch(){
-        db.collection("matches").addSnapshotListener { snapshot, error in
-            guard let documents = snapshot?.documents else{
-                print("Error Firestore fetching document \(String(describing: error))")
-                return
-            }
-            
-            documents.forEach { doc in
-                do{
-                    let match = try doc.data(as: Match.self)
-                    self.MatchDict[doc.documentID] = match
-                }catch let error{
-                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
-                }
-            }
-        }
+    @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
+        //makeMode.toggle()
     }
-
-    func getAllUser(){
-        db.collection("users").addSnapshotListener {snapshot, error in
-            guard let documents = snapshot?.documents else{
-                print("Error Firestore fetching document \(String(describing: error))")
-                return
-            }
-            
-            self.userList = documents.compactMap({ doc -> (Users,String)? in
-                do{
-                    let user = try doc.data(as: Users.self)
-                    self.getAllUserMatch(puuid: doc.documentID)
-                    
-                    return (user,doc.documentID)
-                } catch let error{
-                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
-                    return nil
-                }
-            }).sorted(by: {
-                $0.0.elo > $1.0.elo
-            })
-            
-            DispatchQueue.main.async {
-                self.tableView.reloadData()
-            }
-        }
-    }
+    
 }
 
 //MARK: - Table View Datasource
-extension RankViewController{
+extension RankViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
     
-    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = self.userList[indexPath.row].0
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let user = self.userList[indexPath.item].0
         print(user.name)
-        performSegue(withIdentifier: "goToUserMatch", sender: self)
+        if !self.makeMode{
+            performSegue(withIdentifier: "goToUserMatch", sender: self)
+        }
     }
+    
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let destinationVC = segue.destination as! UserMatchHistoryViewController
         
-        if let indexPath = self.tableView.indexPathForSelectedRow{
+        if let indexPath = self.collectionView.indexPathsForSelectedItems?.first{
             destinationVC.userMatchDict = self.userMatchDict
-            destinationVC.puuid = self.userList[indexPath.row].1
+            destinationVC.puuid = self.userList[indexPath.item].1
             destinationVC.champData = self.champData
             destinationVC.version = self.version
             destinationVC.MatchDict = self.MatchDict
         }
     }
     
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UICollectionView) -> Int {
         return 1
     }
-
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return self.userList.count
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
-            return UITableViewCell()
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
+            return UICollectionViewCell()
         }
         
-        let user = self.userList[indexPath.row].0
-        let puuid = self.userList[indexPath.row].1
+        let user = self.userList[indexPath.item].0
+        let puuid = self.userList[indexPath.item].1
         
-        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/profileicon/\(user.profileIconId).png")
-        
-        let champURL: [String] = (0...2).map{
+        let champMost: [String] = (0...2).map{
             guard let champCnt = userChampCnt[puuid] else{
                 return "blank"
             }
             return champData[champCnt[$0]]?.id ?? "blank"
         }
-        
-        let m1 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[0]).png")
-        let m2 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[1]).png")
-        let m3 = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(self.version)/img/champion/\(champURL[2]).png")
-
-        cell.profileImage.kf.setImage(with: profileImageURL)
-        
-        if champURL[0] != "blank"{cell.mostOneImage.kf.setImage(with: m1)}
-        if champURL[1] != "blank"{cell.mostSecondImage.kf.setImage(with: m2)}
-        if champURL[2] != "blank"{cell.mostThirdImage.kf.setImage(with: m3)}
-        
-        cell.tierImage.image = UIImage(named: "Emblem_\(user.tier)")
-        cell.name.text = user.name
-        cell.elo.text = "\(user.elo)LP"
-        cell.tierLabel.text = user.tier
-        
-        let win = user.win
-        let lose = user.lose
-        let ratio = 100*Double(win)/Double(win+lose)
-        cell.ratioConstraint = cell.ratioConstraint.setMultiplier(multiplier: ratio/50)
-        
-        cell.winLabel.text = "\(win)W"
-        cell.loseLabel.text = "\(lose)L"
-        cell.ratioLabel.text = "\(Int(ratio))%"
+        cell.configure(user, champMost, self.version)
 
         return cell
     }
     
-    
-    
-    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        return CGSize(width: self.collectionView.bounds.width , height: 60)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
+        return UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
+        return 5
+    }
+    
 }
 
 extension RankViewController{
@@ -234,7 +152,7 @@ extension RankViewController{
                             self.champData[Int($0.value.key) ?? 0] = $0.value
                         }
                         DispatchQueue.main.async {
-                            self.tableView.reloadData()
+                            self.collectionView.reloadData()
                         }
                         self.save(data: data)
                     case let .failure(error):
@@ -247,7 +165,7 @@ extension RankViewController{
             data.first!.champions.forEach {
                 self.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
             }
-            self.tableView.reloadData()
+            self.collectionView.reloadData()
         }
     }
     
@@ -286,5 +204,92 @@ extension RankViewController{
                     completionHandler(.failure(error))
                 }
             }
+    }
+    
+    func getAllUserMatch(puuid: String){
+        self.db.collection("users").document(puuid).collection("userMatch").getDocuments { (snapshot, error) in
+            guard let documents = snapshot?.documents else{
+                print("Error Firestore fetching document \(String(describing: error))")
+                return
+            }
+            var champCnt = [Int: Int]()
+            self.userMatchDict[puuid] = documents.compactMap({ doc -> (UserMatch,String)?  in
+                do{
+                    let userMatch = try doc.data(as: UserMatch.self)
+                    champCnt[userMatch.champ, default: 0] += 1
+                    return (userMatch,doc.documentID)
+                }catch let error{
+                    print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
+                    return nil
+                }
+            }).sorted(by: {
+                $0.0.matchDate > $1.0.matchDate
+            })
+            
+            self.userChampCnt[puuid] = champCnt.sorted(by: {
+                if $0.value == $1.value{
+                    return $0.key < $1.key
+                }
+                return $0.value > $1.value
+            }).map{
+                $0.key
+            }
+            
+            while self.userChampCnt[puuid]!.count < 3{
+                self.userChampCnt[puuid]!.append(-1)
+            }
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+                if self.userMatchDict.count == self.userList.count{
+                    self.collectionView.allowsSelection = true
+                }
+            }
+        }
+    }
+    
+    func getAllMatch(){
+        db.collection("matches").addSnapshotListener { snapshot, error in
+            guard let documents = snapshot?.documents else{
+                print("Error Firestore fetching document \(String(describing: error))")
+                return
+            }
+            
+            documents.forEach { doc in
+                do{
+                    let match = try doc.data(as: Match.self)
+                    self.MatchDict[doc.documentID] = match
+                }catch let error{
+                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+
+    func getAllUser(){
+        db.collection("users").addSnapshotListener {snapshot, error in
+            guard let documents = snapshot?.documents else{
+                print("Error Firestore fetching document \(String(describing: error))")
+                return
+            }
+            
+            self.userList = documents.compactMap({ doc -> (User,String)? in
+                do{
+                    let user = try doc.data(as: User.self)
+                    self.getAllUserMatch(puuid: doc.documentID)
+                    
+                    return (user,doc.documentID)
+                } catch let error{
+                    print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
+                    return nil
+                }
+            }).sorted(by: {
+                $0.0.elo > $1.0.elo
+            })
+            
+            DispatchQueue.main.async {
+                self.collectionView.reloadData()
+            }
+        }
     }
 }

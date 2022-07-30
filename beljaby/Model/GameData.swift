@@ -8,11 +8,11 @@
 import Foundation
 
 struct userData{
-    let user: Users
+    let user: User
     let matchs: [UserMatch]
 }
 
-struct Users: Codable{
+struct User: Codable{
     let name: String
     let profileIconId: Int
     let elo: Int

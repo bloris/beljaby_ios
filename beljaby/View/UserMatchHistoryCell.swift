@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Kingfisher
 
 class UserMatchHistoryCell: UICollectionViewCell {
     
@@ -38,17 +39,78 @@ class UserMatchHistoryCell: UICollectionViewCell {
     @IBOutlet weak var mainPerkImage: UIImageView!
     @IBOutlet weak var subPerkImage: UIImageView!
     
+    var colorList = [UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00), UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)]
+    
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.configureView()
-        // Initialization code
+        self.initView()
     }
+    
     func setCornerRadius<V:UIView>(_ view: V,_ radius: CGFloat){
         view.clipsToBounds = true
         view.layer.cornerRadius = radius
         
     }
-    func configureView(){
+    
+    func configure(_ userMatch: UserMatch, _ match: Match, _ version: String, _ champ: Champion){
+        let gameDuration = match.gameDuration
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        
+        let matchDate = dateFormatter.string(from: match.matchDate)
+        let duration = String(format: "  %02d:%02d분", gameDuration/60,gameDuration%60)
+        
+        let itemImageList: [UIImageView] = [self.item0, self.item1, self.item2, self.item3, self.item4, self.item5, self.item6]
+        var itemList = userMatch.item.filter{$0 != 0}
+        while itemList.count < 7{
+            itemList.insert(0, at: itemList.count - 1)
+        }
+        
+        let itemImageURL: [URL?] = itemList.map{
+            if $0 == 0{return nil}
+            return URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/item/\($0).png")
+        }
+        
+        let splashURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/\(champ.id)_0.jpg")
+        
+        self.dateLabel.text  = matchDate + duration
+        
+        self.winLabel.text = userMatch.win ? "승리" : "패배"
+        self.winLabel.textColor = userMatch.win ? .black : .white
+        self.winView.backgroundColor = userMatch.win ? self.colorList[0] : self.colorList[1]
+        
+        self.eloChange.text = (userMatch.eloChange > 0 ? "+" : "") + "\(userMatch.eloChange)"
+        
+        self.champName.text = champ.name
+        self.champLevel.text = "\(userMatch.champLevel)"
+        
+        self.killScoreLabel.text = "\(userMatch.kill)/\(userMatch.death)/\(userMatch.assist)"
+        self.csLabel.text = "\(userMatch.cs) "+String(format: "(%.1f)", (Double(userMatch.cs)/(Double(gameDuration)/600.0)+5.0)/10.0)
+        self.goldEarnedLabel.text = String(format: "%.1f천", Double(userMatch.goldEarned+50)/1000.0)
+        
+        self.killPLabel.text = "킬관여 \(userMatch.killP)%"
+        self.wardLabel.text = "제어 와드 \(userMatch.ward)"
+        
+        self.mainPerkImage.image = UIImage(named: "\(userMatch.mainPerk)")
+        self.subPerkImage.image = UIImage(named: "\(userMatch.subPerk)")
+        
+        self.champSplashImage.kf.setImage(with: splashURL)
+        
+        let gradientMaskLayer = CAGradientLayer()
+        gradientMaskLayer.frame = self.champSplashImage.bounds
+        gradientMaskLayer.colors =  [UIColor.white.cgColor, UIColor.clear.cgColor]
+        gradientMaskLayer.locations = [0.8, 1]
+        
+        self.champSplashImage.layer.mask = gradientMaskLayer
+        
+        for (idx, itemURL) in itemImageURL.enumerated(){
+            if let url = itemURL{
+                itemImageList[idx].kf.setImage(with: url)
+            }
+        }
+    }
+    
+    func initView(){
         [item0,item1,item2,item3,item4,item5,item6].forEach{
             setCornerRadius($0, 5)
         }
@@ -57,14 +119,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
             setCornerRadius($0, $0.frame.height/2)
         }
         
-        
-        
         self.clipsToBounds = true
         self.layer.cornerRadius = 10
-        
-        
     }
-    
-    
-    
 }

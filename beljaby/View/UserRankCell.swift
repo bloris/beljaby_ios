@@ -8,7 +8,7 @@
 import UIKit
 import Kingfisher
 
-class UserRankCell: UITableViewCell {
+class UserRankCell: UICollectionViewCell {
 
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var tierImage: UIImageView!
@@ -16,11 +16,9 @@ class UserRankCell: UITableViewCell {
     @IBOutlet weak var mostSecondImage: UIImageView!
     @IBOutlet weak var mostThirdImage: UIImageView!
     
-    
     @IBOutlet weak var winView: UIView!
     @IBOutlet weak var loseView: UIView!
     @IBOutlet weak var entireView: UIStackView!
-    
     
     @IBOutlet weak var name: UILabel!
     @IBOutlet weak var elo: UILabel!
@@ -29,20 +27,50 @@ class UserRankCell: UITableViewCell {
     @IBOutlet weak var loseLabel: UILabel!
     @IBOutlet weak var tierLabel: UILabel!
     
-    
     @IBOutlet weak var ratioConstraint: NSLayoutConstraint!
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        self.configureView()
+        self.initView()
     }
+    
+    func configure(_ user: User, _ champMost: [String], _ version: String){
+        let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
+        
+        let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
+        
+        let champURL: [URL?] = champMost.map{
+            URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/champion/\($0).png")
+        }
+        
+        let win = user.win
+        let lose = user.lose
+        let ratio = win+lose != 0 ? 100*Double(win)/Double(win+lose) : 0.0
+        
+        self.profileImage.kf.setImage(with: profileImageURL)
+        
+        for (idx, url) in champURL.enumerated(){
+            if champMost[idx] != "blank"{
+                champImageList[idx]?.kf.setImage(with: url)
+            }
+        }
+        
+        tierImage.image = UIImage(named: "Emblem_\(user.tier)")
+        name.text = user.name
+        elo.text = "\(user.elo)LP"
+        winLabel.text = "\(win)W"
+        loseLabel.text = "\(lose)L"
+        ratioLabel.text = "\(Int(ratio))%"
+        ratioConstraint = ratioConstraint.setMultiplier(multiplier: ratio/50)
+    }
+    
     func setCornerRadius<V:UIView>(_ view: V,_ radius: CGFloat){
         view.clipsToBounds = true
         view.layer.cornerRadius = radius
         view.layer.borderWidth = 1
-        
     }
-    func configureView(){
+    
+    func initView(){
         [entireView,profileImage].forEach{
             setCornerRadius($0, 5)
         }
@@ -54,14 +82,9 @@ class UserRankCell: UITableViewCell {
         
         entireView.layer.borderWidth = 0
         
-        
+        self.clipsToBounds = true
+        self.layer.cornerRadius = 5
     }
-    override func setSelected(_ selected: Bool, animated: Bool) {
-        super.setSelected(selected, animated: animated)
-
-    }
-    
-    
 }
 
 extension NSLayoutConstraint {
