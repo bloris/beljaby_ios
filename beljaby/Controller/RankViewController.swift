@@ -31,22 +31,18 @@ class RankViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let nibName = UINib(nibName: "UserRankCell", bundle: nil)
-        self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
         
         self.configureCollectionView()
-        self.collectionView.allowsSelection = false
         
-        self.initData()
-        self.getAllUser()
-        self.getAllMatch()
-        
-        if let flowlayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
-            flowlayout.estimatedItemSize = .zero
-        }
+        self.configureData()
     }
     
     private func configureCollectionView(){
+        let nibName = UINib(nibName: "UserRankCell", bundle: nil)
+        self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
+        self.collectionView.delegate = self
+        self.collectionView.allowsSelection = false
+        
         datasource = UICollectionViewDiffableDataSource<Section, User>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, user in
             guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
                 return nil
@@ -68,7 +64,7 @@ class RankViewController: UIViewController {
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 10, bottom: 5, trailing: 10)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0)
         section.interGroupSpacing = 5
         
         let layout = UICollectionViewCompositionalLayout(section: section)
@@ -83,6 +79,12 @@ class RankViewController: UIViewController {
         datasource.apply(snapshot)
     }
     
+    private func configureData(){
+        self.initData()
+        self.getAllUser()
+        self.getAllMatch()
+    }
+    
     @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
         //makeMode.toggle()
     }
@@ -90,26 +92,20 @@ class RankViewController: UIViewController {
 }
 
 //MARK: - Table View Datasource
-extension RankViewController{
-    
+extension RankViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let user = self.userList[indexPath.item]
         print(user.name)
-        if !self.makeMode{
-            performSegue(withIdentifier: "goToUserMatch", sender: self)
-        }
-    }
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! UserMatchHistoryViewController
+        let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
         
-        if let indexPath = self.collectionView.indexPathsForSelectedItems?.first{
-            destinationVC.userMatchDict = self.userMatchDict
-            destinationVC.puuid = self.userList[indexPath.item].puuid
-            destinationVC.version = self.version
-            destinationVC.MatchDict = self.MatchDict
-        }
+        destinationVC.userMatchDict = self.userMatchDict
+        destinationVC.puuid = user.puuid
+        destinationVC.version = self.version
+        destinationVC.MatchDict = self.MatchDict
+        
+        destinationVC.title = "\(user.name) 대전 기록"
+        
+        self.navigationController?.pushViewController(destinationVC, animated: true)
     }
 }
 

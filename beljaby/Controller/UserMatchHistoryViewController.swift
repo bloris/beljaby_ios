@@ -23,6 +23,8 @@ class UserMatchHistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.largeTitleDisplayMode = .never
+        
         let nibName = UINib(nibName: "UserMatchHistoryCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserMatchHistoryCell")
         
