@@ -7,6 +7,7 @@
 
 import UIKit
 import Kingfisher
+import Combine
 
 private let reuseIdentifier = "Cell"
 

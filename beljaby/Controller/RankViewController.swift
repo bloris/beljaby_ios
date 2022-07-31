@@ -10,6 +10,7 @@ import Alamofire
 import FirebaseDatabase
 import FirebaseFirestore
 import RealmSwift
+import Combine
 
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
