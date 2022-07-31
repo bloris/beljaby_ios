@@ -15,7 +15,7 @@ class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     var userList = [User]()
     var userChampCnt = [String: [Int]]()
-    var userMatchDict = [String: Array<(UserMatch,String)>]()
+    var userMatchDict = [String: Array<UserMatch>]()
     var MatchDict = [String: Match]()
 
     var version = "12.12.1"
@@ -75,7 +75,7 @@ class RankViewController: UIViewController {
     private func applySectionItems(_ items: [User], to section: Section = .main){
         var snapshot = NSDiffableDataSourceSnapshot<Section, User>()
         snapshot.appendSections([section])
-        snapshot.appendItems(items, toSection: .main)
+        snapshot.appendItems(items, toSection: section)
         datasource.apply(snapshot)
     }
     
@@ -204,17 +204,17 @@ extension RankViewController{
                 return
             }
             var champCnt = [Int: Int]()
-            self.userMatchDict[puuid] = documents.compactMap({ doc -> (UserMatch,String)?  in
+            self.userMatchDict[puuid] = documents.compactMap({ doc -> UserMatch?  in
                 do{
                     let userMatch = try doc.data(as: UserMatch.self)
                     champCnt[userMatch.champ, default: 0] += 1
-                    return (userMatch,doc.documentID)
+                    return userMatch
                 }catch let error{
                     print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
                     return nil
                 }
             }).sorted(by: {
-                $0.0.matchDate > $1.0.matchDate
+                $0.matchDate > $1.matchDate
             })
             
             self.userChampCnt[puuid] = champCnt.sorted(by: {
