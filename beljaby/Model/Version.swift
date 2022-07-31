@@ -14,8 +14,8 @@ struct Version:Codable{
 }
 
 class DataCache: Object{
-    @objc dynamic var version: String = ""
-    let champions = List<ChampionCache>()
+    @Persisted var version: String = ""
+    @Persisted var champions = List<ChampionCache>()
 }
 
 

@@ -13,77 +13,90 @@ private let reuseIdentifier = "Cell"
 class UserMatchHistoryViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var userMatchDict: [String: Array<(UserMatch,String)>]?
+    var userMatchDict: [String: Array<UserMatch>]?
     var MatchDict: [String: Match]?
     var puuid: String?
-    var champData: [Int: Champion]?
     var version: String?
     
     var MatchList = [Match]()
     
+    enum Section{
+        case main
+    }
+    
+    var datasource: UICollectionViewDiffableDataSource<Section, UserMatch>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        self.navigationItem.largeTitleDisplayMode = .never
+        
+        self.configureCollectionView()
+    }
+    
+    private func configureCollectionView(){
         let nibName = UINib(nibName: "UserMatchHistoryCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserMatchHistoryCell")
         
         self.collectionView.delegate = self
-        self.collectionView.dataSource = self
         
-        if let flowlayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
-            flowlayout.estimatedItemSize = .zero
-        }
-    }
-    
-    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
-        super.viewWillTransition(to: size, with: coordinator)
-        guard let flowLayout = collectionView.collectionViewLayout as? UICollectionViewFlowLayout else {
-            return
-        }
-        flowLayout.invalidateLayout()
-    }
-}
-
-extension UserMatchHistoryViewController: UICollectionViewDataSource{
-    func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.userMatchDict?[self.puuid ?? ""]?.count ?? 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else{
-            return UICollectionViewCell()
-        }
-        
-        if let matchTuple = self.userMatchDict?[self.puuid ?? ""]?[indexPath.row], let version = self.version{
-            let userMatch = matchTuple.0
-            let matchId = matchTuple.1
-            let match = self.MatchDict![matchId]!
-            let champ = self.champData![userMatch.champ]!
+        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, userMatch in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell, let version = self.version else{
+                return nil
+            }
+            let match = self.MatchDict![userMatch.matchId]!
+            let champ = Champion.champData[userMatch.champ]!
             
             cell.configure(userMatch, match, version, champ)
-        }
+            
+            return cell
+        })
         
-        return cell
-    }
-}
-
-extension UserMatchHistoryViewController: UICollectionViewDelegateFlowLayout{
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        let cnt = self.collectionView.bounds.width / 370
-        return CGSize(width: self.collectionView.bounds.width/cnt , height: 190)
+        self.applySectionItems(self.userMatchDict![self.puuid!]!)
+        
+        self.collectionView.collectionViewLayout = layout()
     }
     
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        let cnt = self.collectionView.bounds.width / 370
-        let totalCellWidth = cnt.rounded(.down) * (self.collectionView.bounds.width/cnt)
-        let totalSapcing = (cnt.rounded(.down)-1) * 10
-        let inset = self.collectionView.bounds.width - (totalSapcing+totalCellWidth)
-        
-        return UIEdgeInsets(top: 10, left: inset/2, bottom: 10, right: inset/2)
+    private func applySectionItems(_ items: [UserMatch], to section: Section = .main){
+        var snapshot = NSDiffableDataSourceSnapshot<Section, UserMatch>()
+        snapshot.appendSections([section])
+        snapshot.appendItems(items, toSection: section)
+        self.datasource.apply(snapshot)
     }
+    
+    private func layout() -> UICollectionViewCompositionalLayout{
+        let cnt = self.view.bounds.width / 370
+        let interItemSpacing: CGFloat = 10
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/cnt), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(190))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: Int(cnt))
+        group.interItemSpacing = .fixed(interItemSpacing)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let totalCellWidth = cnt.rounded(.down) * (self.view.bounds.width/cnt)
+        let totalSapcing = (cnt.rounded(.down)-1) * interItemSpacing
+        let inset = self.view.bounds.width - (totalSapcing+totalCellWidth)
+        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: inset/2, bottom: 10, trailing: inset/2)
+        section.interGroupSpacing = 10
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return layout
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        self.collectionView.collectionViewLayout = layout()
+        self.collectionView.collectionViewLayout.invalidateLayout()
+    }
+    
+}
+
+extension UserMatchHistoryViewController: UICollectionViewDelegate{
     
 }

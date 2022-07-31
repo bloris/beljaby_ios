@@ -13,12 +13,11 @@ import RealmSwift
 
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
-    var userList = [(User,String)]()
+    var userList = [User]()
     var userChampCnt = [String: [Int]]()
-    var userMatchDict = [String: Array<(UserMatch,String)>]()
+    var userMatchDict = [String: Array<UserMatch>]()
     var MatchDict = [String: Match]()
 
-    var champData = [Int: Champion]()
     var version = "12.12.1"
     var db = Firestore.firestore()
     var makeMode = false
@@ -28,20 +27,62 @@ class RankViewController: UIViewController {
         case main
     }
     
+    var datasource: UICollectionViewDiffableDataSource<Section, User>!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.configureCollectionView()
+        
+        self.configureData()
+    }
+    
+    private func configureCollectionView(){
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
-        self.collectionView.allowsSelection = false
-        self.collectionView.dataSource = self
         self.collectionView.delegate = self
+        self.collectionView.allowsSelection = false
+        
+        datasource = UICollectionViewDiffableDataSource<Section, User>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, user in
+            guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
+                return nil
+            }
+            
+            cell.configure(user, self.version, self.userChampCnt)
+            return cell
+        })
+        
+        self.collectionView.collectionViewLayout = layout()
+    }
+    
+    private func layout() -> UICollectionViewCompositionalLayout{
+        
+        let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
+        let item = NSCollectionLayoutItem(layoutSize: itemSize)
+        
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 5, leading: 0, bottom: 5, trailing: 0)
+        section.interGroupSpacing = 5
+        
+        let layout = UICollectionViewCompositionalLayout(section: section)
+        
+        return layout
+    }
+    
+    private func applySectionItems(_ items: [User], to section: Section = .main){
+        var snapshot = NSDiffableDataSourceSnapshot<Section, User>()
+        snapshot.appendSections([section])
+        snapshot.appendItems(items, toSection: section)
+        datasource.apply(snapshot)
+    }
+    
+    private func configureData(){
         self.initData()
         self.getAllUser()
         self.getAllMatch()
-        
-        if let flowlayout = self.collectionView.collectionViewLayout as? UICollectionViewFlowLayout{
-            flowlayout.estimatedItemSize = .zero
-        }
     }
     
     @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
@@ -51,68 +92,21 @@ class RankViewController: UIViewController {
 }
 
 //MARK: - Table View Datasource
-extension RankViewController: UICollectionViewDataSource, UICollectionViewDelegateFlowLayout{
-    
+extension RankViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = self.userList[indexPath.item].0
+        let user = self.userList[indexPath.item]
         print(user.name)
-        if !self.makeMode{
-            performSegue(withIdentifier: "goToUserMatch", sender: self)
-        }
-    }
-    
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let destinationVC = segue.destination as! UserMatchHistoryViewController
+        let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
         
-        if let indexPath = self.collectionView.indexPathsForSelectedItems?.first{
-            destinationVC.userMatchDict = self.userMatchDict
-            destinationVC.puuid = self.userList[indexPath.item].1
-            destinationVC.champData = self.champData
-            destinationVC.version = self.version
-            destinationVC.MatchDict = self.MatchDict
-        }
-    }
-    
-    func numberOfSections(in tableView: UICollectionView) -> Int {
-        return 1
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.userList.count
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
-            return UICollectionViewCell()
-        }
+        destinationVC.userMatchDict = self.userMatchDict
+        destinationVC.puuid = user.puuid
+        destinationVC.version = self.version
+        destinationVC.MatchDict = self.MatchDict
         
-        let user = self.userList[indexPath.item].0
-        let puuid = self.userList[indexPath.item].1
+        destinationVC.title = "\(user.name) 대전 기록"
         
-        let champMost: [String] = (0...2).map{
-            guard let champCnt = userChampCnt[puuid] else{
-                return "blank"
-            }
-            return champData[champCnt[$0]]?.id ?? "blank"
-        }
-        cell.configure(user, champMost, self.version)
-
-        return cell
+        self.navigationController?.pushViewController(destinationVC, animated: true)
     }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.collectionView.bounds.width , height: 60)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 10, bottom: 5, right: 10)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
-        return 5
-    }
-    
 }
 
 extension RankViewController{
@@ -143,13 +137,10 @@ extension RankViewController{
                     switch result{
                     case let .success(result):
                         result.data.forEach{
-                            let champData = ChampionCache()
-                            champData.id = $0.value.id
-                            champData.key = $0.value.key
-                            champData.name = $0.value.name
+                            let champData = ChampionCache(champ: $0.value)
                             
                             data.champions.append(champData)
-                            self.champData[Int($0.value.key) ?? 0] = $0.value
+                            Champion.champData[Int($0.value.key) ?? 0] = $0.value
                         }
                         DispatchQueue.main.async {
                             self.collectionView.reloadData()
@@ -163,7 +154,7 @@ extension RankViewController{
             }
         }else{
             data.first!.champions.forEach {
-                self.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
+                Champion.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
             }
             self.collectionView.reloadData()
         }
@@ -213,17 +204,17 @@ extension RankViewController{
                 return
             }
             var champCnt = [Int: Int]()
-            self.userMatchDict[puuid] = documents.compactMap({ doc -> (UserMatch,String)?  in
+            self.userMatchDict[puuid] = documents.compactMap({ doc -> UserMatch?  in
                 do{
                     let userMatch = try doc.data(as: UserMatch.self)
                     champCnt[userMatch.champ, default: 0] += 1
-                    return (userMatch,doc.documentID)
+                    return userMatch
                 }catch let error{
                     print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
                     return nil
                 }
             }).sorted(by: {
-                $0.0.matchDate > $1.0.matchDate
+                $0.matchDate > $1.matchDate
             })
             
             self.userChampCnt[puuid] = champCnt.sorted(by: {
@@ -273,22 +264,22 @@ extension RankViewController{
                 return
             }
             
-            self.userList = documents.compactMap({ doc -> (User,String)? in
+            self.userList = documents.compactMap({ doc -> User? in
                 do{
                     let user = try doc.data(as: User.self)
                     self.getAllUserMatch(puuid: doc.documentID)
                     
-                    return (user,doc.documentID)
+                    return user
                 } catch let error{
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
                     return nil
                 }
             }).sorted(by: {
-                $0.0.elo > $1.0.elo
+                $0.elo > $1.elo
             })
             
             DispatchQueue.main.async {
-                self.collectionView.reloadData()
+                self.applySectionItems(self.userList)
             }
         }
     }
