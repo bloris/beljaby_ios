@@ -20,6 +20,9 @@ class RankViewController: UIViewController {
     var MatchDict = [String: Match]()
 
     var version = "12.12.1"
+    @Published var ver: Version = Version(v: "")
+    var subscriptions = Set<AnyCancellable>()
+    
     var db = Firestore.firestore()
     var makeMode = false
     let realm = try! Realm()
@@ -36,6 +39,8 @@ class RankViewController: UIViewController {
         self.configureCollectionView()
         
         self.configureData()
+        
+        self.bind()
     }
     
     private func configureCollectionView(){
@@ -61,7 +66,7 @@ class RankViewController: UIViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
@@ -81,7 +86,7 @@ class RankViewController: UIViewController {
     }
     
     private func configureData(){
-        self.initData()
+        self.getVersion()
         self.getAllUser()
         self.getAllMatch()
     }
@@ -111,53 +116,57 @@ extension RankViewController: UICollectionViewDelegate{
 }
 
 extension RankViewController{
-    func initData(){
-        let data = realm.objects(DataCache.self)
-        let semaphore = DispatchSemaphore(value: 0)
-        var version = ""
-        self.getVersion {result in
-            switch result{
-            case let .success(result):
-                version = result.v
-                semaphore.signal()
-            case let .failure(error):
-                print(error.localizedDescription)
-                return
-            }
-        }
-        
-        if data.count == 0 || data.first!.version != version{
-            DispatchQueue.global().async {
-                semaphore.wait()
-                let data = DataCache()
-                data.version = version
-                self.getChampion(version) {[weak self] result in
-                    guard let self = self else{
-                        return
-                    }
-                    switch result{
-                    case let .success(result):
-                        result.data.forEach{
-                            let champData = ChampionCache(champ: $0.value)
-                            
-                            data.champions.append(champData)
-                            Champion.champData[Int($0.value.key) ?? 0] = $0.value
-                        }
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
-                        }
-                        self.save(data: data)
-                    case let .failure(error):
-                        print(error.localizedDescription)
-                        return
-                    }
+    func bind(){
+        $ver
+            .receive(on: RunLoop.main)
+            .sink { result in
+                if !result.v.isEmpty{
+                    self.getChamption()
+                }else{
+                    print("Initial value")
                 }
-            }
+            }.store(in: &subscriptions)
+    }
+    
+    func getVersion(){
+        let url = "https://ddragon.leagueoflegends.com/realms/kr.json"
+        AF.request(url)
+            .publishDecodable(type: Version.self)
+            .value()
+            .replaceError(with: Version(v: ""))
+            .receive(on: RunLoop.main)
+            .assign(to: \.ver, on: self)
+            .store(in: &subscriptions)
+    }
+    
+    func getChamption(){
+        let realmData = realm.objects(DataCache.self)
+        let version = self.ver.v
+        if realmData.count == 0 || realmData.first!.version != version{
+            let url = "https://ddragon.leagueoflegends.com/cdn/\(version)/data/ko_KR/champion.json"
+            
+            AF.request(url)
+                .publishDecodable(type: ChampionList.self)
+                .value()
+                .replaceError(with: ChampionList(data: [:]))
+                .receive(on: RunLoop.main)
+                .sink(receiveValue: { result in
+                    let realmData = DataCache()
+                    realmData.version = version
+                    result
+                        .data
+                        .forEach { (_, champion: Champion) in
+                            Champion.champData[Int(champion.key) ?? 0] = champion
+                            realmData.champions.append(ChampionCache(champ: champion))
+                        }
+                    self.save(data: realmData)
+                })
+                .store(in: &subscriptions)
+            
         }else{
-            data.first!.champions.forEach {
+            realmData.first!.champions.forEach {
                 Champion.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
             }
-            self.collectionView.reloadData()
         }
     }
     
@@ -171,33 +180,6 @@ extension RankViewController{
         }
     }
     
-    func getVersion(completionHandler: @escaping (Result<Version, Error>) -> Void){
-        let url = "https://ddragon.leagueoflegends.com/realms/kr.json"
-        
-        AF.request(url, method: .get)
-            .responseDecodable(of: Version.self) { response in
-                switch response.result {
-                case .success(let response):
-                    completionHandler(.success(response))
-                case .failure(let error):
-                    completionHandler(.failure(error))
-                }
-            }
-    }
-    
-    func getChampion(_ version: String, completionHandler: @escaping (Result<ChampionList, Error>) -> Void){
-        let url = "https://ddragon.leagueoflegends.com/cdn/\(version)/data/ko_KR/champion.json"
-        AF.request(url, method: .get)
-            .responseDecodable(of: ChampionList.self) { response in
-                switch response.result {
-                case .success(let response):
-                    completionHandler(.success(response))
-                case .failure(let error):
-                    completionHandler(.failure(error))
-                }
-            }
-    }
-    
     func getAllUserMatch(puuid: String){
         self.db.collection("users").document(puuid).collection("userMatch").getDocuments { (snapshot, error) in
             guard let documents = snapshot?.documents else{
@@ -205,6 +187,7 @@ extension RankViewController{
                 return
             }
             var champCnt = [Int: Int]()
+            
             self.userMatchDict[puuid] = documents.compactMap({ doc -> UserMatch?  in
                 do{
                     let userMatch = try doc.data(as: UserMatch.self)

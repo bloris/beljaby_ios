@@ -25,6 +25,7 @@
 		74A9934B288E2BC900B8660E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934A288E2BC900B8660E /* README.md */; };
 		74A9934E288E2E6E00B8660E /* rankview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934C288E2E6E00B8660E /* rankview.png */; };
 		74A9934F288E2E6E00B8660E /* matchview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934D288E2E6E00B8660E /* matchview.png */; };
+		74F6500F289798220009967C /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 74F6500E289798220009967C /* Utils.swift */; };
 		7EEC046B3DB1C1EFC8AEE87F /* Pods_beljaby.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 737F396737A6DA4FBF18D51A /* Pods_beljaby.framework */; };
 /* End PBXBuildFile section */
 
@@ -50,6 +51,7 @@
 		74A9934A288E2BC900B8660E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		74A9934C288E2E6E00B8660E /* rankview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rankview.png; sourceTree = "<group>"; };
 		74A9934D288E2E6E00B8660E /* matchview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = matchview.png; sourceTree = "<group>"; };
+		74F6500E289798220009967C /* Utils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
 		83AAFBE5FEBD452CCFF807A2 /* Pods-beljaby.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.release.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.release.xcconfig"; sourceTree = "<group>"; };
 		87137291E049B2634B690973 /* Pods-beljaby.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-beljaby.debug.xcconfig"; path = "Target Support Files/Pods-beljaby/Pods-beljaby.debug.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -98,6 +100,8 @@
 		744623FB2872E2E100492565 /* beljaby */ = {
 			isa = PBXGroup;
 			children = (
+				74F6500D289798180009967C /* Network */,
+				74F6500C2897980F0009967C /* Utils */,
 				744623FC2872E2E100492565 /* AppDelegate.swift */,
 				744623FE2872E2E100492565 /* SceneDelegate.swift */,
 				7446241C2874313A00492565 /* Model */,
@@ -140,6 +144,21 @@
 				742591AD2887E40600FE2523 /* Champion.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		74F6500C2897980F0009967C /* Utils */ = {
+			isa = PBXGroup;
+			children = (
+				74F6500E289798220009967C /* Utils.swift */,
+			);
+			path = Utils;
+			sourceTree = "<group>";
+		};
+		74F6500D289798180009967C /* Network */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Network;
 			sourceTree = "<group>";
 		};
 		C44D88650C19F6C8D17E6893 /* Pods */ = {
@@ -277,6 +296,7 @@
 				74462424287BF94400492565 /* Version.swift in Sources */,
 				7446241E2874314600492565 /* GameData.swift in Sources */,
 				7470DF1E28869D5C00D2F575 /* UserMatchHistoryViewController.swift in Sources */,
+				74F6500F289798220009967C /* Utils.swift in Sources */,
 				7446241B287430EB00492565 /* RankViewController.swift in Sources */,
 				7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */,
 				742591AE2887E40600FE2523 /* Champion.swift in Sources */,

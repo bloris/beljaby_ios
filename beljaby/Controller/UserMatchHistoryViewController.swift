@@ -72,7 +72,7 @@ class UserMatchHistoryViewController: UIViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/cnt), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(190))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(190))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: Int(cnt))
         group.interItemSpacing = .fixed(interItemSpacing)
         
@@ -90,7 +90,7 @@ class UserMatchHistoryViewController: UIViewController {
         return layout
     }
     
-    override func viewDidLayoutSubviews() {
+    override func viewWillLayoutSubviews() {
         super.viewDidLayoutSubviews()
         self.collectionView.collectionViewLayout = layout()
         self.collectionView.collectionViewLayout.invalidateLayout()
