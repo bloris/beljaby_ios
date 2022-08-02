@@ -7,9 +7,3 @@
 
 import Foundation
 import UIKit
-
-extension UIImageView{
-    func setImage(with url: URL){
-        
-    }
-}

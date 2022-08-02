@@ -22,6 +22,7 @@
 		7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */; };
 		7470DF1C2885536B00D2F575 /* UserMatchHistoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */; };
 		7470DF1E28869D5C00D2F575 /* UserMatchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */; };
+		747AE7002897C8AE0094151C /* MatchDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE6FF2897C8AE0094151C /* MatchDetailViewController.swift */; };
 		74A9934B288E2BC900B8660E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934A288E2BC900B8660E /* README.md */; };
 		74A9934E288E2E6E00B8660E /* rankview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934C288E2E6E00B8660E /* rankview.png */; };
 		74A9934F288E2E6E00B8660E /* matchview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934D288E2E6E00B8660E /* matchview.png */; };
@@ -48,6 +49,7 @@
 		7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryCell.swift; sourceTree = "<group>"; };
 		7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserMatchHistoryCell.xib; sourceTree = "<group>"; };
 		7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryViewController.swift; sourceTree = "<group>"; };
+		747AE6FF2897C8AE0094151C /* MatchDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchDetailViewController.swift; sourceTree = "<group>"; };
 		74A9934A288E2BC900B8660E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		74A9934C288E2E6E00B8660E /* rankview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rankview.png; sourceTree = "<group>"; };
 		74A9934D288E2E6E00B8660E /* matchview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = matchview.png; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			children = (
 				7446241A287430EB00492565 /* RankViewController.swift */,
 				7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */,
+				747AE6FF2897C8AE0094151C /* MatchDetailViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -300,6 +303,7 @@
 				7446241B287430EB00492565 /* RankViewController.swift in Sources */,
 				7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */,
 				742591AE2887E40600FE2523 /* Champion.swift in Sources */,
+				747AE7002897C8AE0094151C /* MatchDetailViewController.swift in Sources */,
 				744623FF2872E2E100492565 /* SceneDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

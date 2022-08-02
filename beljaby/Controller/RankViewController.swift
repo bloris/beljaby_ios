@@ -14,12 +14,15 @@ import Combine
 
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
-    var userList = [User]()
+    
+    var userDict = [String:User]()
+    var userList = CurrentValueSubject<[User], Never>([User]())
     var userChampCnt = [String: [Int]]()
+    
     var userMatchDict = [String: Array<UserMatch>]()
+    
     var MatchDict = [String: Match]()
 
-    var version = "12.12.1"
     @Published var ver: Version = Version(v: "")
     var subscriptions = Set<AnyCancellable>()
     
@@ -43,18 +46,55 @@ class RankViewController: UIViewController {
         self.bind()
     }
     
+    @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
+        //makeMode.toggle()
+        /*
+         change bar button to done button
+         mupltiple selct mode active
+         select 10 user -> tap done button
+         present or push balanced team member view
+         */
+    }
+    
+    private func configureData(){
+        self.getVersion()
+        self.getAllUser()
+        self.getAllMatch()
+    }
+    
+    private func bind(){
+        $ver
+            .receive(on: RunLoop.main)
+            .sink { result in
+                if !result.v.isEmpty{
+                    self.getChamption()
+                }
+            }.store(in: &subscriptions)
+        
+        self.userList
+            .receive(on: RunLoop.main)
+            .sink {[unowned self] users in
+                self.applySectionItems(users)
+            }.store(in: &subscriptions)
+    }
+}
+
+//MARK: - Configure CollectionView
+extension RankViewController{
     private func configureCollectionView(){
+        //link cell to collectionView
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
+        
         self.collectionView.delegate = self
-        self.collectionView.allowsSelection = false
+        self.collectionView.allowsSelection = false //Disable selection before load user match history data
         
         datasource = UICollectionViewDiffableDataSource<Section, User>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, user in
             guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
                 return nil
             }
             
-            cell.configure(user, self.version, self.userChampCnt)
+            cell.configure(user, self.ver.v, self.userChampCnt)
             return cell
         })
         
@@ -84,30 +124,21 @@ class RankViewController: UIViewController {
         snapshot.appendItems(items, toSection: section)
         datasource.apply(snapshot)
     }
-    
-    private func configureData(){
-        self.getVersion()
-        self.getAllUser()
-        self.getAllMatch()
-    }
-    
-    @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
-        //makeMode.toggle()
-    }
-    
 }
 
 //MARK: - Table View Datasource
 extension RankViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = self.userList[indexPath.item]
+        let user = self.userList.value[indexPath.item]
         print(user.name)
         let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
         
         destinationVC.userMatchDict = self.userMatchDict
         destinationVC.puuid = user.puuid
-        destinationVC.version = self.version
+        destinationVC.version = self.ver.v
         destinationVC.MatchDict = self.MatchDict
+        destinationVC.userList = self.userList.value
+        destinationVC.userDict = self.userDict
         
         destinationVC.title = "\(user.name) 대전 기록"
         
@@ -115,19 +146,8 @@ extension RankViewController: UICollectionViewDelegate{
     }
 }
 
+//MARK: - League of Legends Game Data load
 extension RankViewController{
-    func bind(){
-        $ver
-            .receive(on: RunLoop.main)
-            .sink { result in
-                if !result.v.isEmpty{
-                    self.getChamption()
-                }else{
-                    print("Initial value")
-                }
-            }.store(in: &subscriptions)
-    }
-    
     func getVersion(){
         let url = "https://ddragon.leagueoflegends.com/realms/kr.json"
         AF.request(url)
@@ -179,7 +199,10 @@ extension RankViewController{
             print("Error saving cache, \(error)")
         }
     }
-    
+}
+
+//MARK: - Cloud Firestore Database Read
+extension RankViewController{
     func getAllUserMatch(puuid: String){
         self.db.collection("users").document(puuid).collection("userMatch").getDocuments { (snapshot, error) in
             guard let documents = snapshot?.documents else{
@@ -216,7 +239,7 @@ extension RankViewController{
             
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
-                if self.userMatchDict.count == self.userList.count{
+                if self.userMatchDict.count == self.userList.value.count{
                     self.collectionView.allowsSelection = true
                 }
             }
@@ -248,23 +271,20 @@ extension RankViewController{
                 return
             }
             
-            self.userList = documents.compactMap({ doc -> User? in
+            documents.forEach { doc in
                 do{
                     let user = try doc.data(as: User.self)
                     self.getAllUserMatch(puuid: doc.documentID)
                     
-                    return user
+                    self.userDict[doc.documentID] = user
                 } catch let error{
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
-                    return nil
                 }
-            }).sorted(by: {
+            }
+            
+            self.userList.send(Array(self.userDict.values).sorted{
                 $0.elo > $1.elo
             })
-            
-            DispatchQueue.main.async {
-                self.applySectionItems(self.userList)
-            }
         }
     }
 }

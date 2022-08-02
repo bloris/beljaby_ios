@@ -16,10 +16,10 @@ class UserMatchHistoryViewController: UIViewController {
     
     var userMatchDict: [String: Array<UserMatch>]?
     var MatchDict: [String: Match]?
+    var userList: [User]?
+    var userDict: [String: User]?
     var puuid: String?
     var version: String?
-    
-    var MatchList = [Match]()
     
     enum Section{
         case main
@@ -99,5 +99,22 @@ class UserMatchHistoryViewController: UIViewController {
 }
 
 extension UserMatchHistoryViewController: UICollectionViewDelegate{
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let userMatch = self.userMatchDict![self.puuid!]![indexPath.item]
+        
+        var userMatches = [(self.userDict![self.puuid!]!,userMatch)]
+        self.MatchDict![userMatch.matchId]!.users.forEach { user in
+            if user != self.puuid!{
+                for um in self.userMatchDict![user]!{
+                    if um.matchId == userMatch.matchId{
+                        userMatches.append((self.userDict![user]!,um))
+                        break
+                    }
+                }
+            }
+        }
+        userMatches.forEach { (user,um) in
+            print(user.name)
+        }
+    }
 }
