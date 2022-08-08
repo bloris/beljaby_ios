@@ -7,22 +7,6 @@
 
 import Foundation
 
-struct userData{
-    let user: User
-    let matchs: [UserMatch]
-}
-
-struct User: Codable, Hashable{
-    let puuid: String
-    let name: String
-    let profileIconId: Int
-    let elo: Int
-    let tier: String
-    let win: Int
-    let lose: Int
-    
-}
-
 struct Match: Codable{
     let matchId: String
     let gameDuration: Int

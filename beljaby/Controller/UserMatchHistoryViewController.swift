@@ -7,18 +7,23 @@
 
 import UIKit
 import Kingfisher
+import Combine
 
 private let reuseIdentifier = "Cell"
 
 class UserMatchHistoryViewController: UIViewController {
+    private let realmManager = LolRealmManager.shared
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     var userMatchDict: [String: Array<UserMatch>]?
     var MatchDict: [String: Match]?
+    var userList: [User]?
+    var userDict: [String: User]?
     var puuid: String?
-    var version: String?
     
-    var MatchList = [Match]()
+    var subscriptions = Set<AnyCancellable>()
+    var userMatchList = CurrentValueSubject<[UserMatch], Never>([UserMatch]())
     
     enum Section{
         case main
@@ -32,6 +37,16 @@ class UserMatchHistoryViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .never
         
         self.configureCollectionView()
+        
+        self.bind()
+    }
+    
+    private func bind(){
+        userMatchList
+            .receive(on: RunLoop.main)
+            .sink { userMatches in
+                self.applySectionItems(userMatches)
+            }.store(in: &subscriptions)
     }
     
     private func configureCollectionView(){
@@ -40,19 +55,15 @@ class UserMatchHistoryViewController: UIViewController {
         
         self.collectionView.delegate = self
         
-        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, userMatch in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell, let version = self.version else{
+        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: {[unowned self] collectionView, indexPath, userMatch in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell, let match = self.MatchDict?[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else{
                 return nil
             }
-            let match = self.MatchDict![userMatch.matchId]!
-            let champ = Champion.champData[userMatch.champ]!
             
-            cell.configure(userMatch, match, version, champ)
+            cell.configure(userMatch, match, champ)
             
             return cell
         })
-        
-        self.applySectionItems(self.userMatchDict![self.puuid!]!)
         
         self.collectionView.collectionViewLayout = layout()
     }
@@ -71,7 +82,7 @@ class UserMatchHistoryViewController: UIViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/cnt), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(190))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(190))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: Int(cnt))
         group.interItemSpacing = .fixed(interItemSpacing)
         
@@ -89,8 +100,8 @@ class UserMatchHistoryViewController: UIViewController {
         return layout
     }
     
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
         self.collectionView.collectionViewLayout = layout()
         self.collectionView.collectionViewLayout.invalidateLayout()
     }
@@ -98,5 +109,7 @@ class UserMatchHistoryViewController: UIViewController {
 }
 
 extension UserMatchHistoryViewController: UICollectionViewDelegate{
-    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        print("Selected!")
+    }
 }

@@ -9,19 +9,22 @@ import UIKit
 import Alamofire
 import FirebaseDatabase
 import FirebaseFirestore
-import RealmSwift
+import Combine
 
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
-    var userList = [User]()
+    
+    var userList = CurrentValueSubject<[User], Never>([User]())
     var userChampCnt = [String: [Int]]()
+    
+    var userDict = [String:User]()
     var userMatchDict = [String: Array<UserMatch>]()
     var MatchDict = [String: Match]()
-
-    var version = "12.12.1"
+    
+    var subscriptions = Set<AnyCancellable>()
+    
     var db = Firestore.firestore()
     var makeMode = false
-    let realm = try! Realm()
     
     enum Section{
         case main
@@ -35,20 +38,50 @@ class RankViewController: UIViewController {
         self.configureCollectionView()
         
         self.configureData()
+        
+        self.bind()
     }
     
+    @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
+        //makeMode.toggle()
+        /*
+         change bar button to done button
+         mupltiple selct mode active
+         select 10 user -> tap done button
+         present or push balanced team member view
+         */
+    }
+    
+    private func configureData(){
+        self.getAllUser()
+        self.getAllMatch()
+    }
+    
+    private func bind(){
+        self.userList
+            .receive(on: RunLoop.main)
+            .sink {[unowned self] users in
+                self.applySectionItems(users)
+            }.store(in: &subscriptions)
+    }
+}
+
+//MARK: - Configure CollectionView
+extension RankViewController{
     private func configureCollectionView(){
+        //link cell to collectionView
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
+        
         self.collectionView.delegate = self
-        self.collectionView.allowsSelection = false
+        self.collectionView.allowsSelection = false //Disable selection before load user match history data
         
         datasource = UICollectionViewDiffableDataSource<Section, User>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, user in
             guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
                 return nil
             }
             
-            cell.configure(user, self.version, self.userChampCnt)
+            cell.configure(user, self.userChampCnt)
             return cell
         })
         
@@ -60,7 +93,7 @@ class RankViewController: UIViewController {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(1))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
-        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(60))
+        let groupSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: groupSize, subitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
@@ -78,30 +111,20 @@ class RankViewController: UIViewController {
         snapshot.appendItems(items, toSection: section)
         datasource.apply(snapshot)
     }
-    
-    private func configureData(){
-        self.initData()
-        self.getAllUser()
-        self.getAllMatch()
-    }
-    
-    @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
-        //makeMode.toggle()
-    }
-    
 }
 
 //MARK: - Table View Datasource
 extension RankViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = self.userList[indexPath.item]
+        let user = self.userList.value[indexPath.item]
         print(user.name)
         let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
         
-        destinationVC.userMatchDict = self.userMatchDict
+        destinationVC.userMatchList.send(self.userMatchDict[user.puuid] ?? [])
         destinationVC.puuid = user.puuid
-        destinationVC.version = self.version
         destinationVC.MatchDict = self.MatchDict
+        destinationVC.userList = self.userList.value
+        destinationVC.userDict = self.userDict
         
         destinationVC.title = "\(user.name) 대전 기록"
         
@@ -109,94 +132,8 @@ extension RankViewController: UICollectionViewDelegate{
     }
 }
 
+//MARK: - Cloud Firestore Database Read
 extension RankViewController{
-    func initData(){
-        let data = realm.objects(DataCache.self)
-        let semaphore = DispatchSemaphore(value: 0)
-        var version = ""
-        self.getVersion {result in
-            switch result{
-            case let .success(result):
-                version = result.v
-                semaphore.signal()
-            case let .failure(error):
-                print(error.localizedDescription)
-                return
-            }
-        }
-        
-        if data.count == 0 || data.first!.version != version{
-            DispatchQueue.global().async {
-                semaphore.wait()
-                let data = DataCache()
-                data.version = version
-                self.getChampion(version) {[weak self] result in
-                    guard let self = self else{
-                        return
-                    }
-                    switch result{
-                    case let .success(result):
-                        result.data.forEach{
-                            let champData = ChampionCache(champ: $0.value)
-                            
-                            data.champions.append(champData)
-                            Champion.champData[Int($0.value.key) ?? 0] = $0.value
-                        }
-                        DispatchQueue.main.async {
-                            self.collectionView.reloadData()
-                        }
-                        self.save(data: data)
-                    case let .failure(error):
-                        print(error.localizedDescription)
-                        return
-                    }
-                }
-            }
-        }else{
-            data.first!.champions.forEach {
-                Champion.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
-            }
-            self.collectionView.reloadData()
-        }
-    }
-    
-    func save(data: DataCache){
-        do{
-            try realm.write({
-                realm.add(data)
-            })
-        }catch{
-            print("Error saving cache, \(error)")
-        }
-    }
-    
-    func getVersion(completionHandler: @escaping (Result<Version, Error>) -> Void){
-        let url = "https://ddragon.leagueoflegends.com/realms/kr.json"
-        
-        AF.request(url, method: .get)
-            .responseDecodable(of: Version.self) { response in
-                switch response.result {
-                case .success(let response):
-                    completionHandler(.success(response))
-                case .failure(let error):
-                    completionHandler(.failure(error))
-                }
-            }
-    }
-    
-    func getChampion(_ version: String, completionHandler: @escaping (Result<ChampionList, Error>) -> Void){
-        let url = "https://ddragon.leagueoflegends.com/cdn/\(version)/data/ko_KR/champion.json"
-        AF.request(url, method: .get)
-            .responseDecodable(of: ChampionList.self) { response in
-                switch response.result {
-                case .success(let response):
-                    completionHandler(.success(response))
-                case .failure(let error):
-                    completionHandler(.failure(error))
-                }
-            }
-    }
-    
     func getAllUserMatch(puuid: String){
         self.db.collection("users").document(puuid).collection("userMatch").getDocuments { (snapshot, error) in
             guard let documents = snapshot?.documents else{
@@ -204,6 +141,7 @@ extension RankViewController{
                 return
             }
             var champCnt = [Int: Int]()
+            
             self.userMatchDict[puuid] = documents.compactMap({ doc -> UserMatch?  in
                 do{
                     let userMatch = try doc.data(as: UserMatch.self)
@@ -232,7 +170,7 @@ extension RankViewController{
             
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
-                if self.userMatchDict.count == self.userList.count{
+                if self.userMatchDict.count == self.userList.value.count{
                     self.collectionView.allowsSelection = true
                 }
             }
@@ -256,7 +194,7 @@ extension RankViewController{
             }
         }
     }
-
+    
     func getAllUser(){
         db.collection("users").addSnapshotListener {snapshot, error in
             guard let documents = snapshot?.documents else{
@@ -264,23 +202,19 @@ extension RankViewController{
                 return
             }
             
-            self.userList = documents.compactMap({ doc -> User? in
+            documents.forEach { doc in
                 do{
                     let user = try doc.data(as: User.self)
                     self.getAllUserMatch(puuid: doc.documentID)
                     
-                    return user
+                    self.userDict[doc.documentID] = user
                 } catch let error{
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
-                    return nil
                 }
-            }).sorted(by: {
+            }
+            self.userList.send(Array(self.userDict.values).sorted{
                 $0.elo > $1.elo
             })
-            
-            DispatchQueue.main.async {
-                self.applySectionItems(self.userList)
-            }
         }
     }
 }

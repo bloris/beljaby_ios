@@ -9,6 +9,7 @@ import UIKit
 import Kingfisher
 
 class UserRankCell: UICollectionViewCell {
+    private let realmManager = LolRealmManager.shared
 
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var tierImage: UIImageView!
@@ -34,8 +35,9 @@ class UserRankCell: UICollectionViewCell {
         self.initView()
     }
     
-    func configure(_ user: User, _ version: String, _ userChampCnt: [String: [Int]]){
+    func configure(_ user: User, _ userChampCnt: [String: [Int]]){
         let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
+        let version = realmManager.realmData[0].version
         
         let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
         
@@ -43,14 +45,12 @@ class UserRankCell: UICollectionViewCell {
             guard let champCnt = userChampCnt[user.puuid] else{
                 return "blank"
             }
-            return Champion.champData[champCnt[$0]]?.id ?? "blank"
+            return realmManager.champData[champCnt[$0]]?.id ?? "blank"
         }
         
         let champURL: [URL?] = champMost.map{
             URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/champion/\($0).png")
         }
-        
-        
         
         let win = user.win
         let lose = user.lose
@@ -94,34 +94,5 @@ class UserRankCell: UICollectionViewCell {
         
         self.clipsToBounds = true
         self.layer.cornerRadius = 5
-    }
-}
-
-extension NSLayoutConstraint {
-    /**
-     Change multiplier constraint
-
-     - parameter multiplier: CGFloat
-     - returns: NSLayoutConstraint
-    */
-    func setMultiplier(multiplier:CGFloat) -> NSLayoutConstraint {
-
-        NSLayoutConstraint.deactivate([self])
-
-        let newConstraint = NSLayoutConstraint(
-            item: firstItem!,
-            attribute: firstAttribute,
-            relatedBy: relation,
-            toItem: secondItem,
-            attribute: secondAttribute,
-            multiplier: multiplier,
-            constant: constant)
-
-        newConstraint.priority = priority
-        newConstraint.shouldBeArchived = self.shouldBeArchived
-        newConstraint.identifier = self.identifier
-
-        NSLayoutConstraint.activate([newConstraint])
-        return newConstraint
     }
 }
