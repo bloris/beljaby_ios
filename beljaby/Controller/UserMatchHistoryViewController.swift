@@ -12,6 +12,8 @@ import Combine
 private let reuseIdentifier = "Cell"
 
 class UserMatchHistoryViewController: UIViewController {
+    private let realmManager = LolRealmManager.shared
+    
     @IBOutlet weak var collectionView: UICollectionView!
     
     var userMatchDict: [String: Array<UserMatch>]?
@@ -41,14 +43,12 @@ class UserMatchHistoryViewController: UIViewController {
         
         self.collectionView.delegate = self
         
-        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, userMatch in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell, let version = self.version else{
+        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: {[unowned self] collectionView, indexPath, userMatch in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell, let match = self.MatchDict?[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else{
                 return nil
             }
-            let match = self.MatchDict![userMatch.matchId]!
-            let champ = Champion.champData[userMatch.champ]!
             
-            cell.configure(userMatch, match, version, champ)
+            cell.configure(userMatch, match, champ)
             
             return cell
         })
@@ -91,7 +91,7 @@ class UserMatchHistoryViewController: UIViewController {
     }
     
     override func viewWillLayoutSubviews() {
-        super.viewDidLayoutSubviews()
+        super.viewWillLayoutSubviews()
         self.collectionView.collectionViewLayout = layout()
         self.collectionView.collectionViewLayout.invalidateLayout()
     }

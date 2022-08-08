@@ -13,7 +13,7 @@ class ChampionCache: Object{
     @Persisted var key: String = ""
     @Persisted var name: String = ""
     
-    var parentCategory = LinkingObjects(fromType: DataCache.self, property: "champions")
+    var parentCategory = LinkingObjects(fromType: LolDataCache.self, property: "champions")
     
     convenience init(champ: Champion){
         self.init()
@@ -31,6 +31,4 @@ struct Champion: Codable{
     let id: String
     let key: String
     let name: String
-    
-    static var champData = [Int: Champion]()
 }

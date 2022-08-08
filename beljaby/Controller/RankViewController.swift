@@ -9,7 +9,6 @@ import UIKit
 import Alamofire
 import FirebaseDatabase
 import FirebaseFirestore
-import RealmSwift
 import Combine
 
 class RankViewController: UIViewController {
@@ -28,7 +27,6 @@ class RankViewController: UIViewController {
     
     var db = Firestore.firestore()
     var makeMode = false
-    let realm = try! Realm()
     
     enum Section{
         case main
@@ -57,20 +55,12 @@ class RankViewController: UIViewController {
     }
     
     private func configureData(){
-        self.getVersion()
+//        self.getVersion()
         self.getAllUser()
         self.getAllMatch()
     }
     
     private func bind(){
-        $ver
-            .receive(on: RunLoop.main)
-            .sink { result in
-                if !result.v.isEmpty{
-                    self.getChamption()
-                }
-            }.store(in: &subscriptions)
-        
         self.userList
             .receive(on: RunLoop.main)
             .sink {[unowned self] users in
@@ -94,7 +84,7 @@ extension RankViewController{
                 return nil
             }
             
-            cell.configure(user, self.ver.v, self.userChampCnt)
+            cell.configure(user, self.userChampCnt)
             return cell
         })
         
@@ -143,61 +133,6 @@ extension RankViewController: UICollectionViewDelegate{
         destinationVC.title = "\(user.name) 대전 기록"
         
         self.navigationController?.pushViewController(destinationVC, animated: true)
-    }
-}
-
-//MARK: - League of Legends Game Data load
-extension RankViewController{
-    func getVersion(){
-        let url = "https://ddragon.leagueoflegends.com/realms/kr.json"
-        AF.request(url)
-            .publishDecodable(type: Version.self)
-            .value()
-            .replaceError(with: Version(v: ""))
-            .receive(on: RunLoop.main)
-            .assign(to: \.ver, on: self)
-            .store(in: &subscriptions)
-    }
-    
-    func getChamption(){
-        let realmData = realm.objects(DataCache.self)
-        let version = self.ver.v
-        if realmData.count == 0 || realmData.first!.version != version{
-            let url = "https://ddragon.leagueoflegends.com/cdn/\(version)/data/ko_KR/champion.json"
-            
-            AF.request(url)
-                .publishDecodable(type: ChampionList.self)
-                .value()
-                .replaceError(with: ChampionList(data: [:]))
-                .receive(on: RunLoop.main)
-                .sink(receiveValue: { result in
-                    let realmData = DataCache()
-                    realmData.version = version
-                    result
-                        .data
-                        .forEach { (_, champion: Champion) in
-                            Champion.champData[Int(champion.key) ?? 0] = champion
-                            realmData.champions.append(ChampionCache(champ: champion))
-                        }
-                    self.save(data: realmData)
-                })
-                .store(in: &subscriptions)
-            
-        }else{
-            realmData.first!.champions.forEach {
-                Champion.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
-            }
-        }
-    }
-    
-    func save(data: DataCache){
-        do{
-            try realm.write({
-                realm.add(data)
-            })
-        }catch{
-            print("Error saving cache, \(error)")
-        }
     }
 }
 
@@ -281,10 +216,10 @@ extension RankViewController{
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
                 }
             }
-            
             self.userList.send(Array(self.userDict.values).sorted{
                 $0.elo > $1.elo
             })
         }
+        
     }
 }

@@ -9,6 +9,7 @@ import UIKit
 import Kingfisher
 
 class UserMatchHistoryCell: UICollectionViewCell {
+    private let realmManager = LolRealmManager.shared
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var winView: UIView!
@@ -52,9 +53,11 @@ class UserMatchHistoryCell: UICollectionViewCell {
         
     }
     
-    func configure(_ userMatch: UserMatch, _ match: Match, _ version: String, _ champ: Champion){
+    func configure(_ userMatch: UserMatch, _ match: Match, _ champ: Champion){
         let gameDuration = match.gameDuration
         let dateFormatter = DateFormatter()
+        let version = realmManager.realmData[0].version
+        
         dateFormatter.dateFormat = "yyyy/MM/dd"
         
         let matchDate = dateFormatter.string(from: match.matchDate)
