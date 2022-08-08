@@ -13,17 +13,15 @@ import Combine
 final class FirebaseManager{
     static let shared = FirebaseManager()
     
-    private var db = Firestore.firestore()
-    
     var userList = CurrentValueSubject<[User], Never>([User]())
     var userMatchLoad = PassthroughSubject<Bool, Never>()
-    
-    var subscriptions = Set<AnyCancellable>()
     
     var userDict = [String:User]()
     var userMatchDict = [String: Array<UserMatch>]()
     var MatchDict = [String: Match]()
     var userChampCnt = [String: [Int]]()
+    
+    private var db = Firestore.firestore()
     
     private init(){
         self.getAllUser()

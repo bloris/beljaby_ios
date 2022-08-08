@@ -18,16 +18,17 @@ class RankViewController: UIViewController {
     
     var subscriptions = Set<AnyCancellable>()
     
-    var makeMode = false
-    
     enum Section{
         case main
     }
     
     var datasource: UICollectionViewDiffableDataSource<Section, User>!
+    var viewModel: RankViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        self.viewModel = RankViewModel()
         
         self.configureCollectionView()
         
@@ -35,7 +36,6 @@ class RankViewController: UIViewController {
     }
     
     @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
-        //makeMode.toggle()
         /*
          present select view with simple view(ex: only name and elo?)
          balancing button in below
@@ -50,6 +50,18 @@ class RankViewController: UIViewController {
     }
     
     private func bind(){
+        self.viewModel.selectedUser
+            .receive(on: RunLoop.main)
+            .compactMap({$0})
+            .sink {[unowned self] user in
+                let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
+                
+                destinationVC.puuid.send(self.viewModel.puuid)
+                destinationVC.title = self.viewModel.historyViewTitle
+                
+                self.navigationController?.pushViewController(destinationVC, animated: true)
+            }.store(in: &subscriptions)
+        
         self.firebaseManager.userList
             .receive(on: RunLoop.main)
             .sink {[unowned self] users in
@@ -70,7 +82,6 @@ class RankViewController: UIViewController {
 //MARK: - Configure CollectionView
 extension RankViewController{
     private func configureCollectionView(){
-        //link cell to collectionView
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
         
@@ -78,7 +89,7 @@ extension RankViewController{
         self.collectionView.allowsSelection = false //Disable selection before load user match history data
         
         datasource = UICollectionViewDiffableDataSource<Section, User>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, user in
-            guard let cell = self.collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else{
                 return nil
             }
             
@@ -114,17 +125,9 @@ extension RankViewController{
     }
 }
 
-//MARK: - Table View Datasource
+//MARK: - Collection View Delegate
 extension RankViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let user = self.firebaseManager.userList.value[indexPath.item]
-        print(user.name)
-        let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
-        
-        destinationVC.puuid.send(user.puuid)
-        
-        destinationVC.title = "\(user.name) 대전 기록"
-        
-        self.navigationController?.pushViewController(destinationVC, animated: true)
+        self.viewModel.didSelect(at: indexPath)
     }
 }

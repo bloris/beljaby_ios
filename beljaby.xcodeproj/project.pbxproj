@@ -26,6 +26,8 @@
 		747AE70E28A08D1D0094151C /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE70D28A08D1D0094151C /* User.swift */; };
 		747AE71028A0A7D70094151C /* Constraints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE70F28A0A7D70094151C /* Constraints.swift */; };
 		747AE71228A0CC630094151C /* FirebaseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE71128A0CC630094151C /* FirebaseManager.swift */; };
+		747AE71428A0DB340094151C /* RankViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE71328A0DB340094151C /* RankViewModel.swift */; };
+		747AE71628A0DB430094151C /* UserMatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 747AE71528A0DB430094151C /* UserMatchHistoryViewModel.swift */; };
 		74A9934B288E2BC900B8660E /* README.md in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934A288E2BC900B8660E /* README.md */; };
 		74A9934E288E2E6E00B8660E /* rankview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934C288E2E6E00B8660E /* rankview.png */; };
 		74A9934F288E2E6E00B8660E /* matchview.png in Resources */ = {isa = PBXBuildFile; fileRef = 74A9934D288E2E6E00B8660E /* matchview.png */; };
@@ -56,6 +58,8 @@
 		747AE70D28A08D1D0094151C /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
 		747AE70F28A0A7D70094151C /* Constraints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constraints.swift; sourceTree = "<group>"; };
 		747AE71128A0CC630094151C /* FirebaseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirebaseManager.swift; sourceTree = "<group>"; };
+		747AE71328A0DB340094151C /* RankViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankViewModel.swift; sourceTree = "<group>"; };
+		747AE71528A0DB430094151C /* UserMatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		74A9934A288E2BC900B8660E /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		74A9934C288E2E6E00B8660E /* rankview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = rankview.png; sourceTree = "<group>"; };
 		74A9934D288E2E6E00B8660E /* matchview.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = matchview.png; sourceTree = "<group>"; };
@@ -126,6 +130,8 @@
 		744624102872E2EB00492565 /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				747AE71328A0DB340094151C /* RankViewModel.swift */,
+				747AE71528A0DB430094151C /* UserMatchHistoryViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -307,9 +313,11 @@
 				744623FD2872E2E100492565 /* AppDelegate.swift in Sources */,
 				747AE71228A0CC630094151C /* FirebaseManager.swift in Sources */,
 				74462424287BF94400492565 /* Version.swift in Sources */,
+				747AE71628A0DB430094151C /* UserMatchHistoryViewModel.swift in Sources */,
 				7446241E2874314600492565 /* Match.swift in Sources */,
 				7470DF1E28869D5C00D2F575 /* UserMatchHistoryViewController.swift in Sources */,
 				747AE71028A0A7D70094151C /* Constraints.swift in Sources */,
+				747AE71428A0DB340094151C /* RankViewModel.swift in Sources */,
 				74F6500F289798220009967C /* RealmManager.swift in Sources */,
 				7446241B287430EB00492565 /* RankViewController.swift in Sources */,
 				7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */,

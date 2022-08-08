@@ -40,7 +40,7 @@ class UserMatchHistoryViewController: UIViewController {
     private func bind(){
         puuid
             .receive(on: RunLoop.main)
-            .sink { puuid in
+            .sink {[unowned self] puuid in
                 self.applySectionItems(self.firebaseManager.userMatchDict[puuid] ?? [])
             }.store(in: &subscriptions)
     }
@@ -51,7 +51,7 @@ class UserMatchHistoryViewController: UIViewController {
         
         self.collectionView.delegate = self
         
-        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: {collectionView, indexPath, userMatch in
+        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, userMatch in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else{
                 return nil
             }
