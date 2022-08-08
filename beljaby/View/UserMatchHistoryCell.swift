@@ -10,6 +10,7 @@ import Kingfisher
 
 class UserMatchHistoryCell: UICollectionViewCell {
     private let realmManager = LolRealmManager.shared
+    private let firebaseManager = FirebaseManager.shared
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var winView: UIView!
@@ -53,7 +54,11 @@ class UserMatchHistoryCell: UICollectionViewCell {
         
     }
     
-    func configure(_ userMatch: UserMatch, _ match: Match, _ champ: Champion){
+    func configure(_ userMatch: UserMatch){
+        guard let match = self.firebaseManager.MatchDict[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else{
+            return
+        }
+        
         let gameDuration = match.gameDuration
         let dateFormatter = DateFormatter()
         let version = realmManager.realmData[0].version

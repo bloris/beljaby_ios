@@ -13,17 +13,13 @@ private let reuseIdentifier = "Cell"
 
 class UserMatchHistoryViewController: UIViewController {
     private let realmManager = LolRealmManager.shared
+    private let firebaseManager = FirebaseManager.shared
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var userMatchDict: [String: Array<UserMatch>]?
-    var MatchDict: [String: Match]?
-    var userList: [User]?
-    var userDict: [String: User]?
-    var puuid: String?
+    var puuid = CurrentValueSubject<String,Never>("")
     
     var subscriptions = Set<AnyCancellable>()
-    var userMatchList = CurrentValueSubject<[UserMatch], Never>([UserMatch]())
     
     enum Section{
         case main
@@ -42,10 +38,10 @@ class UserMatchHistoryViewController: UIViewController {
     }
     
     private func bind(){
-        userMatchList
+        puuid
             .receive(on: RunLoop.main)
-            .sink { userMatches in
-                self.applySectionItems(userMatches)
+            .sink { puuid in
+                self.applySectionItems(self.firebaseManager.userMatchDict[puuid] ?? [])
             }.store(in: &subscriptions)
     }
     
@@ -55,12 +51,12 @@ class UserMatchHistoryViewController: UIViewController {
         
         self.collectionView.delegate = self
         
-        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: {[unowned self] collectionView, indexPath, userMatch in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell, let match = self.MatchDict?[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else{
+        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: {collectionView, indexPath, userMatch in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else{
                 return nil
             }
             
-            cell.configure(userMatch, match, champ)
+            cell.configure(userMatch)
             
             return cell
         })
