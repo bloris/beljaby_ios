@@ -14,15 +14,13 @@ import Combine
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var userDict = [String:User]()
     var userList = CurrentValueSubject<[User], Never>([User]())
     var userChampCnt = [String: [Int]]()
     
+    var userDict = [String:User]()
     var userMatchDict = [String: Array<UserMatch>]()
-    
     var MatchDict = [String: Match]()
-
-    @Published var ver: Version = Version(v: "")
+    
     var subscriptions = Set<AnyCancellable>()
     
     var db = Firestore.firestore()
@@ -55,7 +53,6 @@ class RankViewController: UIViewController {
     }
     
     private func configureData(){
-//        self.getVersion()
         self.getAllUser()
         self.getAllMatch()
     }
@@ -123,9 +120,8 @@ extension RankViewController: UICollectionViewDelegate{
         print(user.name)
         let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
         
-        destinationVC.userMatchDict = self.userMatchDict
+        destinationVC.userMatchList.send(self.userMatchDict[user.puuid] ?? [])
         destinationVC.puuid = user.puuid
-        destinationVC.version = self.ver.v
         destinationVC.MatchDict = self.MatchDict
         destinationVC.userList = self.userList.value
         destinationVC.userDict = self.userDict
@@ -198,7 +194,7 @@ extension RankViewController{
             }
         }
     }
-
+    
     func getAllUser(){
         db.collection("users").addSnapshotListener {snapshot, error in
             guard let documents = snapshot?.documents else{
@@ -220,6 +216,5 @@ extension RankViewController{
                 $0.elo > $1.elo
             })
         }
-        
     }
 }

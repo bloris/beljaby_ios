@@ -21,7 +21,9 @@ class UserMatchHistoryViewController: UIViewController {
     var userList: [User]?
     var userDict: [String: User]?
     var puuid: String?
-    var version: String?
+    
+    var subscriptions = Set<AnyCancellable>()
+    var userMatchList = CurrentValueSubject<[UserMatch], Never>([UserMatch]())
     
     enum Section{
         case main
@@ -35,6 +37,16 @@ class UserMatchHistoryViewController: UIViewController {
         self.navigationItem.largeTitleDisplayMode = .never
         
         self.configureCollectionView()
+        
+        self.bind()
+    }
+    
+    private func bind(){
+        userMatchList
+            .receive(on: RunLoop.main)
+            .sink { userMatches in
+                self.applySectionItems(userMatches)
+            }.store(in: &subscriptions)
     }
     
     private func configureCollectionView(){
@@ -52,8 +64,6 @@ class UserMatchHistoryViewController: UIViewController {
             
             return cell
         })
-        
-        self.applySectionItems(self.userMatchDict![self.puuid!]!)
         
         self.collectionView.collectionViewLayout = layout()
     }
@@ -100,21 +110,6 @@ class UserMatchHistoryViewController: UIViewController {
 
 extension UserMatchHistoryViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let userMatch = self.userMatchDict![self.puuid!]![indexPath.item]
-        
-        var userMatches = [(self.userDict![self.puuid!]!,userMatch)]
-        self.MatchDict![userMatch.matchId]!.users.forEach { user in
-            if user != self.puuid!{
-                for um in self.userMatchDict![user]!{
-                    if um.matchId == userMatch.matchId{
-                        userMatches.append((self.userDict![user]!,um))
-                        break
-                    }
-                }
-            }
-        }
-        userMatches.forEach { (user,um) in
-            print(user.name)
-        }
+        print("Selected!")
     }
 }
