@@ -8,6 +8,7 @@
 import UIKit
 import Kingfisher
 import Combine
+import SwiftUI
 
 private let reuseIdentifier = "Cell"
 
@@ -17,9 +18,9 @@ class UserMatchHistoryViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var puuid = CurrentValueSubject<String,Never>("")
-    
     var subscriptions = Set<AnyCancellable>()
+    
+    var viewModel: UserMatchHistoryViewModel!
     
     enum Section{
         case main
@@ -38,10 +39,21 @@ class UserMatchHistoryViewController: UIViewController {
     }
     
     private func bind(){
-        puuid
+        self.viewModel.userMatchList
             .receive(on: RunLoop.main)
-            .sink {[unowned self] puuid in
-                self.applySectionItems(self.firebaseManager.userMatchDict[puuid] ?? [])
+            .sink { [unowned self] userMatches in
+                self.applySectionItems(userMatches)
+            }.store(in: &subscriptions)
+        
+        self.viewModel.selectedMatch
+            .receive(on: RunLoop.main)
+            .compactMap({$0})
+            .sink { [unowned self] userMatch in
+                let matchId = userMatch.matchId
+                let detailView = MatchDetailView(matchId: matchId)
+                let vc = UIHostingController(rootView: detailView)
+                
+                self.navigationController?.pushViewController(vc, animated: true)
             }.store(in: &subscriptions)
     }
     
@@ -106,6 +118,6 @@ class UserMatchHistoryViewController: UIViewController {
 
 extension UserMatchHistoryViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected!")
+        self.viewModel.didSelect(at: indexPath)
     }
 }

@@ -53,10 +53,10 @@ class RankViewController: UIViewController {
         self.viewModel.selectedUser
             .receive(on: RunLoop.main)
             .compactMap({$0})
-            .sink {[unowned self] user in
+            .sink { [unowned self] user in
                 let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
                 
-                destinationVC.puuid.send(self.viewModel.puuid)
+                destinationVC.viewModel = UserMatchHistoryViewModel(puuid: self.viewModel.puuid)
                 destinationVC.title = self.viewModel.historyViewTitle
                 
                 self.navigationController?.pushViewController(destinationVC, animated: true)
@@ -64,13 +64,13 @@ class RankViewController: UIViewController {
         
         self.firebaseManager.userList
             .receive(on: RunLoop.main)
-            .sink {[unowned self] users in
+            .sink { [unowned self] users in
                 self.applySectionItems(users)
             }.store(in: &subscriptions)
         
         self.firebaseManager.userMatchLoad
             .receive(on: RunLoop.main)
-            .sink {[unowned self] complete in
+            .sink { [unowned self] complete in
                 if complete{
                     self.collectionView.reloadData()
                     self.collectionView.allowsSelection = true

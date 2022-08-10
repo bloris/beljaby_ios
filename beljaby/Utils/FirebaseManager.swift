@@ -17,7 +17,7 @@ final class FirebaseManager{
     var userMatchLoad = PassthroughSubject<Bool, Never>()
     
     var userDict = [String:User]()
-    var userMatchDict = [String: Array<UserMatch>]()
+    var userMatchDict = [String: [String: UserMatch]]()
     var MatchDict = [String: Match]()
     var userChampCnt = [String: [Int]]()
     
@@ -36,18 +36,21 @@ final class FirebaseManager{
             }
             var champCnt = [Int: Int]()
             
-            self.userMatchDict[puuid] = documents.compactMap({ doc -> UserMatch?  in
+            self.userMatchDict[puuid] = [String: UserMatch]()
+            
+            documents.forEach({ doc in
                 do{
                     let userMatch = try doc.data(as: UserMatch.self)
                     champCnt[userMatch.champ, default: 0] += 1
-                    return userMatch
+                    self.userMatchDict[puuid]![doc.documentID] = userMatch
                 }catch let error{
                     print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
-                    return nil
+                    return
                 }
-            }).sorted(by: {
-                $0.matchDate > $1.matchDate
             })
+//                        .sorted(by: {
+//                            $0.matchDate > $1.matchDate
+//                        })
             
             self.userChampCnt[puuid] = champCnt.sorted(by: {
                 if $0.value == $1.value{
