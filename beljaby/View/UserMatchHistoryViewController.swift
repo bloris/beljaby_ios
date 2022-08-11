@@ -45,12 +45,12 @@ class UserMatchHistoryViewController: UIViewController {
                 self.applySectionItems(userMatches)
             }.store(in: &subscriptions)
         
-        self.viewModel.selectedMatch
+        self.viewModel.selectedMatchDetail
             .receive(on: RunLoop.main)
             .compactMap({$0})
-            .sink { [unowned self] userMatch in
-                let matchId = userMatch.matchId
-                let detailView = MatchDetailView(matchId: matchId)
+            .sink { [unowned self] matchDetail in
+                let detailViewModel = MatchDetailViewModel(matchDetails: matchDetail)
+                let detailView = MatchDetailView(viewModel: detailViewModel)
                 let vc = UIHostingController(rootView: detailView)
                 
                 self.navigationController?.pushViewController(vc, animated: true)

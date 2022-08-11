@@ -8,21 +8,54 @@
 import Foundation
 import Combine
 
-final class MatchDetailViewModel{
+final class MatchDetailViewModel: ObservableObject{
     
-    let selectedMatchID: CurrentValueSubject<String,Never>
+    @Published var matchDetails: [MatchDetail]
     
-    let match: Match
-    let users: [User]
-    let userMatch: [UserMatch]
+    let champData = LolRealmManager.shared.champData
     
-    init(matchID: String){
+    var myTeam: [MatchDetail]{
+        let team = self.matchDetails[0..<5]
+        return Array(team)
+    }
+    
+    var enemyTeam: [MatchDetail]{
+        let team = self.matchDetails[5..<10]
+        return Array(team)
+    }
+    
+    var champImgURl: URL?{
+        guard let champ = champData[self.matchDetails.first?.userMatch.champ ?? 0] else {return nil}
+        return URL(string: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/\(champ.id)_0.jpg")
+    }
+    
+    var win: Bool{
+        guard let userMatch = self.matchDetails.first?.userMatch else {return true}
+        return userMatch.win
+    }
+    
+    var winLabel: String{
+        guard let win = self.matchDetails.first?.userMatch.win else {return "승리"}
+        return win ? "승리" : "패배"
+    }
+    
+    var dateLabel: String{
         let firebaseManager = FirebaseManager.shared
-        self.selectedMatchID = CurrentValueSubject(matchID)
-        self.match = firebaseManager.MatchDict[matchID]!
-        self.users = self.match.users.map { puuid in
-            firebaseManager.userDict[puuid]!
-        }
-        self.userMatch = []
+        guard let userMatch = self.matchDetails.first?.userMatch,
+              let match = firebaseManager.MatchDict[userMatch.matchId] else {return "0000/00/00 00:00"}
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy/MM/dd"
+        
+        let gameDuration = match.gameDuration
+        
+        let matchDate = dateFormatter.string(from: userMatch.matchDate)
+        let duration = String(format: "  %02d:%02d분", gameDuration/60,gameDuration%60)
+        
+        return matchDate + duration
+    }
+    
+    init(matchDetails: [MatchDetail]){
+        self.matchDetails = matchDetails
     }
 }

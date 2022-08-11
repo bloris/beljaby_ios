@@ -41,7 +41,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
     @IBOutlet weak var mainPerkImage: UIImageView!
     @IBOutlet weak var subPerkImage: UIImageView!
     
-    var colorList = [UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00), UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)]
+    let colorList = [UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00), UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)]
     
     override func awakeFromNib() {
         super.awakeFromNib()
