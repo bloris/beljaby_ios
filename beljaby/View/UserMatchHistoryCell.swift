@@ -61,7 +61,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
         
         let gameDuration = match.gameDuration
         let dateFormatter = DateFormatter()
-        let version = realmManager.realmData[0].version
+        let version = realmManager.ver
         
         dateFormatter.dateFormat = "yyyy/MM/dd"
         

@@ -38,7 +38,7 @@ class UserRankCell: UICollectionViewCell {
     
     func configure(_ user: User){
         let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
-        let version = realmManager.realmData[0].version
+        let version = realmManager.ver
         
         let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
         

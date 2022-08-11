@@ -11,7 +11,7 @@ final class MatchDetailCellViewModel: ObservableObject{
     
     @Published var matchDetail: MatchDetail?
     
-    let version = LolRealmManager.shared.realmData[0].version
+    let version = LolRealmManager.shared.ver
     let champData = LolRealmManager.shared.champData
     
     var my: Bool{
