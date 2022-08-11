@@ -1,8 +1,9 @@
 # Beljaby
 <br />
 <p align="row">
-<img src= "rankview.png" width="300" >
-<img src= "matchview.png" width="300" >
+<img src= "gitImage/rankview.png" width="300" >
+<img src= "gitImage/matchview.png" width="300" >
+<img src= "gitImage/matchDetailView.png" width="300" >
 </p>
 
 ## Features
