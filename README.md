@@ -7,11 +7,11 @@
 
 ## Features
 
-- [x] Get User custom game current Rank
-- [x] Get User custom game Match History
+- [x] User custom game current Rank View
+- [x] User custom game Match History View
+- [x] User custom game Match History Detail View
 - [x] Apply Combine
-- [ ] Apply MVVM
-- [ ] Get User custom game Match History Detail
+- [x] Apply MVVM
 
 ## Requirements
 

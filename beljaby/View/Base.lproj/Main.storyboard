@@ -138,7 +138,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="소환사 랭킹" id="HeJ-1G-RBM">
-                        <barButtonItem key="rightBarButtonItem" style="plain" id="TpN-u9-0aS">
+                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Item" style="plain" id="TpN-u9-0aS">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="hCa-w3-8do">
                                 <rect key="frame" x="256.66666666666669" y="5" width="117.33333333333331" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -146,6 +146,9 @@
                                 <buttonConfiguration key="configuration" style="plain" title="Make Match">
                                     <color key="baseForegroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <action selector="makeMatchTapped:" destination="jvh-1I-O74" eventType="touchUpInside" id="OKC-OB-UbF"/>
+                                </connections>
                             </button>
                             <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </barButtonItem>

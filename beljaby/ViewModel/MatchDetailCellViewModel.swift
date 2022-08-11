@@ -34,7 +34,8 @@ final class MatchDetailCellViewModel: ObservableObject{
     
     var itemImgURL: [URL?]{
         return self.matchDetail?.userMatch.item.map({ item in
-            URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/item/\(item).png")
+            if item == 0 {return nil}
+            return URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/item/\(item).png")
         }) ?? []
     }
     

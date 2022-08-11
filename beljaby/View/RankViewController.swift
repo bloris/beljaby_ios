@@ -35,7 +35,7 @@ class RankViewController: UIViewController {
         self.bind()
     }
     
-    @IBAction func makeMatchTapped(_ sender: UIBarButtonItem) {
+    @IBAction func makeMatchTapped(_ sender: UIButton) {
         /*
          present select view with simple view(ex: only name and elo?)
          balancing button in below
@@ -47,6 +47,7 @@ class RankViewController: UIViewController {
          select 10 user -> tap done button
          present or push balanced team member view
          */
+        print("123")
     }
     
     private func bind(){
