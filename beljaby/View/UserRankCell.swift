@@ -10,6 +10,7 @@ import Kingfisher
 
 class UserRankCell: UICollectionViewCell {
     private let realmManager = LolRealmManager.shared
+    private let firebaseManager = FirebaseManager.shared
 
     @IBOutlet weak var profileImage: UIImageView!
     @IBOutlet weak var tierImage: UIImageView!
@@ -35,14 +36,14 @@ class UserRankCell: UICollectionViewCell {
         self.initView()
     }
     
-    func configure(_ user: User, _ userChampCnt: [String: [Int]]){
+    func configure(_ user: User){
         let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
-        let version = realmManager.realmData[0].version
+        let version = realmManager.ver
         
         let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
         
         let champMost: [String] = (0...2).map{
-            guard let champCnt = userChampCnt[user.puuid] else{
+            guard let champCnt = self.firebaseManager.userChampCnt[user.puuid] else{
                 return "blank"
             }
             return realmManager.champData[champCnt[$0]]?.id ?? "blank"
@@ -61,6 +62,8 @@ class UserRankCell: UICollectionViewCell {
         for (idx, url) in champURL.enumerated(){
             if champMost[idx] != "blank"{
                 champImageList[idx]?.kf.setImage(with: url)
+            }else{
+                champImageList[idx]?.image = nil
             }
         }
         

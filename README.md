@@ -9,6 +9,8 @@
 
 - [x] Get User custom game current Rank
 - [x] Get User custom game Match History
+- [x] Apply Combine
+- [ ] Apply MVVM
 - [ ] Get User custom game Match History Detail
 
 ## Requirements

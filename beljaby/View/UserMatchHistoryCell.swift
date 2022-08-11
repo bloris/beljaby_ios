@@ -10,6 +10,7 @@ import Kingfisher
 
 class UserMatchHistoryCell: UICollectionViewCell {
     private let realmManager = LolRealmManager.shared
+    private let firebaseManager = FirebaseManager.shared
     
     @IBOutlet weak var dateLabel: UILabel!
     @IBOutlet weak var winView: UIView!
@@ -40,7 +41,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
     @IBOutlet weak var mainPerkImage: UIImageView!
     @IBOutlet weak var subPerkImage: UIImageView!
     
-    var colorList = [UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00), UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)]
+    let colorList = [UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00), UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)]
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -53,10 +54,14 @@ class UserMatchHistoryCell: UICollectionViewCell {
         
     }
     
-    func configure(_ userMatch: UserMatch, _ match: Match, _ champ: Champion){
+    func configure(_ userMatch: UserMatch){
+        guard let match = self.firebaseManager.MatchDict[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else{
+            return
+        }
+        
         let gameDuration = match.gameDuration
         let dateFormatter = DateFormatter()
-        let version = realmManager.realmData[0].version
+        let version = realmManager.ver
         
         dateFormatter.dateFormat = "yyyy/MM/dd"
         

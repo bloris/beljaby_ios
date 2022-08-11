@@ -16,9 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
         // Override point for customization after application launch.
+        
+        UIScrollView.appearance().bounces = false
+        
         FirebaseApp.configure()
-        let realmManager = LolRealmManager.shared
-        realmManager.initData()
         
         return true
     }

@@ -8,22 +8,19 @@
 import UIKit
 import Kingfisher
 import Combine
+import SwiftUI
 
 private let reuseIdentifier = "Cell"
 
 class UserMatchHistoryViewController: UIViewController {
     private let realmManager = LolRealmManager.shared
+    private let firebaseManager = FirebaseManager.shared
     
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var userMatchDict: [String: Array<UserMatch>]?
-    var MatchDict: [String: Match]?
-    var userList: [User]?
-    var userDict: [String: User]?
-    var puuid: String?
-    
     var subscriptions = Set<AnyCancellable>()
-    var userMatchList = CurrentValueSubject<[UserMatch], Never>([UserMatch]())
+    
+    var viewModel: UserMatchHistoryViewModel!
     
     enum Section{
         case main
@@ -42,10 +39,21 @@ class UserMatchHistoryViewController: UIViewController {
     }
     
     private func bind(){
-        userMatchList
+        self.viewModel.userMatchList
             .receive(on: RunLoop.main)
-            .sink { userMatches in
+            .sink { [unowned self] userMatches in
                 self.applySectionItems(userMatches)
+            }.store(in: &subscriptions)
+        
+        self.viewModel.selectedMatchDetail
+            .receive(on: RunLoop.main)
+            .compactMap({$0})
+            .sink { [unowned self] matchDetail in
+                let detailViewModel = MatchDetailViewModel(matchDetails: matchDetail)
+                let detailView = MatchDetailView(viewModel: detailViewModel)
+                let vc = UIHostingController(rootView: detailView)
+                
+                self.navigationController?.pushViewController(vc, animated: true)
             }.store(in: &subscriptions)
     }
     
@@ -55,12 +63,12 @@ class UserMatchHistoryViewController: UIViewController {
         
         self.collectionView.delegate = self
         
-        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: {[unowned self] collectionView, indexPath, userMatch in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell, let match = self.MatchDict?[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else{
+        datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, userMatch in
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else{
                 return nil
             }
             
-            cell.configure(userMatch, match, champ)
+            cell.configure(userMatch)
             
             return cell
         })
@@ -110,6 +118,6 @@ class UserMatchHistoryViewController: UIViewController {
 
 extension UserMatchHistoryViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        print("Selected!")
+        self.viewModel.didSelect(at: indexPath)
     }
 }

@@ -7,6 +7,16 @@
 
 import Foundation
 
+struct MatchDetail: Identifiable, Equatable{
+    var id: String{
+        return name
+    }
+    
+    let name: String
+    let userMatch: UserMatch
+    let my: Bool
+}
+
 struct Match: Codable{
     let matchId: String
     let gameDuration: Int

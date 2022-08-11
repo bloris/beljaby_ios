@@ -15,6 +15,7 @@ final class LolRealmManager{
     
     var realmData: Results<LolDataCache>
     var champData = [Int: Champion]()
+    var ver = ""
     
     private let realm = try! Realm()
     
@@ -25,6 +26,7 @@ final class LolRealmManager{
     private init(){
         self.realmData = realm.objects(LolDataCache.self)
         self.bind()
+        self.initData()
     }
     
     func initData(){
@@ -45,6 +47,7 @@ final class LolRealmManager{
             .sink {[unowned self] version in
                 if !version.v.isEmpty{
                     self.getChamption(version)
+                    self.ver = version.v
                 }
             }.store(in: &subscriptions)
     }
