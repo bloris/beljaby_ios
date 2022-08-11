@@ -25,6 +25,7 @@ final class LolRealmManager{
     private init(){
         self.realmData = realm.objects(LolDataCache.self)
         self.bind()
+        self.initData()
     }
     
     func initData(){

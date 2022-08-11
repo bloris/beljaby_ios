@@ -15,12 +15,14 @@ final class MatchDetailViewModel: ObservableObject{
     let champData = LolRealmManager.shared.champData
     
     var myTeam: [MatchDetail]{
-        let team = self.matchDetails[0..<5]
+        let len = self.matchDetails.count
+        let team = self.matchDetails[0..<len/2]
         return Array(team)
     }
     
     var enemyTeam: [MatchDetail]{
-        let team = self.matchDetails[5..<10]
+        let len = self.matchDetails.count
+        let team = self.matchDetails[len/2..<len]
         return Array(team)
     }
     

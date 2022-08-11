@@ -20,43 +20,42 @@ struct MatchDetailView: View {
     
     var body: some View {
         ScrollView {
-            ZStack(alignment: .bottom) {
-                
-                KFImage(self.viewModel.champImgURl)
-                    .resizable()
-                    .aspectRatio(contentMode: .fit)
-                    .overlay {
-                        LinearGradient(gradient: Gradient(colors: [.clear,.black]), startPoint: .init(x: 0.5, y: 0.7), endPoint: .bottom)
+            VStack {
+                ZStack(alignment: .bottom) {
+                    
+                    KFImage(self.viewModel.champImgURl)
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .overlay {
+                            LinearGradient(gradient: Gradient(colors: [.clear,.black]), startPoint: .init(x: 0.5, y: 0.7), endPoint: .bottom)
+                        }
+                    
+                    HStack{
+                        Text(self.viewModel.dateLabel)
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundColor(.gray)
+                            .padding(.leading,20)
+                        
+                        Spacer()
+                        
+                        Text(self.viewModel.winLabel)
+                            .foregroundColor(self.viewModel.win ? .black : .white)
+                            .font(.system(size: 13, weight: .regular))
+                            .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
+                            .background(self.viewModel.win ? self.colorList[0] : self.colorList[1])
+                            .clipShape(Capsule(style: .circular))
+                            .padding(.trailing,20)
                     }
-                
-                HStack{
-                    Text(self.viewModel.dateLabel)
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(.gray)
-                        .padding(.leading,20)
-                    
-                    Spacer()
-                    
-                    Text(self.viewModel.winLabel)
-                        .foregroundColor(self.viewModel.win ? .black : .white)
-                        .font(.system(size: 13, weight: .regular))
-                        .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                        .background(self.viewModel.win ? self.colorList[0] : self.colorList[1])
-                        .clipShape(Capsule(style: .circular))
-                        .padding(.trailing,20)
+                    .padding(.bottom,10)
                 }
-                .padding(.bottom,10)
                 
+                LazyVGrid(columns: layout,spacing: 0){
+                    TeamView(team: self.viewModel.myTeam, text: "아군")
+                    TeamView(team: self.viewModel.enemyTeam, text: "적")
+                }
             }
-            
-            LazyVGrid(columns: layout,spacing: 0){
-                TeamView(team: self.viewModel.myTeam, text: "아군")
-                TeamView(team: self.viewModel.enemyTeam, text: "적")
-            }
-            
         }
         .background(Color.black.ignoresSafeArea())
-        
     }
 }
 
@@ -68,12 +67,13 @@ struct HeaderView: View {
             Text(text)
                 .font(.system(size: 13, weight: .regular))
                 .foregroundColor(.white)
-                .frame(maxWidth:.infinity, alignment: .leading)
                 .padding(5)
                 .padding(.leading,20)
-            .background(Color(UIColor(red: 0.16, green: 0.15, blue: 0.16, alpha: 1.00)))
+                
             Spacer()
         }
+        .frame(maxWidth:.infinity, alignment: .leading)
+        .background(Color(UIColor(red: 0.16, green: 0.15, blue: 0.16, alpha: 1.00)))
     }
 }
 
