@@ -10,7 +10,7 @@
 
 - [x] User custom game current Rank View
 - [x] User custom game Match History View
-- [x] User custom game Match History Detail View
+- [x] User custom game Match History Detail View (swiftUI) 
 - [x] Apply Combine
 - [x] Apply MVVM
 
