@@ -6,6 +6,10 @@
 <img src= "gitImage/matchDetailView.png" width="300" >
 </p>
 
+## In Progress
+
+- Apply MVVM
+
 ## Features
 
 - [x] User custom game current Rank View

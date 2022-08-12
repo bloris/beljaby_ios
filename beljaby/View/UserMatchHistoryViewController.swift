@@ -13,8 +13,6 @@ import SwiftUI
 private let reuseIdentifier = "Cell"
 
 class UserMatchHistoryViewController: UIViewController {
-    private let realmManager = LolRealmManager.shared
-    private let firebaseManager = FirebaseManager.shared
     
     @IBOutlet weak var collectionView: UICollectionView!
     
