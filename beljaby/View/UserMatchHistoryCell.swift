@@ -114,6 +114,8 @@ class UserMatchHistoryCell: UICollectionViewCell {
         for (idx, itemURL) in itemImageURL.enumerated(){
             if let url = itemURL{
                 itemImageList[idx].kf.setImage(with: url)
+            }else{
+                itemImageList[idx].image = nil
             }
         }
     }

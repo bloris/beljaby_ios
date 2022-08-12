@@ -33,10 +33,15 @@ final class MatchDetailCellViewModel: ObservableObject{
     }
     
     var itemImgURL: [URL?]{
-        return self.matchDetail?.userMatch.item.map({ item in
+        var itemList = self.matchDetail?.userMatch.item.filter{$0 != 0} ?? []
+        while itemList.count < 7{
+            itemList.insert(0, at: itemList.count - 1)
+        }
+        
+        return itemList.map({ item in
             if item == 0 {return nil}
             return URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/item/\(item).png")
-        }) ?? []
+        })
     }
     
     var kill: String{
