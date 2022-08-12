@@ -12,7 +12,7 @@
 - [x] User custom game Match History View
 - [x] User custom game Match History Detail View (swiftUI) 
 - [x] Apply Combine
-- [x] Apply MVVM
+- [ ] Apply MVVM
 
 ## Requirements
 
