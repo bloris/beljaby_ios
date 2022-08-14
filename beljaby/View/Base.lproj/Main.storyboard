@@ -138,7 +138,7 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="소환사 랭킹" id="HeJ-1G-RBM">
-                        <barButtonItem key="rightBarButtonItem" enabled="NO" title="Item" style="plain" id="TpN-u9-0aS">
+                        <barButtonItem key="rightBarButtonItem" title="Item" style="plain" id="TpN-u9-0aS">
                             <button key="customView" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" id="hCa-w3-8do">
                                 <rect key="frame" x="256.66666666666669" y="5" width="117.33333333333331" height="34.333333333333336"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>

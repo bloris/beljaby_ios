@@ -25,6 +25,10 @@
 		745915AD28A37B5800B62BD4 /* UserMatchHistoryViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915AC28A37B5800B62BD4 /* UserMatchHistoryViewModel.swift */; };
 		745915AF28A3A81600B62BD4 /* MatchDetailCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915AE28A3A81600B62BD4 /* MatchDetailCellViewModel.swift */; };
 		745915B228A4C39B00B62BD4 /* matchDetailView.png in Resources */ = {isa = PBXBuildFile; fileRef = 745915B128A4C39B00B62BD4 /* matchDetailView.png */; };
+		745915B428A6324F00B62BD4 /* MatchMakingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915B328A6324F00B62BD4 /* MatchMakingView.swift */; };
+		745915B828A63B0700B62BD4 /* ViewUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915B728A63B0700B62BD4 /* ViewUtils.swift */; };
+		745915BA28A63CA300B62BD4 /* MatchMakingViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915B928A63CA300B62BD4 /* MatchMakingViewModel.swift */; };
+		745915BC28A8F1D800B62BD4 /* FlexibleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915BB28A8F1D800B62BD4 /* FlexibleView.swift */; };
 		7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */; };
 		7470DF1C2885536B00D2F575 /* UserMatchHistoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */; };
 		7470DF1E28869D5C00D2F575 /* UserMatchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */; };
@@ -61,6 +65,10 @@
 		745915AC28A37B5800B62BD4 /* UserMatchHistoryViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryViewModel.swift; sourceTree = "<group>"; };
 		745915AE28A3A81600B62BD4 /* MatchDetailCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchDetailCellViewModel.swift; sourceTree = "<group>"; };
 		745915B128A4C39B00B62BD4 /* matchDetailView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = matchDetailView.png; sourceTree = "<group>"; };
+		745915B328A6324F00B62BD4 /* MatchMakingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchMakingView.swift; sourceTree = "<group>"; };
+		745915B728A63B0700B62BD4 /* ViewUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewUtils.swift; sourceTree = "<group>"; };
+		745915B928A63CA300B62BD4 /* MatchMakingViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchMakingViewModel.swift; sourceTree = "<group>"; };
+		745915BB28A8F1D800B62BD4 /* FlexibleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlexibleView.swift; sourceTree = "<group>"; };
 		7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryCell.swift; sourceTree = "<group>"; };
 		7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserMatchHistoryCell.xib; sourceTree = "<group>"; };
 		7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryViewController.swift; sourceTree = "<group>"; };
@@ -141,6 +149,7 @@
 				745915AC28A37B5800B62BD4 /* UserMatchHistoryViewModel.swift */,
 				745915AA28A3744800B62BD4 /* MatchDetailViewModel.swift */,
 				745915AE28A3A81600B62BD4 /* MatchDetailCellViewModel.swift */,
+				745915B928A63CA300B62BD4 /* MatchMakingViewModel.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -148,15 +157,17 @@
 		744624112872E2FD00492565 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				744624022872E2E100492565 /* Main.storyboard */,
 				7446241A287430EB00492565 /* RankViewController.swift */,
-				744624172874278A00492565 /* UserRankCell.xib */,
-				744624162874278A00492565 /* UserRankCell.swift */,
 				7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */,
-				7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */,
+				744624022872E2E100492565 /* Main.storyboard */,
+				744624162874278A00492565 /* UserRankCell.swift */,
+				744624172874278A00492565 /* UserRankCell.xib */,
 				7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */,
+				7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */,
 				745915A628A368F300B62BD4 /* MatchDetailView.swift */,
 				745915A828A36B2B00B62BD4 /* MatchDetailCell.swift */,
+				745915B328A6324F00B62BD4 /* MatchMakingView.swift */,
+				745915BB28A8F1D800B62BD4 /* FlexibleView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -188,6 +199,7 @@
 				74F6500E289798220009967C /* LolRealmManager.swift */,
 				747AE70F28A0A7D70094151C /* Constraints.swift */,
 				747AE71128A0CC630094151C /* FirebaseManager.swift */,
+				745915B728A63B0700B62BD4 /* ViewUtils.swift */,
 			);
 			path = Utils;
 			sourceTree = "<group>";
@@ -334,6 +346,8 @@
 				745915A928A36B2B00B62BD4 /* MatchDetailCell.swift in Sources */,
 				744624182874278A00492565 /* UserRankCell.swift in Sources */,
 				744623FD2872E2E100492565 /* AppDelegate.swift in Sources */,
+				745915B428A6324F00B62BD4 /* MatchMakingView.swift in Sources */,
+				745915BC28A8F1D800B62BD4 /* FlexibleView.swift in Sources */,
 				747AE71228A0CC630094151C /* FirebaseManager.swift in Sources */,
 				745915AF28A3A81600B62BD4 /* MatchDetailCellViewModel.swift in Sources */,
 				74462424287BF94400492565 /* Version.swift in Sources */,
@@ -342,7 +356,9 @@
 				747AE71028A0A7D70094151C /* Constraints.swift in Sources */,
 				745915A728A368F300B62BD4 /* MatchDetailView.swift in Sources */,
 				747AE71428A0DB340094151C /* RankViewModel.swift in Sources */,
+				745915BA28A63CA300B62BD4 /* MatchMakingViewModel.swift in Sources */,
 				74F6500F289798220009967C /* LolRealmManager.swift in Sources */,
+				745915B828A63B0700B62BD4 /* ViewUtils.swift in Sources */,
 				7446241B287430EB00492565 /* RankViewController.swift in Sources */,
 				7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */,
 				747AE70E28A08D1D0094151C /* User.swift in Sources */,

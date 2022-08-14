@@ -10,6 +10,7 @@ import Alamofire
 import FirebaseDatabase
 import FirebaseFirestore
 import Combine
+import SwiftUI
 
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
@@ -36,18 +37,11 @@ class RankViewController: UIViewController {
     }
     
     @IBAction func makeMatchTapped(_ sender: UIButton) {
-        /*
-         present select view with simple view(ex: only name and elo?)
-         balancing button in below
-         if tap button -> make balanced team
-         */
-        /*
-         change bar button to done button
-         mupltiple selct mode active
-         select 10 user -> tap done button
-         present or push balanced team member view
-         */
-        print("123")
+        let matchMakingViewModel = MatchMakingViewModel(deligate: self)
+        let matchMakingView = MatchMakingView(viewModel: matchMakingViewModel)
+        let vc = UIHostingController(rootView: matchMakingView)
+        
+        self.present(vc, animated: true)
     }
     
     private func bind(){
@@ -71,11 +65,9 @@ class RankViewController: UIViewController {
         
         self.firebaseManager.userMatchLoad
             .receive(on: RunLoop.main)
-            .sink { [unowned self] complete in
-                if complete{
-                    self.collectionView.reloadData()
-                    self.collectionView.allowsSelection = true
-                }
+            .sink { [unowned self] in
+                self.collectionView.reloadData()
+                self.collectionView.allowsSelection = true
             }.store(in: &subscriptions)
     }
 }
@@ -130,5 +122,12 @@ extension RankViewController{
 extension RankViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.viewModel.didSelect(at: indexPath)
+    }
+}
+
+extension RankViewController: MatchMakingDelegate{
+    func DelegateFunc(team1: [User], team2: [User]){
+        print(team1.map{$0.name})
+        print(team2.map{$0.name})
     }
 }

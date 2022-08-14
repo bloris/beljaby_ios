@@ -14,7 +14,7 @@ final class FirebaseManager{
     static let shared = FirebaseManager()
     
     var userList = CurrentValueSubject<[User], Never>([User]())
-    var userMatchLoad = PassthroughSubject<Bool, Never>()
+    var userMatchLoad = PassthroughSubject<Void, Never>()
     
     var userDict = [String:User]()
     var userMatchDict = [String: [String: UserMatch]]()
@@ -66,7 +66,7 @@ final class FirebaseManager{
             }
             
             if self.userMatchDict.count == self.userList.value.count{
-                self.userMatchLoad.send(true)
+                self.userMatchLoad.send()
             }
         }
     }
