@@ -37,11 +37,7 @@ class RankViewController: UIViewController {
     }
     
     @IBAction func makeMatchTapped(_ sender: UIButton) {
-        let matchMakingViewModel = MatchMakingViewModel(deligate: self)
-        let matchMakingView = MatchMakingView(viewModel: matchMakingViewModel)
-        let vc = UIHostingController(rootView: matchMakingView)
-        
-        self.present(vc, animated: true)
+        self.viewModel.makeButtonTapped()
     }
     
     private func bind(){
@@ -55,6 +51,26 @@ class RankViewController: UIViewController {
                 destinationVC.title = self.viewModel.historyViewTitle
                 
                 self.navigationController?.pushViewController(destinationVC, animated: true)
+            }.store(in: &subscriptions)
+        
+        self.viewModel.makeButton
+            .receive(on: RunLoop.main)
+            .sink { [unowned self] in
+                let matchMakingViewModel = MatchMakingViewModel(deligate: self.viewModel)
+                let matchMakingView = MatchMakingView(viewModel: matchMakingViewModel)
+                let vc = UIHostingController(rootView: matchMakingView)
+                
+                self.present(vc, animated: true)
+            }.store(in: &subscriptions)
+        
+        self.viewModel.delegateReceive
+            .receive(on: RunLoop.main)
+            .sink {[unowned self] (team1, team2) in
+                let balancedTeamViewModel = BalancedTeamViewModel(team1: team1, team2: team2)
+                let balancedTeamView = BalancedTeamView(viewModel: balancedTeamViewModel)
+                let vc = UIHostingController(rootView: balancedTeamView)
+                
+                self.navigationController?.pushViewController(vc, animated: true)
             }.store(in: &subscriptions)
         
         self.firebaseManager.userList
@@ -122,12 +138,5 @@ extension RankViewController{
 extension RankViewController: UICollectionViewDelegate{
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.viewModel.didSelect(at: indexPath)
-    }
-}
-
-extension RankViewController: MatchMakingDelegate{
-    func DelegateFunc(team1: [User], team2: [User]){
-        print(team1.map{$0.name})
-        print(team2.map{$0.name})
     }
 }

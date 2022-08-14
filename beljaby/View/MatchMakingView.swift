@@ -35,7 +35,6 @@ struct MatchMakingView: View {
             }
             
             Button {
-//                self.viewModel.Balance()
                 self.presentationMode.wrappedValue.dismiss()
             } label: {
                 Text(self.viewModel.buttonLabel)

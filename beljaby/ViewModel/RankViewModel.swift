@@ -12,6 +12,8 @@ final class RankViewModel{
     private let firebaseManager = FirebaseManager.shared
     
     let selectedUser: CurrentValueSubject<User?, Never>
+    let delegateReceive = PassthroughSubject<([User],[User]), Never>()
+    let makeButton = PassthroughSubject<Void, Never>()
     
     var historyViewTitle: String{
         guard let name = self.selectedUser.value?.name else {return ""}
@@ -29,5 +31,15 @@ final class RankViewModel{
     func didSelect(at indexPath: IndexPath){
         let user = self.firebaseManager.userList.value[indexPath.item]
         selectedUser.send(user)
+    }
+    
+    func makeButtonTapped(){
+        self.makeButton.send()
+    }
+}
+
+extension RankViewModel: MatchMakingDelegate{
+    func DelegateFunc(team1: [User], team2: [User]){
+        self.delegateReceive.send((team1,team2))
     }
 }
