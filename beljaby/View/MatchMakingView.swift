@@ -12,12 +12,13 @@ struct MatchMakingView: View {
     @Environment(\.presentationMode) var presentationMode
     
     @StateObject var viewModel: MatchMakingViewModel
+    @State var availableWidth = UIScreen.main.bounds.width
     
     // MARK: - BODY
     var body: some View {
         VStack(spacing: 30) {
             FlexibleView(
-                availableWidth: UIScreen.main.bounds.width,
+                availableWidth: availableWidth,
                 data: viewModel.gridValue,
                 spacing: 15,
                 alignment: .center
@@ -35,6 +36,7 @@ struct MatchMakingView: View {
             }
             
             Button {
+                self.viewModel.buttonTapped = true
                 self.presentationMode.wrappedValue.dismiss()
             } label: {
                 Text(self.viewModel.buttonLabel)
@@ -48,7 +50,13 @@ struct MatchMakingView: View {
             
         }
         .onDisappear{
-            self.viewModel.Balance()
+            if self.viewModel.buttonTapped{
+                self.viewModel.Balance()
+            }
+        }
+        .frame(maxWidth: .infinity)
+        .readSize { size in
+            availableWidth = size.width
         }
     }
 }

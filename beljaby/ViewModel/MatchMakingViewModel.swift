@@ -22,6 +22,7 @@ protocol MatchMakingDelegate {
 final class MatchMakingViewModel: ObservableObject{
     @Published var userDict: [String: UserSelect] = [:]
     var delegate: MatchMakingDelegate
+    var buttonTapped = false
     
     var gridValue: [UserSelect]{
         userDict.values.sorted{$0.name < $1.name}
