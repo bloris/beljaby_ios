@@ -1,10 +1,10 @@
 # Beljaby
 <br />
-<p align="row">
-<img src= "gitImage/rankview.png" width="300" >
-<img src= "gitImage/matchview.png" width="300" >
-<img src= "gitImage/matchDetailView.png" width="300" >
-<img src= "gitImage/makeMatchView.png" width="300" >
+<p align="center">
+<img src= "gitImage/rankview.png" width="200" >
+<img src= "gitImage/matchview.png" width="200" >
+<img src= "gitImage/matchDetailView.png" width="200" >
+<img src= "gitImage/makeMatchView.png" width="200" >
 </p>
 
 ## In Progress
