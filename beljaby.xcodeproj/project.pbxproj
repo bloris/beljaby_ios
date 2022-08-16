@@ -32,6 +32,7 @@
 		745915BE28A9005A00B62BD4 /* BalancedTeamView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915BD28A9005A00B62BD4 /* BalancedTeamView.swift */; };
 		745915C028A900E600B62BD4 /* BalancedTeamViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915BF28A900E600B62BD4 /* BalancedTeamViewModel.swift */; };
 		745915C228AB28E500B62BD4 /* makeMatchView.png in Resources */ = {isa = PBXBuildFile; fileRef = 745915C128AB28E500B62BD4 /* makeMatchView.png */; };
+		745915C428AB2A1B00B62BD4 /* appIntro.gif in Resources */ = {isa = PBXBuildFile; fileRef = 745915C328AB2A1B00B62BD4 /* appIntro.gif */; };
 		7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */; };
 		7470DF1C2885536B00D2F575 /* UserMatchHistoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */; };
 		7470DF1E28869D5C00D2F575 /* UserMatchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */; };
@@ -75,6 +76,7 @@
 		745915BD28A9005A00B62BD4 /* BalancedTeamView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancedTeamView.swift; sourceTree = "<group>"; };
 		745915BF28A900E600B62BD4 /* BalancedTeamViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancedTeamViewModel.swift; sourceTree = "<group>"; };
 		745915C128AB28E500B62BD4 /* makeMatchView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = makeMatchView.png; sourceTree = "<group>"; };
+		745915C328AB2A1B00B62BD4 /* appIntro.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = appIntro.gif; sourceTree = "<group>"; };
 		7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryCell.swift; sourceTree = "<group>"; };
 		7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserMatchHistoryCell.xib; sourceTree = "<group>"; };
 		7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryViewController.swift; sourceTree = "<group>"; };
@@ -198,6 +200,7 @@
 				74A9934D288E2E6E00B8660E /* matchview.png */,
 				74A9934C288E2E6E00B8660E /* rankview.png */,
 				745915C128AB28E500B62BD4 /* makeMatchView.png */,
+				745915C328AB2A1B00B62BD4 /* appIntro.gif */,
 			);
 			path = gitImage;
 			sourceTree = "<group>";
@@ -294,6 +297,7 @@
 				74A9934F288E2E6E00B8660E /* matchview.png in Resources */,
 				744624132874003C00492565 /* GoogleService-Info.plist in Resources */,
 				74A9934B288E2BC900B8660E /* README.md in Resources */,
+				745915C428AB2A1B00B62BD4 /* appIntro.gif in Resources */,
 				7470DF1C2885536B00D2F575 /* UserMatchHistoryCell.xib in Resources */,
 				744624062872E2E200492565 /* Assets.xcassets in Resources */,
 				745915B228A4C39B00B62BD4 /* matchDetailView.png in Resources */,

@@ -1,6 +1,11 @@
 # Beljaby
 <br />
 <p align="center">
+<img src= "gitImage/appIntro.png" width="300" >
+</p>
+
+<p align="center">
+<img src= "gitImage/appIntro.png" width="300" >
 <img src= "gitImage/rankview.png" width="200" >
 <img src= "gitImage/matchview.png" width="200" >
 <img src= "gitImage/matchDetailView.png" width="200" >
