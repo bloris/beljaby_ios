@@ -49,14 +49,14 @@ struct MatchMakingView: View {
             .disabled(self.viewModel.makeButtonDisable)
             
         }
+        .frame(maxWidth: .infinity)
+        .readSize { size in
+            availableWidth = size.width - 10
+        }
         .onDisappear{
             if self.viewModel.buttonTapped{
                 self.viewModel.Balance()
             }
-        }
-        .frame(maxWidth: .infinity)
-        .readSize { size in
-            availableWidth = size.width
         }
     }
 }
