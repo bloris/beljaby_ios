@@ -1,7 +1,7 @@
 # Beljaby
 <br />
 <p align="center">
-<img src= "gitImage/appIntro.png" width="300" >
+<img src= "gitImage/appIntro.gif" width="300" >
 </p>
 
 <p align="center">
