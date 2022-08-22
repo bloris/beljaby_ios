@@ -13,7 +13,8 @@
 
 ## In Progress
 
-- Apply MVVM
+- Refactoring
+- Make CollectionViewCell View Model
 
 ## Features
 
@@ -21,7 +22,7 @@
 - [x] User custom game Match History View
 - [x] User custom game Match History Detail View (swiftUI) 
 - [x] Apply Combine
-- [ ] Apply MVVM
+- [x] Apply MVVM
 
 ## Requirements
 
