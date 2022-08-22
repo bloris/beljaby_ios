@@ -18,8 +18,8 @@ struct BalancedTeamView: View {
     
     var body: some View {
         ScrollView {
-            VStack{
-                LazyVGrid(columns: layout,spacing: 0){
+            VStack {
+                LazyVGrid(columns: layout,spacing: 0) {
                     TealBalanceView(text: "블루 팀", team: $viewModel.team1, version: viewModel.version)
                     TealBalanceView(text: "레드 팀", team: $viewModel.team2, version: viewModel.version)
                 }
@@ -43,10 +43,10 @@ struct TealBalanceView: View {
     let version: String
     
     var body: some View {
-        Section(header: HeaderView(text: text)){
+        Section(header: HeaderView(text: text)) {
             ForEach(team, id: \.puuid) { user in
                 VStack(spacing: 0) {
-                    HStack{
+                    HStack {
                         KFImage(URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png"))
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -68,7 +68,7 @@ struct TealBalanceView: View {
                     .padding()
                     .frame(maxWidth: .infinity)
                     
-                    if user != team.last{
+                    if user != team.last {
                         RoundedRectangle(cornerRadius: 1)
                             .foregroundColor( Color( UITableView().separatorColor ?? .gray) )
                             .frame(height: 2)

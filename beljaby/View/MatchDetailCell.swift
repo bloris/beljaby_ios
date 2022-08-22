@@ -37,11 +37,11 @@ struct MatchDetailCell: View {
                             .stroke(Color.gray, lineWidth: 1)
                     )
                     .padding(.top, -16)
-                    
+                
             }
             
-            VStack(spacing: 5){
-                HStack(spacing: 20){
+            VStack(spacing: 5) {
+                HStack(spacing: 20) {
                     DetailTextView(text: viewModel.name)
                     
                     Spacer()
@@ -59,8 +59,8 @@ struct MatchDetailCell: View {
                     DetailTextView(text: viewModel.goldEarned)
                 }
                 
-                HStack{
-                    HStack(spacing: 5){
+                HStack {
+                    HStack(spacing: 5) {
                         Image(viewModel.mainPerk)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -75,8 +75,8 @@ struct MatchDetailCell: View {
                     
                     Spacer()
                     
-                    HStack{
-                        ForEach(viewModel.itemImgURL, id: \.self){ url in
+                    HStack {
+                        ForEach(viewModel.itemImgURL, id: \.self) { url in
                             KFImage(url)
                                 .resizable()
                                 .background(Color(UIColor(red: 0.26, green: 0.26, blue: 0.26, alpha: 1.00)))
@@ -118,6 +118,6 @@ struct MatchDetailCell_Previews: PreviewProvider {
     static var previews: some View {
         MatchDetailCell(viewModel: MatchDetailCellViewModel(matchDetail: MatchDetail(name: "Bloris", userMatch: UserMatch(matchId: "24234", champ: 895, eloChange: -19, champLevel: 13, goldEarned: 10359, mainPerk: 8010, subPerk: 8400, kill: 4, death: 6, assist: 5, cs: 204, killP: 53, item: [1055,6673,3046,3006,3133,1018,3363], ward: 1, matchDate: Date(), win: false), my: false)))
             .previewLayout(.fixed(width: 390, height: 120))
-            
+        
     }
 }

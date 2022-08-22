@@ -10,7 +10,7 @@ import FirebaseDatabase
 import FirebaseFirestore
 import Combine
 
-final class FirebaseManager{
+final class FirebaseManager {
     static let shared = FirebaseManager()
     
     var userList = CurrentValueSubject<[User], Never>([User]())
@@ -23,14 +23,14 @@ final class FirebaseManager{
     
     private var db = Firestore.firestore()
     
-    private init(){
+    private init() {
         self.getAllUser()
         self.getAllMatch()
     }
     
-    private func getAllUserMatch(puuid: String){
+    private func getAllUserMatch(puuid: String) {
         self.db.collection("users").document(puuid).collection("userMatch").getDocuments {[unowned self] (snapshot, error) in
-            guard let documents = snapshot?.documents else{
+            guard let documents = snapshot?.documents else {
                 print("Error Firestore fetching document \(String(describing: error))")
                 return
             }
@@ -38,75 +38,72 @@ final class FirebaseManager{
             
             self.userMatchDict[puuid] = [String: UserMatch]()
             
-            documents.forEach({ doc in
-                do{
+            documents.forEach( { doc in
+                do {
                     let userMatch = try doc.data(as: UserMatch.self)
                     champCnt[userMatch.champ, default: 0] += 1
                     self.userMatchDict[puuid]![doc.documentID] = userMatch
-                }catch let error{
+                } catch let error {
                     print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
                     return
                 }
             })
-//                        .sorted(by: {
-//                            $0.matchDate > $1.matchDate
-//                        })
             
             self.userChampCnt[puuid] = champCnt.sorted(by: {
-                if $0.value == $1.value{
+                if $0.value == $1.value {
                     return $0.key < $1.key
                 }
                 return $0.value > $1.value
-            }).map{
+            }).map {
                 $0.key
             }
             
-            while self.userChampCnt[puuid]!.count < 3{
+            while self.userChampCnt[puuid]!.count < 3 {
                 self.userChampCnt[puuid]!.append(-1)
             }
             
-            if self.userMatchDict.count == self.userList.value.count{
+            if self.userMatchDict.count == self.userList.value.count {
                 self.userMatchLoad.send()
             }
         }
     }
     
-    private func getAllMatch(){
-        self.db.collection("matches").addSnapshotListener {[unowned self] snapshot, error in
-            guard let documents = snapshot?.documents else{
+    private func getAllMatch() {
+        self.db.collection("matches").addSnapshotListener { [unowned self] snapshot, error in
+            guard let documents = snapshot?.documents else {
                 print("Error Firestore fetching document \(String(describing: error))")
                 return
             }
             
             documents.forEach { doc in
-                do{
+                do {
                     let match = try doc.data(as: Match.self)
                     self.MatchDict[doc.documentID] = match
-                }catch let error{
+                } catch let error {
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
                 }
             }
         }
     }
     
-    private func getAllUser(){
-        self.db.collection("users").addSnapshotListener {[unowned self] snapshot, error in
-            guard let documents = snapshot?.documents else{
+    private func getAllUser() {
+        self.db.collection("users").addSnapshotListener { [unowned self] snapshot, error in
+            guard let documents = snapshot?.documents else {
                 print("Error Firestore fetching document \(String(describing: error))")
                 return
             }
             
             documents.forEach { doc in
-                do{
+                do {
                     let user = try doc.data(as: User.self)
                     self.getAllUserMatch(puuid: doc.documentID)
                     
                     self.userDict[doc.documentID] = user
-                } catch let error{
+                } catch let error {
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
                 }
             }
-            self.userList.send(Array(self.userDict.values).sorted{
+            self.userList.send(Array(self.userDict.values).sorted {
                 $0.elo > $1.elo
             })
         }

@@ -9,17 +9,17 @@ import Foundation
 import Alamofire
 import RealmSwift
 
-class LolDataCache: Object{
+class LolDataCache: Object {
     @Persisted var version: String = ""
     @Persisted var champions = List<ChampionCache>()
     
-    convenience init(version: String){
+    convenience init(version: String) {
         self.init()
         self.version = version
     }
 }
 
-struct Version:Codable{
+struct Version:Codable {
     let v: String
 }
 

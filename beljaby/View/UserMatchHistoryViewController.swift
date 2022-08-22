@@ -20,7 +20,7 @@ class UserMatchHistoryViewController: UIViewController {
     
     var viewModel: UserMatchHistoryViewModel!
     
-    enum Section{
+    enum Section {
         case main
     }
     
@@ -36,7 +36,7 @@ class UserMatchHistoryViewController: UIViewController {
         self.bind()
     }
     
-    private func bind(){
+    private func bind() {
         self.viewModel.userMatchList
             .receive(on: RunLoop.main)
             .sink { [unowned self] userMatches in
@@ -45,7 +45,7 @@ class UserMatchHistoryViewController: UIViewController {
         
         self.viewModel.selectedMatchDetail
             .receive(on: RunLoop.main)
-            .compactMap({$0})
+            .compactMap( { $0 } )
             .sink { [unowned self] matchDetail in
                 let detailViewModel = MatchDetailViewModel(matchDetails: matchDetail)
                 let detailView = MatchDetailView(viewModel: detailViewModel)
@@ -55,14 +55,14 @@ class UserMatchHistoryViewController: UIViewController {
             }.store(in: &subscriptions)
     }
     
-    private func configureCollectionView(){
+    private func configureCollectionView() {
         let nibName = UINib(nibName: "UserMatchHistoryCell", bundle: nil)
         self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserMatchHistoryCell")
         
         self.collectionView.delegate = self
         
         datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, userMatch in
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else{
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else {
                 return nil
             }
             
@@ -74,15 +74,15 @@ class UserMatchHistoryViewController: UIViewController {
         self.collectionView.collectionViewLayout = layout()
     }
     
-    private func applySectionItems(_ items: [UserMatch], to section: Section = .main){
+    private func applySectionItems(_ items: [UserMatch], to section: Section = .main) {
         var snapshot = NSDiffableDataSourceSnapshot<Section, UserMatch>()
         snapshot.appendSections([section])
         snapshot.appendItems(items, toSection: section)
         self.datasource.apply(snapshot)
     }
     
-    private func layout() -> UICollectionViewCompositionalLayout{
-        let cnt = self.view.bounds.width / 370
+    private func layout() -> UICollectionViewCompositionalLayout {
+        let cnt = max(1.0, self.view.bounds.width / 370)
         let interItemSpacing: CGFloat = 10
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/cnt), heightDimension: .fractionalHeight(1))
@@ -114,7 +114,7 @@ class UserMatchHistoryViewController: UIViewController {
     
 }
 
-extension UserMatchHistoryViewController: UICollectionViewDelegate{
+extension UserMatchHistoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         self.viewModel.didSelect(at: indexPath)
     }

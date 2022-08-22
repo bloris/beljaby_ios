@@ -8,7 +8,7 @@
 import Foundation
 import Combine
 
-final class UserMatchHistoryViewModel{
+final class UserMatchHistoryViewModel {
     
     var puuid: String
     
@@ -18,7 +18,7 @@ final class UserMatchHistoryViewModel{
     
     let userMatchList: CurrentValueSubject<[UserMatch], Never>
     
-    init(puuid: String, selectedMatch: [MatchDetail]? = nil){
+    init(puuid: String, selectedMatch: [MatchDetail]? = nil) {
         let firebaseManager = FirebaseManager.shared
         
         self.puuid = puuid
@@ -35,7 +35,7 @@ final class UserMatchHistoryViewModel{
         self.selectedMatchDetail = CurrentValueSubject(selectedMatch)
     }
     
-    func didSelect(at indexPath: IndexPath){
+    func didSelect(at indexPath: IndexPath) {
         let firebaseManager = FirebaseManager.shared
         
         let userMatch = self.userMatchList.value[indexPath.item]
@@ -48,23 +48,23 @@ final class UserMatchHistoryViewModel{
         //현재 유저가 속한 팀을 상단으로, 현재 유저를 0번째 열로
         if users[0..<5].contains(self.puuid) {
             team = Array(users[0..<5]).sorted(by: {
-                if $0 == self.puuid{return true}
-                else if $1 == self.puuid{return false}
+                if $0 == self.puuid { return true }
+                else if $1 == self.puuid { return false }
                 return true
             }) + Array(users[5..<10])
         }else {
             team = Array(users[5..<10]).sorted(by: {
-                if $0 == self.puuid{return true}
-                else if $1 == self.puuid{return false}
+                if $0 == self.puuid { return true }
+                else if $1 == self.puuid { return false }
                 return true
             }) + Array(users[0..<5])
         }
         
-        userMatches = team.map({ puuid in
+        userMatches = team.map( { puuid in
             firebaseManager.userMatchDict[puuid]![userMatch.matchId]!
         })
         
-        matchDetails = zip(team, userMatches).map{MatchDetail(name: firebaseManager.userDict[$0]!.name, userMatch: $1, my: $0 == team[0])}
+        matchDetails = zip(team, userMatches).map { MatchDetail(name: firebaseManager.userDict[$0]!.name, userMatch: $1, my: $0 == team[0]) }
         
         self.selectedMatchDetail.send(matchDetails)
     }

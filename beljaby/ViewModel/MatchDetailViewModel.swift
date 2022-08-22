@@ -8,43 +8,43 @@
 import Foundation
 import Combine
 
-final class MatchDetailViewModel: ObservableObject{
+final class MatchDetailViewModel: ObservableObject {
     
     @Published var matchDetails: [MatchDetail]
     
     let champData = LolRealmManager.shared.champData
     
-    var myTeam: [MatchDetail]{
+    var myTeam: [MatchDetail] {
         let len = self.matchDetails.count
         let team = self.matchDetails[0..<len/2]
         return Array(team)
     }
     
-    var enemyTeam: [MatchDetail]{
+    var enemyTeam: [MatchDetail] {
         let len = self.matchDetails.count
         let team = self.matchDetails[len/2..<len]
         return Array(team)
     }
     
-    var champImgURl: URL?{
-        guard let champ = champData[self.matchDetails.first?.userMatch.champ ?? 0] else {return nil}
+    var champImgURl: URL? {
+        guard let champ = champData[self.matchDetails.first?.userMatch.champ ?? 0] else { return nil }
         return URL(string: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/\(champ.id)_0.jpg")
     }
     
-    var win: Bool{
-        guard let userMatch = self.matchDetails.first?.userMatch else {return true}
+    var win: Bool {
+        guard let userMatch = self.matchDetails.first?.userMatch else { return true }
         return userMatch.win
     }
     
-    var winLabel: String{
-        guard let win = self.matchDetails.first?.userMatch.win else {return "승리"}
+    var winLabel: String {
+        guard let win = self.matchDetails.first?.userMatch.win else { return "승리" }
         return win ? "승리" : "패배"
     }
     
-    var dateLabel: String{
+    var dateLabel: String {
         let firebaseManager = FirebaseManager.shared
         guard let userMatch = self.matchDetails.first?.userMatch,
-              let match = firebaseManager.MatchDict[userMatch.matchId] else {return "0000/00/00 00:00"}
+              let match = firebaseManager.MatchDict[userMatch.matchId] else { return "0000/00/00 00:00" }
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy/MM/dd"
@@ -57,7 +57,7 @@ final class MatchDetailViewModel: ObservableObject{
         return matchDate + duration
     }
     
-    init(matchDetails: [MatchDetail]){
+    init(matchDetails: [MatchDetail]) {
         self.matchDetails = matchDetails
     }
 }

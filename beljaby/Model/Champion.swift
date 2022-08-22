@@ -8,14 +8,14 @@
 import Foundation
 import RealmSwift
 
-class ChampionCache: Object{
+class ChampionCache: Object {
     @Persisted var id: String = ""
     @Persisted var key: String = ""
     @Persisted var name: String = ""
     
     var parentCategory = LinkingObjects(fromType: LolDataCache.self, property: "champions")
     
-    convenience init(champ: Champion){
+    convenience init(champ: Champion) {
         self.init()
         self.id = champ.id
         self.key = champ.key
@@ -23,11 +23,11 @@ class ChampionCache: Object{
     }
 }
 
-struct ChampionList:Codable{
+struct ChampionList:Codable {
     let data: [String: Champion]
 }
 
-struct Champion: Codable{
+struct Champion: Codable {
     let id: String
     let key: String
     let name: String

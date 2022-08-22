@@ -48,14 +48,14 @@ class UserMatchHistoryCell: UICollectionViewCell {
         self.initView()
     }
     
-    func setCornerRadius<V:UIView>(_ view: V,_ radius: CGFloat){
+    func setCornerRadius<V:UIView>(_ view: V,_ radius: CGFloat) {
         view.clipsToBounds = true
         view.layer.cornerRadius = radius
         
     }
     
-    func configure(_ userMatch: UserMatch){
-        guard let match = self.firebaseManager.MatchDict[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else{
+    func configure(_ userMatch: UserMatch) {
+        guard let match = self.firebaseManager.MatchDict[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else {
             return
         }
         
@@ -69,13 +69,13 @@ class UserMatchHistoryCell: UICollectionViewCell {
         let duration = String(format: "  %02d:%02d분", gameDuration/60,gameDuration%60)
         
         let itemImageList: [UIImageView] = [self.item0, self.item1, self.item2, self.item3, self.item4, self.item5, self.item6]
-        var itemList = userMatch.item.filter{$0 != 0}
-        while itemList.count < 7{
+        var itemList = userMatch.item.filter { $0 != 0 }
+        while itemList.count < 7 {
             itemList.insert(0, at: itemList.count - 1)
         }
         
-        let itemImageURL: [URL?] = itemList.map{
-            if $0 == 0{return nil}
+        let itemImageURL: [URL?] = itemList.map {
+            if $0 == 0 { return nil }
             return URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/item/\($0).png")
         }
         
@@ -111,17 +111,17 @@ class UserMatchHistoryCell: UICollectionViewCell {
         
         self.champSplashImage.layer.mask = gradientMaskLayer
         
-        for (idx, itemURL) in itemImageURL.enumerated(){
-            if let url = itemURL{
+        for (idx, itemURL) in itemImageURL.enumerated() {
+            if let url = itemURL {
                 itemImageList[idx].kf.setImage(with: url)
-            }else{
+            } else {
                 itemImageList[idx].image = nil
             }
         }
     }
     
-    func initView(){
-        [item0,item1,item2,item3,item4,item5,item6].forEach{
+    func initView() {
+        [item0,item1,item2,item3,item4,item5,item6].forEach {
             setCornerRadius($0, 5)
         }
         

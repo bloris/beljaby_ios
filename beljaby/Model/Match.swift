@@ -7,8 +7,8 @@
 
 import Foundation
 
-struct MatchDetail: Identifiable, Equatable{
-    var id: String{
+struct MatchDetail: Identifiable, Equatable {
+    var id: String {
         return name
     }
     
@@ -17,7 +17,7 @@ struct MatchDetail: Identifiable, Equatable{
     let my: Bool
 }
 
-struct Match: Codable{
+struct Match: Codable {
     let matchId: String
     let gameDuration: Int
     let matchDate: Date
@@ -25,7 +25,7 @@ struct Match: Codable{
     let win: Bool
 }
 
-struct UserMatch: Codable, Hashable{
+struct UserMatch: Codable, Hashable {
     let matchId: String
     let champ: Int
     let eloChange: Int

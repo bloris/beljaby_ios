@@ -36,20 +36,20 @@ class UserRankCell: UICollectionViewCell {
         self.initView()
     }
     
-    func configure(_ user: User){
+    func configure(_ user: User) {
         let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
         let version = realmManager.ver
         
         let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
         
-        let champMost: [String] = (0...2).map{
-            guard let champCnt = self.firebaseManager.userChampCnt[user.puuid] else{
+        let champMost: [String] = (0...2).map {
+            guard let champCnt = self.firebaseManager.userChampCnt[user.puuid] else {
                 return "blank"
             }
             return realmManager.champData[champCnt[$0]]?.id ?? "blank"
         }
         
-        let champURL: [URL?] = champMost.map{
+        let champURL: [URL?] = champMost.map {
             URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/champion/\($0).png")
         }
         
@@ -59,10 +59,10 @@ class UserRankCell: UICollectionViewCell {
         
         self.profileImage.kf.setImage(with: profileImageURL)
         
-        for (idx, url) in champURL.enumerated(){
-            if champMost[idx] != "blank"{
+        for (idx, url) in champURL.enumerated() {
+            if champMost[idx] != "blank" {
                 champImageList[idx]?.kf.setImage(with: url)
-            }else{
+            } else {
                 champImageList[idx]?.image = nil
             }
         }
@@ -77,14 +77,14 @@ class UserRankCell: UICollectionViewCell {
         ratioConstraint = ratioConstraint.setMultiplier(multiplier: ratio/50)
     }
     
-    func setCornerRadius<V:UIView>(_ view: V,_ radius: CGFloat){
+    func setCornerRadius<V:UIView>(_ view: V,_ radius: CGFloat) {
         view.clipsToBounds = true
         view.layer.cornerRadius = radius
         view.layer.borderWidth = 1
     }
     
-    func initView(){
-        [entireView,profileImage].forEach{
+    func initView() {
+        [entireView,profileImage].forEach {
             setCornerRadius($0, 5)
         }
          

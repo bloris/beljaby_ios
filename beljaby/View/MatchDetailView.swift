@@ -30,7 +30,7 @@ struct MatchDetailView: View {
                             LinearGradient(gradient: Gradient(colors: [.clear,.black]), startPoint: .init(x: 0.5, y: 0.7), endPoint: .bottom)
                         }
                     
-                    HStack{
+                    HStack {
                         Text(self.viewModel.dateLabel)
                             .font(.system(size: 15, weight: .bold))
                             .foregroundColor(.gray)
@@ -49,7 +49,7 @@ struct MatchDetailView: View {
                     .padding(.bottom,10)
                 }
                 
-                LazyVGrid(columns: layout,spacing: 0){
+                LazyVGrid(columns: layout,spacing: 0) {
                     TeamView(team: self.viewModel.myTeam, text: "아군")
                     TeamView(team: self.viewModel.enemyTeam, text: "적")
                 }
@@ -69,7 +69,7 @@ struct HeaderView: View {
                 .foregroundColor(.white)
                 .padding(5)
                 .padding(.leading,20)
-                
+            
             Spacer()
         }
         .frame(maxWidth:.infinity, alignment: .leading)
@@ -82,12 +82,12 @@ struct TeamView: View {
     let text: String
     
     var body: some View {
-        Section(header: HeaderView(text: text)){
+        Section(header: HeaderView(text: text)) {
             ForEach(team) { matchDetail in
                 VStack(spacing: 0) {
                     MatchDetailCell(viewModel: MatchDetailCellViewModel(matchDetail: matchDetail))
                     
-                    if matchDetail != team.last{
+                    if matchDetail != team.last {
                         RoundedRectangle(cornerRadius: 1)
                             .foregroundColor( Color( UITableView().separatorColor ?? .gray) )
                             .frame(height: 2)

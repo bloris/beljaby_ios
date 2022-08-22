@@ -53,8 +53,8 @@ struct MatchMakingView: View {
         .readSize { size in
             availableWidth = size.width - 10
         }
-        .onDisappear{
-            if self.viewModel.buttonTapped{
+        .onDisappear {
+            if self.viewModel.buttonTapped {
                 self.viewModel.Balance()
             }
         }
