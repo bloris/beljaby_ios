@@ -7,6 +7,7 @@
 
 import Foundation
 
+/// Match Detail View를 위한 User name, UserMatch, 기준이 되는 User인지 확인하는 변수 my를 합친 Struct
 struct MatchDetail: Identifiable, Equatable {
     var id: String {
         return name
@@ -17,6 +18,7 @@ struct MatchDetail: Identifiable, Equatable {
     let my: Bool
 }
 
+/// Match의 기본적인 정보 및 Match 참여 User puuid List를 가져오기 위한 Struct
 struct Match: Codable {
     let matchId: String
     let gameDuration: Int
@@ -25,6 +27,7 @@ struct Match: Codable {
     let win: Bool
 }
 
+/// User 각각의 Match Detail을 가져오기 위한 Struct
 struct UserMatch: Codable, Hashable {
     let matchId: String
     let champ: Int

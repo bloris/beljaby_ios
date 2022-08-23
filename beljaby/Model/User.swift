@@ -7,6 +7,16 @@
 
 import Foundation
 
+/// MatchMakingView에서 Select 여부를 지원하기 위한 Struct
+struct UserSelect: Hashable {
+    let name: String
+    let elo: Int
+    let puuid: String
+    let user: User
+    var isSelected: Bool = false
+}
+
+/// User 정보를 가져오기 위한 Struct
 struct User: Codable, Hashable {
     let puuid: String
     let name: String
@@ -15,5 +25,4 @@ struct User: Codable, Hashable {
     let tier: String
     let win: Int
     let lose: Int
-    
 }
