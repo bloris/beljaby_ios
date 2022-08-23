@@ -92,7 +92,7 @@ struct MatchDetailCell: View {
             
         }
         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-        .background(self.viewModel.my ? LinearGradient(gradient: Gradient(colors: [.gray,.black]), startPoint: .leading, endPoint: .trailing) : LinearGradient(colors: [.black], startPoint: .leading, endPoint: .trailing))
+        .background(viewModel.my ? LinearGradient(gradient: Gradient(colors: [.gray,.black]), startPoint: .leading, endPoint: .trailing) : LinearGradient(colors: [.black], startPoint: .leading, endPoint: .trailing))
     }
 }
 

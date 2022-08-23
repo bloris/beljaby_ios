@@ -7,14 +7,6 @@
 
 import Foundation
 
-struct UserSelect: Hashable {
-    let name: String
-    let elo: Int
-    let puuid: String
-    let user: User
-    var isSelected: Bool = false
-}
-
 protocol MatchMakingDelegate {
     func DelegateFunc(team1: [User], team2: [User])
 }

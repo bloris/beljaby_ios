@@ -143,9 +143,9 @@
 			children = (
 				745915EC28B46E6700B62BD4 /* UserRank */,
 				745915ED28B46EA900B62BD4 /* UserMatchHistory */,
-				745915EE28B46EC900B62BD4 /* MatchDetail */,
-				745915F028B46F3500B62BD4 /* BalancedTeam */,
-				745915EF28B46F1A00B62BD4 /* MatchMaking */,
+				745915EE28B46EC900B62BD4 /* MatchDetailSwiftUI */,
+				745915F028B46F3500B62BD4 /* BalancedTeamSwiftUI */,
+				745915EF28B46F1A00B62BD4 /* MatchMakingSwiftUI */,
 				74F6500D289798180009967C /* Network */,
 				74F6500C2897980F0009967C /* Utils */,
 				7446241C2874313A00492565 /* Model */,
@@ -206,7 +206,7 @@
 			path = UserMatchHistory;
 			sourceTree = "<group>";
 		};
-		745915EE28B46EC900B62BD4 /* MatchDetail */ = {
+		745915EE28B46EC900B62BD4 /* MatchDetailSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
 				745915A628A368F300B62BD4 /* MatchDetailView.swift */,
@@ -214,20 +214,20 @@
 				745915A828A36B2B00B62BD4 /* MatchDetailCell.swift */,
 				745915AE28A3A81600B62BD4 /* MatchDetailCellViewModel.swift */,
 			);
-			path = MatchDetail;
+			path = MatchDetailSwiftUI;
 			sourceTree = "<group>";
 		};
-		745915EF28B46F1A00B62BD4 /* MatchMaking */ = {
+		745915EF28B46F1A00B62BD4 /* MatchMakingSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
 				745915B328A6324F00B62BD4 /* MatchMakingView.swift */,
 				745915BB28A8F1D800B62BD4 /* FlexibleView.swift */,
 				745915B928A63CA300B62BD4 /* MatchMakingViewModel.swift */,
 			);
-			path = MatchMaking;
+			path = MatchMakingSwiftUI;
 			sourceTree = "<group>";
 		};
-		745915F028B46F3500B62BD4 /* BalancedTeam */ = {
+		745915F028B46F3500B62BD4 /* BalancedTeamSwiftUI */ = {
 			isa = PBXGroup;
 			children = (
 				745915BD28A9005A00B62BD4 /* BalancedTeamView.swift */,
@@ -235,7 +235,7 @@
 				745915F528B48A7A00B62BD4 /* BalancedTeamCell.swift */,
 				745915F728B48ABC00B62BD4 /* BalancedTeamCellViewModel.swift */,
 			);
-			path = BalancedTeam;
+			path = BalancedTeamSwiftUI;
 			sourceTree = "<group>";
 		};
 		74F6500C2897980F0009967C /* Utils */ = {
@@ -243,7 +243,6 @@
 			children = (
 				74F6500E289798220009967C /* LolRealmManager.swift */,
 				747AE70F28A0A7D70094151C /* Constraints.swift */,
-				747AE71128A0CC630094151C /* FirebaseManager.swift */,
 				745915B728A63B0700B62BD4 /* ViewUtils.swift */,
 			);
 			path = Utils;
@@ -252,6 +251,7 @@
 		74F6500D289798180009967C /* Network */ = {
 			isa = PBXGroup;
 			children = (
+				747AE71128A0CC630094151C /* FirebaseManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";
