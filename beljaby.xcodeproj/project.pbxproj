@@ -34,6 +34,8 @@
 		745915C228AB28E500B62BD4 /* makeMatchView.png in Resources */ = {isa = PBXBuildFile; fileRef = 745915C128AB28E500B62BD4 /* makeMatchView.png */; };
 		745915C428AB2A1B00B62BD4 /* appIntro.gif in Resources */ = {isa = PBXBuildFile; fileRef = 745915C328AB2A1B00B62BD4 /* appIntro.gif */; };
 		745915F228B46FCD00B62BD4 /* UserMatchHistory.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 745915F128B46FCD00B62BD4 /* UserMatchHistory.storyboard */; };
+		745915F628B48A7A00B62BD4 /* BalancedTeamCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915F528B48A7A00B62BD4 /* BalancedTeamCell.swift */; };
+		745915F828B48ABC00B62BD4 /* BalancedTeamCellViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 745915F728B48ABC00B62BD4 /* BalancedTeamCellViewModel.swift */; };
 		7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */; };
 		7470DF1C2885536B00D2F575 /* UserMatchHistoryCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */; };
 		7470DF1E28869D5C00D2F575 /* UserMatchHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */; };
@@ -79,6 +81,8 @@
 		745915C128AB28E500B62BD4 /* makeMatchView.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = makeMatchView.png; sourceTree = "<group>"; };
 		745915C328AB2A1B00B62BD4 /* appIntro.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = appIntro.gif; sourceTree = "<group>"; };
 		745915F128B46FCD00B62BD4 /* UserMatchHistory.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = UserMatchHistory.storyboard; sourceTree = "<group>"; };
+		745915F528B48A7A00B62BD4 /* BalancedTeamCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancedTeamCell.swift; sourceTree = "<group>"; };
+		745915F728B48ABC00B62BD4 /* BalancedTeamCellViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BalancedTeamCellViewModel.swift; sourceTree = "<group>"; };
 		7470DF192885536B00D2F575 /* UserMatchHistoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryCell.swift; sourceTree = "<group>"; };
 		7470DF1A2885536B00D2F575 /* UserMatchHistoryCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = UserMatchHistoryCell.xib; sourceTree = "<group>"; };
 		7470DF1D28869D5C00D2F575 /* UserMatchHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserMatchHistoryViewController.swift; sourceTree = "<group>"; };
@@ -228,6 +232,8 @@
 			children = (
 				745915BD28A9005A00B62BD4 /* BalancedTeamView.swift */,
 				745915BF28A900E600B62BD4 /* BalancedTeamViewModel.swift */,
+				745915F528B48A7A00B62BD4 /* BalancedTeamCell.swift */,
+				745915F728B48ABC00B62BD4 /* BalancedTeamCellViewModel.swift */,
 			);
 			path = BalancedTeam;
 			sourceTree = "<group>";
@@ -404,6 +410,8 @@
 				74F6500F289798220009967C /* LolRealmManager.swift in Sources */,
 				745915B828A63B0700B62BD4 /* ViewUtils.swift in Sources */,
 				7446241B287430EB00492565 /* RankViewController.swift in Sources */,
+				745915F828B48ABC00B62BD4 /* BalancedTeamCellViewModel.swift in Sources */,
+				745915F628B48A7A00B62BD4 /* BalancedTeamCell.swift in Sources */,
 				7470DF1B2885536B00D2F575 /* UserMatchHistoryCell.swift in Sources */,
 				747AE70E28A08D1D0094151C /* User.swift in Sources */,
 				742591AE2887E40600FE2523 /* Champion.swift in Sources */,
