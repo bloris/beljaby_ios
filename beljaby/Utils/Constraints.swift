@@ -8,12 +8,7 @@
 import UIKit
 
 extension NSLayoutConstraint {
-    /**
-     Change multiplier constraint
-
-     - parameter multiplier: CGFloat
-     - returns: NSLayoutConstraint
-    */
+    /// Change multiplier constraint
     func setMultiplier(multiplier:CGFloat) -> NSLayoutConstraint {
 
         NSLayoutConstraint.deactivate([self])

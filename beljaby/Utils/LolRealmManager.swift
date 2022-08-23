@@ -10,6 +10,8 @@ import RealmSwift
 import Alamofire
 import Combine
 
+/// Realm Data 사용을 위한 Class
+/// - shared: Realm Data를 사용하기 위한 싱글톤 인스턴스
 final class LolRealmManager {
     static let shared = LolRealmManager()
     
@@ -34,6 +36,7 @@ final class LolRealmManager {
     }
     
     private func bind() {
+        // Champion List 정보를 받으면 [key: Int, champion: Champion] 형태로 가공하여 저장
         self.championList
             .receive(on: RunLoop.main)
             .sink { [unowned self] data in
@@ -42,6 +45,7 @@ final class LolRealmManager {
                 }
             }.store(in: &subscriptions)
         
+        // Version 정보를 받으면 String 타입으로 저장
         self.version
             .receive(on: RunLoop.main)
             .filter { !$0.v.isEmpty }
@@ -51,6 +55,7 @@ final class LolRealmManager {
             }.store(in: &subscriptions)
     }
     
+    /// Riot으로 부터 현재 게임 Version 정보 fetch
     private func getVersion() {
         let url = "https://ddragon.leagueoflegends.com/realms/kr.json"
         AF.request(url)
@@ -70,7 +75,9 @@ final class LolRealmManager {
             }.store(in: &subscriptions)
     }
     
+    /// Riot으로 부터 현재 Version 정보에 맞는 Champion List fetch
     private func getChamption(_ version: Version) {
+        // 앱을 처음 실행하여 Local 정보가 없거나 Local Data Version과 최신 Version이 다른 경우 fetch
         if realmData.count == 0 || realmData[0].version != version.v {
             let url = "https://ddragon.leagueoflegends.com/cdn/\(version.v)/data/ko_KR/champion.json"
             
@@ -81,20 +88,19 @@ final class LolRealmManager {
                 .receive(on: RunLoop.main)
                 .sink(receiveValue: { [unowned self] result in
                     let newData = LolDataCache(version: version.v)
-                    result
-                        .data
-                        .forEach { (_, champion: Champion) in
+                    result.data.forEach { (_, champion: Champion) in
                             newData.champions.append(ChampionCache(champ: champion))
                         }
                     self.save(newData: newData)
                 })
                 .store(in: &subscriptions)
             
-        } else {
+        } else { // Version 업데이트가 없는 경우 Local Data 활용
             self.championList.send(self.realmData[0])
         }
     }
     
+    /// 새로운 Data를 fetch한 경우 (첫 실행, Version Update) Local에 저장
     private func save(newData: LolDataCache) {
         do {
             try realm.write( { [unowned self] in
