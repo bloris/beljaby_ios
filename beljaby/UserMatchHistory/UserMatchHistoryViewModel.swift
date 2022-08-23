@@ -66,6 +66,6 @@ final class UserMatchHistoryViewModel {
         
         matchDetails = zip(team, userMatches).map { MatchDetail(name: firebaseManager.userDict[$0]!.name, userMatch: $1, my: $0 == team[0]) }
         
-        self.selectedMatchDetail.send(matchDetails)
+        selectedMatchDetail.send(matchDetails)
     }
 }

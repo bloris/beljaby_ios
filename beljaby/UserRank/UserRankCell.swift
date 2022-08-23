@@ -37,7 +37,7 @@ class UserRankCell: UICollectionViewCell {
     }
     
     func configure(_ user: User) {
-        let champImageList = [self.mostOneImage, self.mostSecondImage, self.mostThirdImage]
+        let champImageList = [mostOneImage, mostSecondImage, mostThirdImage]
         let version = realmManager.ver
         
         let profileImageURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/\(version)/img/profileicon/\(user.profileIconId).png")
@@ -57,7 +57,7 @@ class UserRankCell: UICollectionViewCell {
         let lose = user.lose
         let ratio = win+lose != 0 ? 100*Double(win)/Double(win+lose) : 0.0
         
-        self.profileImage.kf.setImage(with: profileImageURL)
+        profileImage.kf.setImage(with: profileImageURL)
         
         for (idx, url) in champURL.enumerated() {
             if champMost[idx] != "blank" {

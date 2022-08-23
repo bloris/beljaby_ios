@@ -12,7 +12,10 @@ struct MatchDetailView: View {
     
     @StateObject var viewModel: MatchDetailViewModel
     
-    let colorList = [UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00), UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)].map{Color($0)}
+    let colorList = [
+        UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00),
+        UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)
+    ].map{Color($0)}
     
     let layout: [GridItem] = [
         GridItem(.flexible())
@@ -23,7 +26,7 @@ struct MatchDetailView: View {
             VStack {
                 ZStack(alignment: .bottom) {
                     
-                    KFImage(self.viewModel.champImgURl)
+                    KFImage(viewModel.champImgURl)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .overlay {
@@ -31,18 +34,18 @@ struct MatchDetailView: View {
                         }
                     
                     HStack {
-                        Text(self.viewModel.dateLabel)
+                        Text(viewModel.dateLabel)
                             .font(.system(size: 15, weight: .bold))
                             .foregroundColor(.gray)
                             .padding(.leading,20)
                         
                         Spacer()
                         
-                        Text(self.viewModel.winLabel)
-                            .foregroundColor(self.viewModel.win ? .black : .white)
+                        Text(viewModel.winLabel)
+                            .foregroundColor(viewModel.win ? .black : .white)
                             .font(.system(size: 13, weight: .regular))
                             .padding(EdgeInsets(top: 5, leading: 15, bottom: 5, trailing: 15))
-                            .background(self.viewModel.win ? self.colorList[0] : self.colorList[1])
+                            .background(viewModel.win ? colorList[0] : colorList[1])
                             .clipShape(Capsule(style: .circular))
                             .padding(.trailing,20)
                     }
@@ -50,8 +53,8 @@ struct MatchDetailView: View {
                 }
                 
                 LazyVGrid(columns: layout,spacing: 0) {
-                    TeamView(team: self.viewModel.myTeam, text: "아군")
-                    TeamView(team: self.viewModel.enemyTeam, text: "적")
+                    TeamView(team: viewModel.myTeam, text: "아군")
+                    TeamView(team: viewModel.enemyTeam, text: "적")
                 }
             }
         }

@@ -36,17 +36,17 @@ struct MatchMakingView: View {
             }
             
             Button {
-                self.viewModel.buttonTapped = true
-                self.presentationMode.wrappedValue.dismiss()
+                viewModel.buttonTapped = true
+                presentationMode.wrappedValue.dismiss()
             } label: {
-                Text(self.viewModel.buttonLabel)
+                Text(viewModel.buttonLabel)
                     .font(.system(size: 18, weight: .bold))
                     .foregroundColor(.white)
                     .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
-                    .background(self.viewModel.makeButtonDisable ? Color.red : Color.blue)
+                    .background(viewModel.makeButtonDisable ? Color.red : Color.blue)
                     .clipShape(Capsule(style: .circular))
             }
-            .disabled(self.viewModel.makeButtonDisable)
+            .disabled(viewModel.makeButtonDisable)
             
         }
         .frame(maxWidth: .infinity)
@@ -54,8 +54,8 @@ struct MatchMakingView: View {
             availableWidth = size.width - 10
         }
         .onDisappear {
-            if self.viewModel.buttonTapped {
-                self.viewModel.Balance()
+            if viewModel.buttonTapped {
+                viewModel.Balance()
             }
         }
     }

@@ -29,21 +29,21 @@ class UserMatchHistoryViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.navigationItem.largeTitleDisplayMode = .never
+        navigationItem.largeTitleDisplayMode = .never
         
-        self.configureCollectionView()
+        configureCollectionView()
         
-        self.bind()
+        bind()
     }
     
     private func bind() {
-        self.viewModel.userMatchList
+        viewModel.userMatchList
             .receive(on: RunLoop.main)
             .sink { [unowned self] userMatches in
                 self.applySectionItems(userMatches)
             }.store(in: &subscriptions)
         
-        self.viewModel.selectedMatchDetail
+        viewModel.selectedMatchDetail
             .receive(on: RunLoop.main)
             .compactMap( { $0 } )
             .sink { [unowned self] matchDetail in
@@ -57,9 +57,9 @@ class UserMatchHistoryViewController: UIViewController {
     
     private func configureCollectionView() {
         let nibName = UINib(nibName: "UserMatchHistoryCell", bundle: nil)
-        self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserMatchHistoryCell")
+        collectionView.register(nibName, forCellWithReuseIdentifier: "UserMatchHistoryCell")
         
-        self.collectionView.delegate = self
+        collectionView.delegate = self
         
         datasource = UICollectionViewDiffableDataSource<Section, UserMatch>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, userMatch in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserMatchHistoryCell", for: indexPath) as? UserMatchHistoryCell else {
@@ -71,14 +71,18 @@ class UserMatchHistoryViewController: UIViewController {
             return cell
         })
         
-        self.collectionView.collectionViewLayout = layout()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, UserMatch>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems([], toSection: .main)
+        datasource.apply(snapshot)
+        
+        collectionView.collectionViewLayout = layout()
     }
     
     private func applySectionItems(_ items: [UserMatch], to section: Section = .main) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, UserMatch>()
-        snapshot.appendSections([section])
+        var snapshot = datasource.snapshot()
         snapshot.appendItems(items, toSection: section)
-        self.datasource.apply(snapshot)
+        datasource.apply(snapshot)
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
@@ -108,14 +112,14 @@ class UserMatchHistoryViewController: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        self.collectionView.collectionViewLayout = layout()
-        self.collectionView.collectionViewLayout.invalidateLayout()
+        collectionView.collectionViewLayout = layout()
+        collectionView.collectionViewLayout.invalidateLayout()
     }
     
 }
 
 extension UserMatchHistoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.viewModel.didSelect(at: indexPath)
+        viewModel.didSelect(at: indexPath)
     }
 }

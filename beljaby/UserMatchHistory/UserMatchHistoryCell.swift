@@ -55,7 +55,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
     }
     
     func configure(_ userMatch: UserMatch) {
-        guard let match = self.firebaseManager.MatchDict[userMatch.matchId], let champ = self.realmManager.champData[userMatch.champ] else {
+        guard let match = firebaseManager.MatchDict[userMatch.matchId], let champ = realmManager.champData[userMatch.champ] else {
             return
         }
         
@@ -68,7 +68,7 @@ class UserMatchHistoryCell: UICollectionViewCell {
         let matchDate = dateFormatter.string(from: match.matchDate)
         let duration = String(format: "  %02d:%02d분", gameDuration/60,gameDuration%60)
         
-        let itemImageList: [UIImageView] = [self.item0, self.item1, self.item2, self.item3, self.item4, self.item5, self.item6]
+        let itemImageList: [UIImageView] = [item0, item1, item2, item3, item4, item5, item6]
         var itemList = userMatch.item.filter { $0 != 0 }
         while itemList.count < 7 {
             itemList.insert(0, at: itemList.count - 1)
@@ -81,35 +81,35 @@ class UserMatchHistoryCell: UICollectionViewCell {
         
         let splashURL = URL(string: "https://ddragon.leagueoflegends.com/cdn/img/champion/splash/\(champ.id)_0.jpg")
         
-        self.dateLabel.text  = matchDate + duration
+        dateLabel.text  = matchDate + duration
         
-        self.winLabel.text = userMatch.win ? "승리" : "패배"
-        self.winLabel.textColor = userMatch.win ? .black : .white
-        self.winView.backgroundColor = userMatch.win ? self.colorList[0] : self.colorList[1]
+        winLabel.text = userMatch.win ? "승리" : "패배"
+        winLabel.textColor = userMatch.win ? .black : .white
+        winView.backgroundColor = userMatch.win ? colorList[0] : colorList[1]
         
-        self.eloChange.text = (userMatch.eloChange > 0 ? "+" : "") + "\(userMatch.eloChange)"
+        eloChange.text = (userMatch.eloChange > 0 ? "+" : "") + "\(userMatch.eloChange)"
         
-        self.champName.text = champ.name
-        self.champLevel.text = "\(userMatch.champLevel)"
+        champName.text = champ.name
+        champLevel.text = "\(userMatch.champLevel)"
         
-        self.killScoreLabel.text = "\(userMatch.kill)/\(userMatch.death)/\(userMatch.assist)"
-        self.csLabel.text = "\(userMatch.cs) "+String(format: "(%.1f)", (Double(userMatch.cs)/(Double(gameDuration)/600.0)+5.0)/10.0)
-        self.goldEarnedLabel.text = String(format: "%.1f천", Double(userMatch.goldEarned+50)/1000.0)
+        killScoreLabel.text = "\(userMatch.kill)/\(userMatch.death)/\(userMatch.assist)"
+        csLabel.text = "\(userMatch.cs) "+String(format: "(%.1f)", (Double(userMatch.cs)/(Double(gameDuration)/600.0)+5.0)/10.0)
+        goldEarnedLabel.text = String(format: "%.1f천", Double(userMatch.goldEarned+50)/1000.0)
         
-        self.killPLabel.text = "킬관여 \(userMatch.killP)%"
-        self.wardLabel.text = "제어 와드 \(userMatch.ward)"
+        killPLabel.text = "킬관여 \(userMatch.killP)%"
+        wardLabel.text = "제어 와드 \(userMatch.ward)"
         
-        self.mainPerkImage.image = UIImage(named: "\(userMatch.mainPerk)")
-        self.subPerkImage.image = UIImage(named: "\(userMatch.subPerk)")
+        mainPerkImage.image = UIImage(named: "\(userMatch.mainPerk)")
+        subPerkImage.image = UIImage(named: "\(userMatch.subPerk)")
         
-        self.champSplashImage.kf.setImage(with: splashURL)
+        champSplashImage.kf.setImage(with: splashURL)
         
         let gradientMaskLayer = CAGradientLayer()
-        gradientMaskLayer.frame = self.champSplashImage.bounds
+        gradientMaskLayer.frame = champSplashImage.bounds
         gradientMaskLayer.colors =  [UIColor.white.cgColor, UIColor.clear.cgColor]
         gradientMaskLayer.locations = [0.8, 1]
         
-        self.champSplashImage.layer.mask = gradientMaskLayer
+        champSplashImage.layer.mask = gradientMaskLayer
         
         for (idx, itemURL) in itemImageURL.enumerated() {
             if let url = itemURL {

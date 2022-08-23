@@ -21,6 +21,7 @@ protocol MatchMakingDelegate {
 
 final class MatchMakingViewModel: ObservableObject {
     @Published var userDict: [String: UserSelect] = [:]
+    
     var delegate: MatchMakingDelegate
     var buttonTapped = false
     
@@ -29,11 +30,11 @@ final class MatchMakingViewModel: ObservableObject {
     }
     
     var makeButtonDisable: Bool {
-        self.userDict.values.filter( { $0.isSelected } ).count != 10
+        userDict.values.filter( { $0.isSelected } ).count != 10
     }
     
     var buttonLabel: String {
-        let remain: Int = 10 - self.userDict.values.filter( { $0.isSelected } ).count
+        let remain: Int = 10 - userDict.values.filter( { $0.isSelected } ).count
         if remain < 0 {
             return "Select too many"
         }
@@ -48,11 +49,11 @@ final class MatchMakingViewModel: ObservableObject {
     }
     
     func Select(name: String) {
-        self.userDict[name]?.isSelected.toggle()
+        userDict[name]?.isSelected.toggle()
     }
     
     func Balance() {
-        let selected = self.userDict.values.filter { $0.isSelected }
+        let selected = userDict.values.filter { $0.isSelected }
         let sumTotal = selected.reduce(0) { $0 + $1.elo }
         var minDiff = sumTotal
         var team1 = [UserSelect]()
@@ -77,6 +78,6 @@ final class MatchMakingViewModel: ObservableObject {
         
         let team2 = selected.filter { !team1.contains($0) }
         
-        self.delegate.DelegateFunc(team1: team1.map { $0.user }, team2: team2.map { $0.user } )
+        delegate.DelegateFunc(team1: team1.map { $0.user }, team2: team2.map { $0.user } )
     }
 }

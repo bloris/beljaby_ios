@@ -29,17 +29,17 @@ final class RankViewModel {
     }
     
     func didSelect(at indexPath: IndexPath) {
-        let user = self.firebaseManager.userList.value[indexPath.item]
+        let user = firebaseManager.userList.value[indexPath.item]
         selectedUser.send(user)
     }
     
     func makeButtonTapped() {
-        self.makeButton.send()
+        makeButton.send()
     }
 }
 
 extension RankViewModel: MatchMakingDelegate {
     func DelegateFunc(team1: [User], team2: [User]) {
-        self.delegateReceive.send((team1,team2))
+        delegateReceive.send((team1,team2))
     }
 }

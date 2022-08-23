@@ -29,20 +29,20 @@ class RankViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        self.viewModel = RankViewModel() //Load ViewModel
+        viewModel = RankViewModel() //Load ViewModel
         
-        self.configureCollectionView() //Configure CollectionView
+        configureCollectionView() //Configure CollectionView
         
-        self.bind() //Bind with ViewModel Publihser
+        bind() //Bind with ViewModel Publihser
     }
     
     @IBAction func makeMatchTapped(_ sender: UIButton) {
-        self.viewModel.makeButtonTapped() //Send Tapped Action
+        viewModel.makeButtonTapped() //Send Tapped Action
     }
     
     private func bind() {
         //Bind Input User Rank Cell Tapped -> Push UserMatchHistory View
-        self.viewModel.selectedUser
+        viewModel.selectedUser
             .receive(on: RunLoop.main)
             .compactMap( { $0 } )
             .sink { [unowned self] user in
@@ -56,7 +56,7 @@ class RankViewController: UIViewController {
             }.store(in: &subscriptions)
         
         //Bind Input Make Match Button Tap -> Push Matchmaking View
-        self.viewModel.makeButton
+        viewModel.makeButton
             .receive(on: RunLoop.main)
             .sink { [unowned self] in
                 let matchMakingViewModel = MatchMakingViewModel(deligate: self.viewModel)
@@ -67,7 +67,7 @@ class RankViewController: UIViewController {
             }.store(in: &subscriptions)
         
         //Bind Delegate Input from Matchmaking View -> Push Balanced Team View
-        self.viewModel.delegateReceive
+        viewModel.delegateReceive
             .receive(on: RunLoop.main)
             .sink { [unowned self] (team1, team2) in
                 let balancedTeamViewModel = BalancedTeamViewModel(team1: team1, team2: team2)
@@ -79,7 +79,7 @@ class RankViewController: UIViewController {
             }.store(in: &subscriptions)
         
         //Bind User Info List from Firebase -> Apply Section Item to Diffable Datasource
-        self.firebaseManager.userList
+        firebaseManager.userList
             .receive(on: RunLoop.main)
             .sink { [unowned self] users in
                 self.applySectionItems(users)
@@ -87,7 +87,7 @@ class RankViewController: UIViewController {
         
         //Bind User Match Info List from Firebase -> Allow Selection
         //Need to Refactoring
-        self.firebaseManager.userMatchLoad
+        firebaseManager.userMatchLoad
             .receive(on: RunLoop.main)
             .sink { [unowned self] in
                 self.collectionView.reloadData()
@@ -101,10 +101,10 @@ extension RankViewController {
     private func configureCollectionView() {
         //Register xib CollectionView Cell
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
-        self.collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
+        collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
         
-        self.collectionView.delegate = self //CollectionView Delegate for didSelectItem
-        self.collectionView.allowsSelection = false //Disable selection before load user match history data
+        collectionView.delegate = self //CollectionView Delegate for didSelectItem
+        collectionView.allowsSelection = false //Disable selection before load user match history data
         
         datasource = UICollectionViewDiffableDataSource<Section, User>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, user in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else {
@@ -115,11 +115,15 @@ extension RankViewController {
             return cell
         })
         
-        self.collectionView.collectionViewLayout = layout()
+        var snapshot = NSDiffableDataSourceSnapshot<Section, User>()
+        snapshot.appendSections([.main])
+        snapshot.appendItems([], toSection: .main)
+        datasource.apply(snapshot)
+        
+        collectionView.collectionViewLayout = layout()
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
-        
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
         
@@ -136,8 +140,7 @@ extension RankViewController {
     }
     
     private func applySectionItems(_ items: [User], to section: Section = .main) {
-        var snapshot = NSDiffableDataSourceSnapshot<Section, User>()
-        snapshot.appendSections([section])
+        var snapshot = datasource.snapshot()
         snapshot.appendItems(items, toSection: section)
         datasource.apply(snapshot)
     }
@@ -146,6 +149,6 @@ extension RankViewController {
 //MARK: - Collection View Delegate
 extension RankViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        self.viewModel.didSelect(at: indexPath)
+        viewModel.didSelect(at: indexPath)
     }
 }
