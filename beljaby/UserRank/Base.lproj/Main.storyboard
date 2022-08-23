@@ -8,53 +8,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--대전 기록-->
-        <scene sceneID="HPs-GU-nMx">
-            <objects>
-                <viewController storyboardIdentifier="UserMatchHistoryViewController" id="yrf-Mw-RTG" customClass="UserMatchHistoryViewController" customModule="beljaby" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="Pld-VL-l4R">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="O9N-Ul-r2a">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                                <color key="backgroundColor" red="0.078431372549019607" green="0.070588235294117646" blue="0.074509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="IVJ-IU-LLS">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="Coc-PC-1Na">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="b4T-7y-Ntl">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
-                                    </collectionViewCell>
-                                </cells>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="0k9-yi-4q4"/>
-                        <color key="backgroundColor" red="0.078431372549019607" green="0.070588235294117646" blue="0.074509803921568626" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="O9N-Ul-r2a" secondAttribute="bottom" id="Eve-zE-I5B"/>
-                            <constraint firstItem="O9N-Ul-r2a" firstAttribute="leading" secondItem="0k9-yi-4q4" secondAttribute="leading" id="S3t-ij-22c"/>
-                            <constraint firstItem="0k9-yi-4q4" firstAttribute="trailing" secondItem="O9N-Ul-r2a" secondAttribute="trailing" id="SMZ-Fw-Pzu"/>
-                            <constraint firstItem="O9N-Ul-r2a" firstAttribute="top" secondItem="Pld-VL-l4R" secondAttribute="top" id="W2x-DA-IAR"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="대전 기록" id="3ht-pU-VEA"/>
-                    <connections>
-                        <outlet property="collectionView" destination="O9N-Ul-r2a" id="UA2-dk-HqH"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="pIg-N6-iUu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1482" y="175"/>
-        </scene>
         <!--Navigation Controller-->
         <scene sceneID="y0U-aF-bxX">
             <objects>
@@ -160,53 +113,6 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="LLX-e8-euu" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="762" y="175"/>
-        </scene>
-        <!--대전 기록-->
-        <scene sceneID="rL5-Fh-RR0">
-            <objects>
-                <viewController storyboardIdentifier="MatchDetailViewController" id="Mmm-xC-G5A" customClass="MatchDetailViewController" customModule="beljaby" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="aYi-F7-DnM">
-                        <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <subviews>
-                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="O4J-eJ-7hM">
-                                <rect key="frame" x="0.0" y="0.0" width="390" height="844"/>
-                                <color key="backgroundColor" red="0.078431372550000003" green="0.070588235289999995" blue="0.074509803920000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                                <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ORd-Xf-W0s">
-                                    <size key="itemSize" width="128" height="128"/>
-                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
-                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
-                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
-                                </collectionViewFlowLayout>
-                                <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="NKm-qh-gnm">
-                                        <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="dhv-w6-kNe">
-                                            <rect key="frame" x="0.0" y="0.0" width="128" height="128"/>
-                                            <autoresizingMask key="autoresizingMask"/>
-                                        </collectionViewCellContentView>
-                                    </collectionViewCell>
-                                </cells>
-                            </collectionView>
-                        </subviews>
-                        <viewLayoutGuide key="safeArea" id="cgY-h3-z6z"/>
-                        <color key="backgroundColor" red="0.078431372550000003" green="0.070588235289999995" blue="0.074509803920000006" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <constraints>
-                            <constraint firstAttribute="bottom" secondItem="O4J-eJ-7hM" secondAttribute="bottom" id="DIw-L7-exW"/>
-                            <constraint firstItem="cgY-h3-z6z" firstAttribute="trailing" secondItem="O4J-eJ-7hM" secondAttribute="trailing" id="QKm-Y3-lsx"/>
-                            <constraint firstItem="O4J-eJ-7hM" firstAttribute="top" secondItem="aYi-F7-DnM" secondAttribute="top" id="dFl-ni-sGn"/>
-                            <constraint firstItem="O4J-eJ-7hM" firstAttribute="leading" secondItem="cgY-h3-z6z" secondAttribute="leading" id="lsq-Fl-Tb0"/>
-                        </constraints>
-                    </view>
-                    <navigationItem key="navigationItem" title="대전 기록" id="bPb-0q-Kpr"/>
-                    <connections>
-                        <outlet property="collectionView" destination="O4J-eJ-7hM" id="HeH-Lc-mOU"/>
-                    </connections>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="rP4-aw-mn5" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2203" y="175"/>
         </scene>
     </scenes>
 </document>

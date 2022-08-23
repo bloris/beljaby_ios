@@ -46,7 +46,8 @@ class RankViewController: UIViewController {
             .receive(on: RunLoop.main)
             .compactMap( { $0 } )
             .sink { [unowned self] user in
-                let destinationVC = self.storyboard?.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
+                let sb = UIStoryboard(name: "UserMatchHistory", bundle: nil)
+                let destinationVC = sb.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
                 
                 destinationVC.viewModel = UserMatchHistoryViewModel(puuid: self.viewModel.puuid)
                 destinationVC.title = self.viewModel.historyViewTitle
@@ -72,6 +73,7 @@ class RankViewController: UIViewController {
                 let balancedTeamViewModel = BalancedTeamViewModel(team1: team1, team2: team2)
                 let balancedTeamView = BalancedTeamView(viewModel: balancedTeamViewModel)
                 let vc = UIHostingController(rootView: balancedTeamView)
+                vc.navigationItem.largeTitleDisplayMode = .never
                 
                 self.navigationController?.pushViewController(vc, animated: true)
             }.store(in: &subscriptions)
