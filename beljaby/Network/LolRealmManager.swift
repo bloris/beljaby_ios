@@ -23,7 +23,7 @@ final class LolRealmManager {
     
     private var subscriptions = Set<AnyCancellable>()
     let gameDataLoad = PassthroughSubject<Void, Never>() // Fetching any data finish -> Request UI reload
-    private let version = CurrentValueSubject<Version,Never>(Version(v: "")) // Fetching version finish -> Request champion info
+    private let version = PassthroughSubject<Version,Never>() // Fetching version finish -> Request champion info
     private let championList = PassthroughSubject<LolDataCache,Never>() // Fetching champion finish -> Preprocessing data
     
     private init() {
@@ -50,10 +50,10 @@ final class LolRealmManager {
         // Version 정보를 받으면 String 타입으로 저장
         self.version
             .receive(on: RunLoop.main)
-            .filter { !$0.v.isEmpty }
+            .filter { !$0.v.isEmpty } // filtering fetch fail
             .sink { [unowned self] version in
-                self.getChamption(version)
                 self.ver = version.v
+                self.getChamption(version)
                 self.gameDataLoad.send()
             }.store(in: &subscriptions)
     }
@@ -91,9 +91,9 @@ final class LolRealmManager {
                 .receive(on: RunLoop.main)
                 .sink(receiveValue: { [unowned self] result in
                     let newData = LolDataCache(version: version.v)
-                    result.data.forEach { (_, champion: Champion) in
-                            newData.champions.append(ChampionCache(champ: champion))
-                        }
+                    result.data.forEach { (_, champion: Champion) in // Append Champion Data to realm instance
+                        newData.champions.append(ChampionCache(champ: champion))
+                    }
                     self.save(newData: newData)
                 })
                 .store(in: &subscriptions)
@@ -107,9 +107,9 @@ final class LolRealmManager {
     private func save(newData: LolDataCache) {
         do {
             try realm.write( { [unowned self] in
-                realm.deleteAll()
-                realm.add(newData)
-                self.championList.send(newData)
+                realm.deleteAll() // 기존 Data delete
+                realm.add(newData) // New Data add
+                self.championList.send(newData) // Send Data
             })
         } catch {
             print("Error saving cache, \(error)")

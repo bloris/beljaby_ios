@@ -46,7 +46,7 @@ final class FirebaseManager {
                     let user = try doc.data(as: User.self)
                     self.getAllUserMatch(puuid: doc.documentID) // 해당 User의 User Match 정보 fetch
                     
-                    self.userDict[doc.documentID] = user
+                    self.userDict[doc.documentID] = user // Store User in UserDict with puuid as key
                 } catch let error {
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
                 }
@@ -71,7 +71,7 @@ final class FirebaseManager {
             documents.forEach { doc in
                 do {
                     let match = try doc.data(as: Match.self)
-                    self.MatchDict[doc.documentID] = match
+                    self.MatchDict[doc.documentID] = match // Store match in MatchDict with MacthID as key
                 } catch let error {
                     print("Error Json parsing \(doc.documentID) \(error.localizedDescription)")
                 }
@@ -89,13 +89,13 @@ final class FirebaseManager {
             }
             var champCnt = [Int: Int]()
             
-            self.userMatchDict[puuid] = [String: UserMatch]()
+            self.userMatchDict[puuid] = [String: UserMatch]() // Create Eampty Dict with puuid, Save userMatch Info in inside dict
             
             documents.forEach( { doc in
                 do {
                     let userMatch = try doc.data(as: UserMatch.self)
                     champCnt[userMatch.champ, default: 0] += 1 // Champion 플레이 횟수 Count
-                    self.userMatchDict[puuid]![doc.documentID] = userMatch
+                    self.userMatchDict[puuid]![doc.documentID] = userMatch // Store match in userMatchDict with puuid, matchID as key
                 } catch let error {
                     print("Error Json Parsing \(doc.documentID) \(error.localizedDescription)")
                     return
