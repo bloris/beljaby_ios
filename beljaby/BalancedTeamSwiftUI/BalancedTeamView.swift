@@ -20,8 +20,8 @@ struct BalancedTeamView: View {
         ScrollView {
             VStack {
                 LazyVGrid(columns: layout,spacing: 0) {
-                    TealBalanceView(text: "블루 팀", team: $viewModel.team1, version: viewModel.version)
-                    TealBalanceView(text: "레드 팀", team: $viewModel.team2, version: viewModel.version)
+                    TealBalanceView(text: "블루 팀", team: $viewModel.team1)
+                    TealBalanceView(text: "레드 팀", team: $viewModel.team2)
                 }
             }
         }
@@ -31,7 +31,6 @@ struct BalancedTeamView: View {
 struct TealBalanceView: View {
     let text: String
     @Binding var team: [User]
-    let version: String
     
     var body: some View {
         Section(header: HeaderView(text: text)) {
@@ -39,6 +38,7 @@ struct TealBalanceView: View {
                 VStack(spacing: 0) {
                     BalancedTeamCell(viewModel: BalancedTeamCellViewModel(user: user))
                     
+                    // Cell 사이에 Divider 추가
                     if user != team.last {
                         RoundedRectangle(cornerRadius: 1)
                             .foregroundColor( Color( UITableView().separatorColor ?? .gray) )
