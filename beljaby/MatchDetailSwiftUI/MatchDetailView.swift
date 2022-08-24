@@ -12,11 +12,13 @@ struct MatchDetailView: View {
     
     @StateObject var viewModel: MatchDetailViewModel
     
+    // Win, Lose state Background Color
     let colorList = [
         UIColor(red: 0.04, green: 0.77, blue: 0.89, alpha: 1.00),
         UIColor(red: 0.82, green: 0.22, blue: 0.22, alpha: 1.00)
     ].map{Color($0)}
     
+    // 1 column for row
     let layout: [GridItem] = [
         GridItem(.flexible())
     ]
@@ -24,13 +26,14 @@ struct MatchDetailView: View {
     var body: some View {
         ScrollView {
             VStack {
-                ZStack(alignment: .bottom) {
-                    
+                ZStack(alignment: .bottom) { // Align Label at bottom of image
+                    // Champion spalsh image with gridation overlay
+                    // Bottom to Black -> Gray date label visiblility
                     KFImage(viewModel.champImgURl)
                         .resizable()
                         .aspectRatio(contentMode: .fit)
                         .overlay {
-                            LinearGradient(gradient: Gradient(colors: [.clear,.black]), startPoint: .init(x: 0.5, y: 0.7), endPoint: .bottom)
+                            LinearGradient(gradient: Gradient(colors: [.clear, .black]), startPoint: .init(x: 0.5, y: 0.7), endPoint: .bottom)
                         }
                     
                     HStack {
@@ -41,6 +44,7 @@ struct MatchDetailView: View {
                         
                         Spacer()
                         
+                        // Different Background Color with win state
                         Text(viewModel.winLabel)
                             .foregroundColor(viewModel.win ? .black : .white)
                             .font(.system(size: 13, weight: .regular))
@@ -52,6 +56,7 @@ struct MatchDetailView: View {
                     .padding(.bottom,10)
                 }
                 
+                // Two Section vertical grid
                 LazyVGrid(columns: layout,spacing: 0) {
                     TeamView(team: viewModel.myTeam, text: "아군")
                     TeamView(team: viewModel.enemyTeam, text: "적")
@@ -62,7 +67,7 @@ struct MatchDetailView: View {
     }
 }
 
-
+//MARK: - Vertical Grid View Section Header view
 struct HeaderView: View {
     let text: String
     var body: some View {

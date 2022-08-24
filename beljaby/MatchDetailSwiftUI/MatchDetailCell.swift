@@ -15,52 +15,53 @@ struct MatchDetailCell: View {
     
     var body: some View {
         HStack(spacing: 10) {
-            VStack(alignment: .center) {
+            VStack(alignment: .center) { // Champion Icon and rounded level label
                 KFImage(viewModel.champImgURl)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
                     .frame(width: 40, height: 40)
                     .cornerRadius(30)
-                    .overlay(
+                    .overlay( // Clips to Rounded Icon and apply white border
                         Capsule(style: .circular)
                             .stroke(Color.white, lineWidth: 2)
                     )
                 
+                // Level rounded label with white border
                 Text(viewModel.champLevel)
                     .font(.system(size: 10, weight: .bold))
                     .frame(width: 16, height: 16)
                     .background(Color.black)
                     .foregroundColor(.white)
                     .cornerRadius(8)
-                    .overlay(
+                    .overlay( // Clips to Rounded Background and apply white border
                         Capsule(style: .circular)
                             .stroke(Color.gray, lineWidth: 1)
                     )
-                    .padding(.top, -16)
+                    .padding(.top, -16) // Negative Padding to overlap with champion Icon image
                 
             }
             
             VStack(spacing: 5) {
                 HStack(spacing: 20) {
-                    DetailTextView(text: viewModel.name)
+                    DetailTextView(text: viewModel.name) // User Name
                     
                     Spacer()
                     
                     HStack(spacing: 3) {
-                        DetailTextView(text: viewModel.kill)
-                        SeperatorTextView()
-                        DetailTextView(text: viewModel.death)
-                        SeperatorTextView()
-                        DetailTextView(text: viewModel.assist)
+                        DetailTextView(text: viewModel.kill) // User kill count
+                        SeperatorTextView() // separator / with gray color
+                        DetailTextView(text: viewModel.death) // User death count
+                        SeperatorTextView() // separator / with gray color
+                        DetailTextView(text: viewModel.assist) // User assist count
                     }
                     
-                    DetailTextView(text: viewModel.cs)
+                    DetailTextView(text: viewModel.cs) // User minions kill count
                     
-                    DetailTextView(text: viewModel.goldEarned)
+                    DetailTextView(text: viewModel.goldEarned) // User gold earned total
                 }
                 
                 HStack {
-                    HStack(spacing: 5) {
+                    HStack(spacing: 5) { // User perk info
                         Image(viewModel.mainPerk)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
@@ -75,7 +76,7 @@ struct MatchDetailCell: View {
                     
                     Spacer()
                     
-                    HStack {
+                    HStack { // User Item Info
                         ForEach(viewModel.itemImgURL, id: \.self) { url in
                             KFImage(url)
                                 .resizable()
@@ -93,9 +94,11 @@ struct MatchDetailCell: View {
         }
         .padding(EdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20))
         .background(viewModel.my ? LinearGradient(gradient: Gradient(colors: [.gray,.black]), startPoint: .leading, endPoint: .trailing) : LinearGradient(colors: [.black], startPoint: .leading, endPoint: .trailing))
+        // If Cuerrent cell is main user apply gradient to emphasize
     }
 }
 
+//MARK: - TextView with same modifier
 struct DetailTextView: View {
     let text: String
     var body: some View {
@@ -106,6 +109,7 @@ struct DetailTextView: View {
     }
 }
 
+//MARK: - TextView to separator
 struct SeperatorTextView: View {
     var body: some View {
         Text("/")
