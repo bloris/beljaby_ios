@@ -8,11 +8,11 @@
 import SwiftUI
 
 struct FlexibleView<Data: Collection, Content: View>: View where Data.Element: Hashable {
-    let availableWidth: CGFloat
-    let data: Data
-    let spacing: CGFloat
-    let alignment: HorizontalAlignment
-    let content: (Data.Element) -> Content
+    let availableWidth: CGFloat // Availablewidth
+    let data: Data // Data
+    let spacing: CGFloat // Spacing between button
+    let alignment: HorizontalAlignment // Alignment of Element
+    let content: (Data.Element) -> Content // View Content
     @State var elementsSize: [Data.Element: CGSize] = [:]
     
     var body : some View {
