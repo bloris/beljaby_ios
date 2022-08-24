@@ -47,7 +47,7 @@ class RankViewController: UIViewController {
                 let sb = UIStoryboard(name: "UserMatchHistory", bundle: nil)
                 let destinationVC = sb.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
                 
-                destinationVC.viewModel = UserMatchHistoryViewModel(puuid: self.viewModel.puuid)
+                destinationVC.viewModel = UserMatchHistoryViewModel(puuid: user.puuid)
                 destinationVC.title = viewModel.historyViewTitle
                 
                 self.navigationController?.pushViewController(destinationVC, animated: true)

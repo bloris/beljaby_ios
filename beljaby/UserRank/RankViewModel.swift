@@ -13,28 +13,24 @@ final class RankViewModel {
     private let realmManger = LolRealmManager.shared //Get Realm Singleton Object
     
     private var subscriptions = Set<AnyCancellable>()
-    let userList = CurrentValueSubject<[User], Never>([User]())
-    let selectedUser: CurrentValueSubject<User?, Never>
-    let delegateReceive = PassthroughSubject<([User],[User]), Never>()
-    let dataLoadFinish = PassthroughSubject<Void, Never>()
-    let makeButton = PassthroughSubject<Void, Never>()
+    let userList = CurrentValueSubject<[User], Never>([User]()) // Subscribe User List from Friebase -> Send to View
+    let selectedUser: CurrentValueSubject<User?, Never> // Get selected User -> Push UserMatchHistory view
+    let delegateReceive = PassthroughSubject<([User],[User]), Never>() // Get balanced team info as delegate func -> Push BalancedTeam View
+    let dataLoadFinish = PassthroughSubject<Void, Never>() // Get data load finish notice -> Request reload Data with correct info
+    let makeButton = PassthroughSubject<Void, Never>() // Make button tapped -> Push MatchMaking View
     
     var historyViewTitle: String {
         guard let name = self.selectedUser.value?.name else {return ""}
         return "\(name) 대전 기록"
     }
     
-    var puuid: String {
-        return self.selectedUser.value?.puuid ?? ""
-    }
-    
     init(selectedUser: User? = nil) {
-        self.selectedUser = CurrentValueSubject(selectedUser)
+        self.selectedUser = CurrentValueSubject(selectedUser) // Initialize selected user with nil
         bind()
     }
     
     func didSelect(at indexPath: IndexPath) {
-        let user = firebaseManager.userList.value[indexPath.item]
+        let user = userList.value[indexPath.item] // Get selected user info
         selectedUser.send(user)
     }
     
