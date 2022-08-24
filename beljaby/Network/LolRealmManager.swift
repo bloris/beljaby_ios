@@ -21,10 +21,10 @@ final class LolRealmManager {
     
     private let realm = try! Realm()
     
-    var championDataLoad = PassthroughSubject<Void, Never>()
     private var subscriptions = Set<AnyCancellable>()
-    private let version = CurrentValueSubject<Version,Never>(Version(v: ""))
-    private let championList = PassthroughSubject<LolDataCache,Never>()
+    let gameDataLoad = PassthroughSubject<Void, Never>() // Fetching any data finish -> Request UI reload
+    private let version = CurrentValueSubject<Version,Never>(Version(v: "")) // Fetching version finish -> Request champion info
+    private let championList = PassthroughSubject<LolDataCache,Never>() // Fetching champion finish -> Preprocessing data
     
     private init() {
         self.realmData = realm.objects(LolDataCache.self)
@@ -43,6 +43,7 @@ final class LolRealmManager {
             .sink { [unowned self] data in
                 data.champions.forEach {
                     self.champData[Int($0.key) ?? 0] = Champion(id: $0.id, key: $0.key, name: $0.name)
+                    self.gameDataLoad.send()
                 }
             }.store(in: &subscriptions)
         
@@ -53,6 +54,7 @@ final class LolRealmManager {
             .sink { [unowned self] version in
                 self.getChamption(version)
                 self.ver = version.v
+                self.gameDataLoad.send()
             }.store(in: &subscriptions)
     }
     

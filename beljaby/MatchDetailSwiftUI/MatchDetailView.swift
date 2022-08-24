@@ -90,6 +90,7 @@ struct TeamView: View {
                 VStack(spacing: 0) {
                     MatchDetailCell(viewModel: MatchDetailCellViewModel(matchDetail: matchDetail))
                     
+                    // Cell 사이에 Divider 추가
                     if matchDetail != team.last {
                         RoundedRectangle(cornerRadius: 1)
                             .foregroundColor( Color( UITableView().separatorColor ?? .gray) )

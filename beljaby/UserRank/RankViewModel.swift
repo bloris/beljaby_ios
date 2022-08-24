@@ -50,7 +50,7 @@ final class RankViewModel {
                 userList.send(users)
             }.store(in: &subscriptions)
         
-        // Bind User Match History Fetching Finish -> Get each user most champion data
+        // Bind User Most Champion Counting Finish -> Get each user most champion data
         // Send View need to reload with correct champion most info
         firebaseManager.mostChampionLoad
             .receive(on: RunLoop.main)
@@ -58,7 +58,9 @@ final class RankViewModel {
                 dataLoadFinish.send()
             }.store(in: &subscriptions)
         
-        realmManger.championDataLoad
+        // Bind realmManager get version, champion game data -> Some game imageURL need version info
+        // Send View need to reload with correct URL
+        realmManger.gameDataLoad
             .receive(on: RunLoop.main)
             .sink { [unowned self] in
                 dataLoadFinish.send()

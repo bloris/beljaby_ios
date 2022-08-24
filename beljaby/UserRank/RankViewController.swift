@@ -83,7 +83,8 @@ class RankViewController: UIViewController {
                 self.applySectionItems(users, to: .main)
             }.store(in: &subscriptions)
         
-        // Bind version, champion fetching finish -> Reload Data with Correct Image URL
+        // Bind version, champion fetching finish -> Reload Data with Correct Image URL (URL need version Info)
+        // Bind most champion calc finish -> Reload Data with Correct Champion Image ULR (URL need champion Info)
         // Before fetching data cell has wrong ImageURL
         viewModel.dataLoadFinish
             .receive(on: RunLoop.main)

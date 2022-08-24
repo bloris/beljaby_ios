@@ -21,8 +21,8 @@ struct FlexibleView<Data: Collection, Content: View>: View where Data.Element: H
                 HStack(spacing: spacing) {
                     ForEach(rowElements, id: \.self) { element in
                         content(element)
-                            .fixedSize()
-                            .readSize { size in
+                            .fixedSize() // Label 한줄 고정
+                            .readSize { size in // Label 사이즈 측정 및 업데이트
                                 elementsSize[element] = size
                             }
                     }
@@ -31,14 +31,17 @@ struct FlexibleView<Data: Collection, Content: View>: View where Data.Element: H
         }
     }
     
+    /// 가용 너비와 element의 크기를 이용하여 Flexible한 row별 element 할당
     func computeRows() -> [[Data.Element]] {
-        var rows: [[Data.Element]] = [[]]
+        var rows: [[Data.Element]] = [[]] // Row 당 할당 되는 element 저장
         var currentRow = 0
-        var remainingWidth = availableWidth
+        var remainingWidth = availableWidth // 남은 너비, 초기값 = 가용 너비
         
         for element in data {
-            let elementSize = elementsSize[element, default: CGSize(width: availableWidth, height: 1)]
+            let elementSize = elementsSize[element, default: CGSize(width: availableWidth, height: 1)] // 현재 element의 너비
             
+            // 가용 너비 내에 들어갈 수 있으면 현재 row에 data apend
+            // 불가능하면 다음 row에 data append
             if remainingWidth - (elementSize.width + spacing) >= 0 {
                 rows[currentRow].append(element)
             } else {
@@ -47,6 +50,7 @@ struct FlexibleView<Data: Collection, Content: View>: View where Data.Element: H
                 remainingWidth = availableWidth
             }
             
+            // 추가한 element 너비 및 spacing만큼 가용 너비에서 감소
             remainingWidth = remainingWidth - (elementSize.width + spacing)
         }
         
