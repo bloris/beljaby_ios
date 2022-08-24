@@ -15,8 +15,9 @@ import Combine
 final class FirebaseManager {
     static let shared = FirebaseManager()
     
-    var userList = CurrentValueSubject<[User], Never>([User]())
-    var userMatchLoad = PassthroughSubject<Void, Never>()
+    let userList = CurrentValueSubject<[User], Never>([User]()) // Send User Array to Rank View
+    let userMatchLoad = PassthroughSubject<Void, Never>() // Send fetch finish info to UserMatchHistory View
+    let mostChampionLoad = PassthroughSubject<Void, Never>() // Send most champion counting finish info to Rank View
     
     var userDict = [String:User]() // 해당 user의 puuid를 key로 하는 User 정보 Dictionary
     var userMatchDict = [String: [String: UserMatch]]() // 해당 user의 puuid를 key로 하는 User Match 정보 Dictionary
@@ -116,7 +117,8 @@ final class FirebaseManager {
             }
             
             if self.userMatchDict.count == self.userList.value.count {
-                self.userMatchLoad.send() // 모든 User Match를 Fetch 했다고 Subject에 주입, 추후 삭제 예정
+                self.userMatchLoad.send() // 모든 User Match를 Fetch 했다고 전달
+                self.mostChampionLoad.send() // 모든 User의 most champion counting이 끝났다고 전달
             }
         }
     }

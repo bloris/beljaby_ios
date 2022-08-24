@@ -21,6 +21,7 @@ final class LolRealmManager {
     
     private let realm = try! Realm()
     
+    var championDataLoad = PassthroughSubject<Void, Never>()
     private var subscriptions = Set<AnyCancellable>()
     private let version = CurrentValueSubject<Version,Never>(Version(v: ""))
     private let championList = PassthroughSubject<LolDataCache,Never>()

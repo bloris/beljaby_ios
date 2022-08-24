@@ -15,9 +15,7 @@ import SwiftUI
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
-    private let firebaseManager = FirebaseManager.shared //Get Firebase Singleton Object -> Move to ViewModel
-    
-    var subscriptions = Set<AnyCancellable>() //Store subscriptions
+    var subscriptions = Set<AnyCancellable>() // Store subscriptions
     
     enum Section {
         case main
@@ -29,11 +27,11 @@ class RankViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        viewModel = RankViewModel() //Load ViewModel
+        viewModel = RankViewModel() // Load ViewModel
         
-        configureCollectionView() //Configure CollectionView
+        configureCollectionView() // Configure CollectionView
         
-        bind() //Bind with ViewModel Publihser
+        bind() // Bind with ViewModel Publihser
     }
     
     @IBAction func makeMatchTapped(_ sender: UIButton) {
@@ -41,7 +39,7 @@ class RankViewController: UIViewController {
     }
     
     private func bind() {
-        //Bind Input User Rank Cell Tapped -> Push UserMatchHistory View
+        // Bind Input User Rank Cell Tapped -> Push UserMatchHistory View
         viewModel.selectedUser
             .receive(on: RunLoop.main)
             .compactMap( { $0 } )
@@ -50,12 +48,12 @@ class RankViewController: UIViewController {
                 let destinationVC = sb.instantiateViewController(withIdentifier: "UserMatchHistoryViewController") as! UserMatchHistoryViewController
                 
                 destinationVC.viewModel = UserMatchHistoryViewModel(puuid: self.viewModel.puuid)
-                destinationVC.title = self.viewModel.historyViewTitle
+                destinationVC.title = viewModel.historyViewTitle
                 
                 self.navigationController?.pushViewController(destinationVC, animated: true)
             }.store(in: &subscriptions)
         
-        //Bind Input Make Match Button Tap -> Push Matchmaking View
+        // Bind Input Make Match Button Tap -> Push Matchmaking View
         viewModel.makeButton
             .receive(on: RunLoop.main)
             .sink { [unowned self] in
@@ -66,7 +64,7 @@ class RankViewController: UIViewController {
                 self.present(vc, animated: true)
             }.store(in: &subscriptions)
         
-        //Bind Delegate Input from Matchmaking View -> Push Balanced Team View
+        // Bind Delegate Input from Matchmaking View -> Push Balanced Team View
         viewModel.delegateReceive
             .receive(on: RunLoop.main)
             .sink { [unowned self] (team1, team2) in
@@ -78,20 +76,19 @@ class RankViewController: UIViewController {
                 self.navigationController?.pushViewController(vc, animated: true)
             }.store(in: &subscriptions)
         
-        //Bind User Info List from Firebase -> Apply Section Item to Diffable Datasource
-        firebaseManager.userList
+        // Bind User Info List from Firebase -> Apply Section Item to Diffable Datasource
+        viewModel.userList
             .receive(on: RunLoop.main)
-            .sink { [unowned self] users in
-                self.applySectionItems(users)
+            .sink { users in
+                self.applySectionItems(users, to: .main)
             }.store(in: &subscriptions)
         
-        //Bind User Match Info List from Firebase -> Allow Selection
-        //Need to Refactoring
-        firebaseManager.userMatchLoad
+        // Bind version, champion fetching finish -> Reload Data with Correct Image URL
+        // Before fetching data cell has wrong ImageURL
+        viewModel.dataLoadFinish
             .receive(on: RunLoop.main)
             .sink { [unowned self] in
                 self.collectionView.reloadData()
-                self.collectionView.allowsSelection = true
             }.store(in: &subscriptions)
     }
 }
@@ -99,12 +96,11 @@ class RankViewController: UIViewController {
 //MARK: - Configure CollectionView
 extension RankViewController {
     private func configureCollectionView() {
-        //Register xib CollectionView Cell
+        // Register xib CollectionView Cell
         let nibName = UINib(nibName: "UserRankCell", bundle: nil)
         collectionView.register(nibName, forCellWithReuseIdentifier: "UserRankCell")
         
         collectionView.delegate = self //CollectionView Delegate for didSelectItem
-        collectionView.allowsSelection = false //Disable selection before load user match history data
         
         datasource = UICollectionViewDiffableDataSource<Section, User>(collectionView: self.collectionView, cellProvider: { collectionView, indexPath, user in
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserRankCell", for: indexPath) as? UserRankCell else {
@@ -139,7 +135,7 @@ extension RankViewController {
         return layout
     }
     
-    private func applySectionItems(_ items: [User], to section: Section = .main) {
+    private func applySectionItems(_ items: [User], to section: Section) {
         var snapshot = datasource.snapshot()
         snapshot.appendItems(items, toSection: section)
         datasource.apply(snapshot)

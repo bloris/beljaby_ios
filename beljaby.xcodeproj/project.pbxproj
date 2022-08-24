@@ -241,7 +241,6 @@
 		74F6500C2897980F0009967C /* Utils */ = {
 			isa = PBXGroup;
 			children = (
-				74F6500E289798220009967C /* LolRealmManager.swift */,
 				747AE70F28A0A7D70094151C /* Constraints.swift */,
 				745915B728A63B0700B62BD4 /* ViewUtils.swift */,
 			);
@@ -252,6 +251,7 @@
 			isa = PBXGroup;
 			children = (
 				747AE71128A0CC630094151C /* FirebaseManager.swift */,
+				74F6500E289798220009967C /* LolRealmManager.swift */,
 			);
 			path = Network;
 			sourceTree = "<group>";

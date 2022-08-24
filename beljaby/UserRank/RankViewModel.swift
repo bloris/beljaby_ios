@@ -9,10 +9,14 @@ import Foundation
 import Combine
 
 final class RankViewModel {
-    private let firebaseManager = FirebaseManager.shared
+    private let firebaseManager = FirebaseManager.shared //Get Firebase Singleton Object
+    private let realmManger = LolRealmManager.shared //Get Realm Singleton Object
     
+    private var subscriptions = Set<AnyCancellable>()
+    let userList = CurrentValueSubject<[User], Never>([User]())
     let selectedUser: CurrentValueSubject<User?, Never>
     let delegateReceive = PassthroughSubject<([User],[User]), Never>()
+    let dataLoadFinish = PassthroughSubject<Void, Never>()
     let makeButton = PassthroughSubject<Void, Never>()
     
     var historyViewTitle: String {
@@ -26,6 +30,7 @@ final class RankViewModel {
     
     init(selectedUser: User? = nil) {
         self.selectedUser = CurrentValueSubject(selectedUser)
+        bind()
     }
     
     func didSelect(at indexPath: IndexPath) {
@@ -35,6 +40,29 @@ final class RankViewModel {
     
     func makeButtonTapped() {
         makeButton.send()
+    }
+    
+    private func bind() {
+        // Bind User Info List from Firebase -> Apply Section Item to Diffable Datasource
+        firebaseManager.userList
+            .receive(on: RunLoop.main)
+            .sink { [unowned self] users in
+                userList.send(users)
+            }.store(in: &subscriptions)
+        
+        // Bind User Match History Fetching Finish -> Get each user most champion data
+        // Send View need to reload with correct champion most info
+        firebaseManager.mostChampionLoad
+            .receive(on: RunLoop.main)
+            .sink { [unowned self] in
+                dataLoadFinish.send()
+            }.store(in: &subscriptions)
+        
+        realmManger.championDataLoad
+            .receive(on: RunLoop.main)
+            .sink { [unowned self] in
+                dataLoadFinish.send()
+            }.store(in: &subscriptions)
     }
 }
 

@@ -12,14 +12,16 @@ final class UserMatchHistoryViewModel {
     
     var puuid: String
     
-//    typealias MatchDetail = (String,UserMatch)
+    //    typealias MatchDetail = (String,UserMatch)
     
+    var subscriptions = Set<AnyCancellable>()
     let selectedMatchDetail: CurrentValueSubject<[MatchDetail]?, Never>
-    
     let userMatchList: CurrentValueSubject<[UserMatch], Never>
     
+    let firebaseManager = FirebaseManager.shared
+    
     init(puuid: String, selectedMatch: [MatchDetail]? = nil) {
-        let firebaseManager = FirebaseManager.shared
+        
         
         self.puuid = puuid
         
@@ -33,6 +35,21 @@ final class UserMatchHistoryViewModel {
         )
         
         self.selectedMatchDetail = CurrentValueSubject(selectedMatch)
+    }
+    
+    private func bind() {
+        firebaseManager.userMatchLoad
+            .receive(on: RunLoop.main)
+            .sink { [unowned self] in
+                userMatchList.send(
+                    firebaseManager
+                        .userMatchDict[puuid]?
+                        .values
+                        .sorted(by: {
+                            $0.matchDate > $1.matchDate
+                        }) ?? []
+                )
+            }.store(in: &subscriptions)
     }
     
     func didSelect(at indexPath: IndexPath) {
