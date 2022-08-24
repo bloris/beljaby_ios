@@ -10,22 +10,19 @@ import Combine
 
 final class UserMatchHistoryViewModel {
     
-    var puuid: String
+    private var puuid: String // 현재 확인중인 User의 puuid
     
-    //    typealias MatchDetail = (String,UserMatch)
+    private var subscriptions = Set<AnyCancellable>()
+    let selectedMatchDetail: CurrentValueSubject<[MatchDetail]?, Never> // MatchDetail View를 위해 재가공된 데이터 전달
+    let userMatchList: CurrentValueSubject<[UserMatch], Never> // Firebase로부터 UserMatch Data를 view에 전달
     
-    var subscriptions = Set<AnyCancellable>()
-    let selectedMatchDetail: CurrentValueSubject<[MatchDetail]?, Never>
-    let userMatchList: CurrentValueSubject<[UserMatch], Never>
-    
-    let firebaseManager = FirebaseManager.shared
+    private let firebaseManager = FirebaseManager.shared //Get Firebase Singleton Object
     
     init(puuid: String, selectedMatch: [MatchDetail]? = nil) {
-        
-        
         self.puuid = puuid
-        
-        self.userMatchList = CurrentValueSubject(
+        selectedMatchDetail = CurrentValueSubject(selectedMatch)
+        // Data를 획득하기 전에 접근했다면 Empty Array -> Bind를 통해 Update
+        userMatchList = CurrentValueSubject(
             firebaseManager
                 .userMatchDict[puuid]?
                 .values
@@ -33,11 +30,12 @@ final class UserMatchHistoryViewModel {
                     $0.matchDate > $1.matchDate
                 }) ?? []
         )
-        
-        self.selectedMatchDetail = CurrentValueSubject(selectedMatch)
+        bind()
     }
     
     private func bind() {
+        // Receive Firebase User Match Data Fetching Finish info
+        // Bind UserMatch Info List from Firebase -> Apply Section Item to Diffable Datasource
         firebaseManager.userMatchLoad
             .receive(on: RunLoop.main)
             .sink { [unowned self] in
@@ -52,17 +50,18 @@ final class UserMatchHistoryViewModel {
             }.store(in: &subscriptions)
     }
     
+    // Preprocess UserMatch Data to MatchDetail View
     func didSelect(at indexPath: IndexPath) {
         let firebaseManager = FirebaseManager.shared
         
-        let userMatch = self.userMatchList.value[indexPath.item]
-        let match = FirebaseManager.shared.MatchDict[userMatch.matchId]!
-        let users = match.users
-        let team: [String]
-        let userMatches: [UserMatch]
-        let matchDetails: [MatchDetail]
+        let userMatch = userMatchList.value[indexPath.item] // Get Selected UserMatch
+        let match = FirebaseManager.shared.MatchDict[userMatch.matchId]! // Get Match data with MatchID
+        let users = match.users // Get User list in Match
+        let team: [String] // Reconstructed users
+        let userMatches: [UserMatch] // Get UserMatch Data with User puuid and MatchID
+        let matchDetails: [MatchDetail] // Reconstruct Data to MatchDetail View
         
-        //현재 유저가 속한 팀을 상단으로, 현재 유저를 0번째 열로
+        // 현재 유저가 속한 팀을 상단으로, 현재 유저를 0번째 열로
         if users[0..<5].contains(self.puuid) {
             team = Array(users[0..<5]).sorted(by: {
                 if $0 == self.puuid { return true }
@@ -77,12 +76,15 @@ final class UserMatchHistoryViewModel {
             }) + Array(users[0..<5])
         }
         
+        // 재구성한 User Puuid List를 바탕으로 UserMatch Data 획득
         userMatches = team.map( { puuid in
             firebaseManager.userMatchDict[puuid]![userMatch.matchId]!
         })
         
+        // MatchDetail View에서 사용하기 편한 형태로 Data 가공
         matchDetails = zip(team, userMatches).map { MatchDetail(name: firebaseManager.userDict[$0]!.name, userMatch: $1, my: $0 == team[0]) }
         
+        // 가공된 Data 전달
         selectedMatchDetail.send(matchDetails)
     }
 }

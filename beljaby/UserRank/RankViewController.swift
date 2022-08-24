@@ -15,7 +15,7 @@ import SwiftUI
 class RankViewController: UIViewController {
     @IBOutlet weak var collectionView: UICollectionView!
     
-    var subscriptions = Set<AnyCancellable>() // Store subscriptions
+    var subscriptions = Set<AnyCancellable>()
     
     enum Section {
         case main
@@ -26,11 +26,8 @@ class RankViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         viewModel = RankViewModel() // Load ViewModel
-        
         configureCollectionView() // Configure CollectionView
-        
         bind() // Bind with ViewModel Publihser
     }
     
@@ -112,14 +109,20 @@ extension RankViewController {
             return cell
         })
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, User>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems([], toSection: .main)
-        datasource.apply(snapshot)
+        applySectionItems([], to: .main) // Initialize Section Item with Empty Array
         
         collectionView.collectionViewLayout = layout()
     }
     
+    /// Apply Section Items to Diffable datasource
+    private func applySectionItems(_ items: [User], to section: Section) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, User>()
+        snapshot.appendSections([section])
+        snapshot.appendItems(items, toSection: section)
+        datasource.apply(snapshot)
+    }
+    
+    /// Configure CollectionView layout
     private func layout() -> UICollectionViewCompositionalLayout {
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .estimated(60))
         let item = NSCollectionLayoutItem(layoutSize: itemSize)
@@ -135,17 +138,11 @@ extension RankViewController {
         
         return layout
     }
-    
-    private func applySectionItems(_ items: [User], to section: Section) {
-        var snapshot = datasource.snapshot()
-        snapshot.appendItems(items, toSection: section)
-        datasource.apply(snapshot)
-    }
 }
 
 //MARK: - Collection View Delegate
 extension RankViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.didSelect(at: indexPath)
+        viewModel.didSelect(at: indexPath) // Send selected indexPath to viewModel
     }
 }

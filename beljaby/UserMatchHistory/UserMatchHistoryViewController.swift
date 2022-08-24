@@ -10,52 +10,49 @@ import Kingfisher
 import Combine
 import SwiftUI
 
-private let reuseIdentifier = "Cell"
-
 class UserMatchHistoryViewController: UIViewController {
     
     @IBOutlet weak var collectionView: UICollectionView!
     
     var subscriptions = Set<AnyCancellable>()
     
-    var viewModel: UserMatchHistoryViewModel!
-    
     enum Section {
         case main
     }
     
     var datasource: UICollectionViewDiffableDataSource<Section, UserMatch>!
+    var viewModel: UserMatchHistoryViewModel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         navigationItem.largeTitleDisplayMode = .never
-        
         configureCollectionView()
-        
         bind()
     }
     
     private func bind() {
-        viewModel.userMatchList
-            .receive(on: RunLoop.main)
-            .sink { [unowned self] userMatches in
-                self.applySectionItems(userMatches)
-            }.store(in: &subscriptions)
-        
+        // Bind Input UserMatchHistory Cell Tapped -> Push MatchDetail View
         viewModel.selectedMatchDetail
             .receive(on: RunLoop.main)
             .compactMap( { $0 } )
             .sink { [unowned self] matchDetail in
                 let detailViewModel = MatchDetailViewModel(matchDetails: matchDetail)
                 let detailView = MatchDetailView(viewModel: detailViewModel)
-                let vc = UIHostingController(rootView: detailView)
+                let vc = UIHostingController(rootView: detailView) // Integrate SwiftUI View to UIKit
                 
                 self.navigationController?.pushViewController(vc, animated: true)
+            }.store(in: &subscriptions)
+        
+        // Bind UserMatch List from Firebase -> Apply Section Item to Diffable Datasource
+        viewModel.userMatchList
+            .receive(on: RunLoop.main)
+            .sink { [unowned self] userMatches in
+                self.applySectionItems(userMatches, to: .main)
             }.store(in: &subscriptions)
     }
     
     private func configureCollectionView() {
+        // Register xib CollectionView Cell
         let nibName = UINib(nibName: "UserMatchHistoryCell", bundle: nil)
         collectionView.register(nibName, forCellWithReuseIdentifier: "UserMatchHistoryCell")
         
@@ -71,22 +68,21 @@ class UserMatchHistoryViewController: UIViewController {
             return cell
         })
         
-        var snapshot = NSDiffableDataSourceSnapshot<Section, UserMatch>()
-        snapshot.appendSections([.main])
-        snapshot.appendItems([], toSection: .main)
-        datasource.apply(snapshot)
+        applySectionItems([], to: .main) // Initialize Section Item with Empty Array
         
         collectionView.collectionViewLayout = layout()
     }
     
-    private func applySectionItems(_ items: [UserMatch], to section: Section = .main) {
-        var snapshot = datasource.snapshot()
+    /// Apply Section Items to Diffable datasource
+    private func applySectionItems(_ items: [UserMatch], to section: Section) {
+        var snapshot = NSDiffableDataSourceSnapshot<Section, UserMatch>()
+        snapshot.appendSections([section])
         snapshot.appendItems(items, toSection: section)
         datasource.apply(snapshot)
     }
     
     private func layout() -> UICollectionViewCompositionalLayout {
-        let cnt = max(1.0, self.view.bounds.width / 370)
+        let cnt = max(1.0, self.view.bounds.width / 370) // Calc maximum item for row with minimum width
         let interItemSpacing: CGFloat = 10
         
         let itemSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1/cnt), heightDimension: .fractionalHeight(1))
@@ -100,9 +96,9 @@ class UserMatchHistoryViewController: UIViewController {
         
         let totalCellWidth = cnt.rounded(.down) * (self.view.bounds.width/cnt)
         let totalSapcing = (cnt.rounded(.down)-1) * interItemSpacing
-        let inset = self.view.bounds.width - (totalSapcing+totalCellWidth)
+        let inset = self.view.bounds.width - (totalSapcing+totalCellWidth) // Calc remain width to align center
         
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: inset/2, bottom: 10, trailing: inset/2)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: inset/2, bottom: 10, trailing: inset/2) // Use ramin width with inset
         section.interGroupSpacing = 10
         
         let layout = UICollectionViewCompositionalLayout(section: section)
@@ -110,6 +106,7 @@ class UserMatchHistoryViewController: UIViewController {
         return layout
     }
     
+    // Rotate iphone -> update layout
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
         collectionView.collectionViewLayout = layout()
@@ -120,6 +117,6 @@ class UserMatchHistoryViewController: UIViewController {
 
 extension UserMatchHistoryViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        viewModel.didSelect(at: indexPath)
+        viewModel.didSelect(at: indexPath) // Send selected indexPath to viewModel
     }
 }

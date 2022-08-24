@@ -117,6 +117,7 @@ final class FirebaseManager {
             }
             
             if self.userMatchDict.count == self.userList.value.count {
+                print("!!!!")
                 self.userMatchLoad.send() // 모든 User Match를 Fetch 했다고 전달
                 self.mostChampionLoad.send() // 모든 User의 most champion counting이 끝났다고 전달
             }
