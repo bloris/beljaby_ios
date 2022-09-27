@@ -8,14 +8,14 @@
 import Foundation
 
 /// Protocol to Dismiss Matchmaking View and push Balanced Team view
-protocol MatchMakingDelegate {
+protocol MatchMakingDelegate: AnyObject {
     func DelegateFunc(team1: [User], team2: [User]) // Get Balanced Team info as parameter
 }
 
 final class MatchMakingViewModel: ObservableObject {
     @Published var userDict: [String: UserSelect] = [:]
     
-    var delegate: MatchMakingDelegate
+    weak var delegate: MatchMakingDelegate?
     var buttonTapped = false // Check View dismiss with button
     
     // Show User name with sorted as alphabetical order
@@ -77,6 +77,6 @@ final class MatchMakingViewModel: ObservableObject {
         
         let team2 = selected.filter { !team1.contains($0) } // Get team2 with filtering team1
         
-        delegate.DelegateFunc(team1: team1.map { $0.user }, team2: team2.map { $0.user } ) // Call Delegate function at RankViewModel
+        delegate?.DelegateFunc(team1: team1.map { $0.user }, team2: team2.map { $0.user } ) // Call Delegate function at RankViewModel
     }
 }

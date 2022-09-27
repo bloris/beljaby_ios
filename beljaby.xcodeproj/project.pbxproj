@@ -141,7 +141,7 @@
 		744623FB2872E2E100492565 /* beljaby */ = {
 			isa = PBXGroup;
 			children = (
-				745915EC28B46E6700B62BD4 /* UserRank */,
+				745915EC28B46E6700B62BD4 /* UserRankHome */,
 				745915ED28B46EA900B62BD4 /* UserMatchHistory */,
 				745915EE28B46EC900B62BD4 /* MatchDetailSwiftUI */,
 				745915EF28B46F1A00B62BD4 /* MatchMakingSwiftUI */,
@@ -182,7 +182,7 @@
 			path = gitImage;
 			sourceTree = "<group>";
 		};
-		745915EC28B46E6700B62BD4 /* UserRank */ = {
+		745915EC28B46E6700B62BD4 /* UserRankHome */ = {
 			isa = PBXGroup;
 			children = (
 				744624022872E2E100492565 /* Main.storyboard */,
@@ -191,7 +191,7 @@
 				744624172874278A00492565 /* UserRankCell.xib */,
 				744624162874278A00492565 /* UserRankCell.swift */,
 			);
-			path = UserRank;
+			path = UserRankHome;
 			sourceTree = "<group>";
 		};
 		745915ED28B46EA900B62BD4 /* UserMatchHistory */ = {
@@ -577,7 +577,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.exmaple.beljaby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
@@ -607,7 +607,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.2;
+				MARKETING_VERSION = 1.2.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.exmaple.beljaby;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
