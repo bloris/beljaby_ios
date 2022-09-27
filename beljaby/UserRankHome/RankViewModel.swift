@@ -68,6 +68,8 @@ extension RankViewModel: MatchMakingDelegate {
     /// Get Balanced Team info
     /// Send Balanced Team info to RankView and push BalancedTeam View
     func DelegateFunc(team1: [User], team2: [User]) {
-        delegateReceive.send((team1,team2))
+        if team1.count == 5 && team2.count == 5 {
+            delegateReceive.send((team1,team2))
+        }
     }
 }
